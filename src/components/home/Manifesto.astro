@@ -8,7 +8,6 @@ const words = m.text.split(' ');
 ---
 <section class="manifeste" data-manifeste aria-labelledby="manifeste-titre">
   <div class="conteneur grid gap-12 lg:grid-cols-12">
-    <p class="etiquette text-encre-douce lg:col-span-12">{m.label}</p>
     <h2 id="manifeste-titre" class="lg:col-span-7">
       {m.lines.map((l, i) => (
         <span class="ligne" data-pole={poles[i]}><span class="ligne-txt">{l}</span></span>

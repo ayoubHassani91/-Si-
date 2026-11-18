@@ -93,11 +93,17 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
     display: flex; gap: 6px; align-items: flex-start;
     color: var(--color-corail-texte); font-size: 14px; line-height: 20px;
   }
-  .erreur::before, .statut[data-type="error"]::before { content: "!"; flex: none; display: grid; place-items: center; inline-size: 18px; block-size: 18px; border-radius: 999px; background: var(--color-corail-pale); font-weight: 700; font-size: 12px; }
+  /* Icônes Lucide (circle-alert / circle-check), trait 1.75, dessinées en masque pour hériter de la couleur. */
+  .erreur::before, .statut[data-type="error"]::before, .statut[data-type="success"]::before {
+    content: ""; flex: none; inline-size: 18px; block-size: 18px; margin-block-start: 1px;
+    background: currentColor; -webkit-mask: var(--icone) center / contain no-repeat; mask: var(--icone) center / contain no-repeat;
+  }
+  .erreur, .statut[data-type="error"] { --icone: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='1.75'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='12'%20cy='12'%20r='10'/%3E%3Cline%20x1='12'%20x2='12'%20y1='8'%20y2='12'/%3E%3Cline%20x1='12'%20x2='12.01'%20y1='16'%20y2='16'/%3E%3C/svg%3E"); }
+  .statut[data-type="success"] { --icone: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='1.75'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='12'%20cy='12'%20r='10'/%3E%3Cpath%20d='m9%2012%202%202%204-4'/%3E%3C/svg%3E"); }
   .statut { padding: 14px 16px; border-radius: var(--radius-s); }
   .statut[data-type="error"] { background: var(--color-corail-pale); }
   .statut[data-type="success"] { background: #e3f0ec; color: var(--color-vert); display: flex; gap: 8px; }
-  .statut[data-type="success"]::before { content: "✓"; font-weight: 700; }
+
   .statut[data-type="info"] { background: var(--color-sable); }
   .choix { position: relative; cursor: pointer; }
   .choix input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }

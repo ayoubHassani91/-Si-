@@ -21,8 +21,7 @@ const icons = [Code, Megaphone];
         );
       })}
       <div class="stat md:col-span-4" data-reveal data-reveal-delay="0.16">
-        <p class="stat-chiffre">{p.stat}</p>
-        <p class="titre-3 mt-2">{p.statLabel}</p>
+        <p class="stat-phrase">{p.stat} {p.statLabel}.</p>
       </div>
     </div>
 
@@ -56,13 +55,14 @@ const icons = [Code, Megaphone];
     min-block-size: 260px;
     border-start-end-radius: 120px;
   }
-  .stat-chiffre {
+  .stat-phrase {
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(44px, 6vw, 72px);
-    line-height: 0.95;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    font-size: clamp(28px, 3.2vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
   }
+  .stat-phrase::first-letter { text-transform: uppercase; }
   .cas {
     padding: 28px;
     border-radius: var(--radius-m);

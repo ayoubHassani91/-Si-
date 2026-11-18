@@ -15,15 +15,17 @@ const icons = [Code, Megaphone, Clapperboard];
   <section class="pb-24" aria-labelledby="equipe">
     <div class="conteneur">
       <h2 id="equipe" class="titre-2" data-reveal>{a.teamTitle}</h2>
-      <ul class="mt-10 grid gap-4 md:grid-cols-3">
+      <ul class="mt-10">
         {a.team.map((m, i) => {
           const Icon = icons[i];
           return (
-            <li class:list={['carte p-8', i === 0 && 'vedette']} data-reveal data-reveal-delay={i * 0.08}>
+            <li class:list={['membre', i === 0 && 'vedette']} data-reveal>
               <span class="avatar" aria-hidden="true"><Icon size={28} stroke-width={1.75} /></span>
-              <h3 class="titre-3 mt-6">{m.role}</h3>
-              <p class="mt-3 text-encre-douce">{m.text}</p>
-              <ul class="mt-6 flex flex-wrap gap-2">{m.tags.map((tg) => <li class="pastille">{tg}</li>)}</ul>
+              <h3 class="titre-2">{m.role}</h3>
+              <div>
+                <p class="text-encre-douce">{m.text}</p>
+                <ul class="mt-4 flex flex-wrap gap-2">{m.tags.map((tg) => <li class="pastille">{tg}</li>)}</ul>
+              </div>
             </li>
           );
         })}
@@ -52,6 +54,15 @@ const icons = [Code, Megaphone, Clapperboard];
     background: var(--color-sable); border-start-start-radius: 100%;
   }
   .vedette .avatar { background: var(--color-corail); }
+  .membre {
+    display: grid;
+    gap: 16px 32px;
+    align-items: start;
+    padding-block: 32px;
+    border-block-start: 1px solid var(--color-trait);
+  }
+  .membre:last-child { border-block-end: 1px solid var(--color-trait); }
+  @media (min-width: 900px) { .membre { grid-template-columns: 64px 5fr 6fr; } }
   .valeurs { background: var(--color-encre); color: var(--color-papier); padding-block: 96px; }
   .valeur-titre { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 5vw, 56px); line-height: 1; color: var(--color-corail); }
 </style>

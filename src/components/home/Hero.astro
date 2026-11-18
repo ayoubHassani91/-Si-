@@ -10,8 +10,7 @@ const h = d.home.hero;
   <div class="hero-colle">
     <div class="conteneur hero-grille">
       <div class="hero-texte" data-hero-texte>
-        <p class="etiquette terminal" aria-hidden="true"><span data-type={h.terminal}>{h.terminal}</span><span class="curseur"></span></p>
-        <h1 class="display mt-5">{h.title}</h1>
+        <h1 class="display">{h.title}</h1>
         <p class="chapo mt-6 max-w-[46ch]">{h.lead}</p>
         <div class="mt-9 flex flex-wrap gap-3">
           <a href={href(lang, 'contact')} class="btn btn-principal">
@@ -21,6 +20,7 @@ const h = d.home.hero;
             <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
           </a>
         </div>
+        <p class="etiquette terminal mt-10" aria-hidden="true"><span>{h.terminal}</span><span class="curseur"></span></p>
       </div>
 
       <div class="hero-scene" aria-hidden="true">
@@ -51,6 +51,7 @@ const h = d.home.hero;
     display: flex;
     align-items: center;
     overflow: clip;
+    background: var(--color-papier); /* fond pour le mélange « darken » de la vidéo et de l'image fixe */
   }
   .hero-grille {
     display: grid;
@@ -78,7 +79,7 @@ const h = d.home.hero;
   .hero-poster[hidden] { display: none; }
   @media (min-width: 1024px) {
     /* Vidéo et image fixe : dans la moitié de fin, jamais sous le texte. */
-    .hero-video, .hero-poster { inset-inline-start: 46%; inline-size: auto; object-fit: contain; }
+    .hero-video, .hero-poster { inset-inline-start: 46%; inline-size: 54%; object-fit: contain; }
   }
   .terminal { color: var(--color-encre-douce); display: inline-flex; align-items: center; gap: 2px; direction: ltr; }
   .curseur {

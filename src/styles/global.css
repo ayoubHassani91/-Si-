@@ -78,6 +78,8 @@
   h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; }
   p { text-wrap: pretty; }
   ::selection { background: var(--color-corail); color: var(--color-encre); }
+  input, textarea { caret-color: var(--color-corail-texte); accent-color: var(--color-encre); }
+  html { scrollbar-color: color-mix(in srgb, var(--color-encre) 35%, transparent) var(--color-papier); }
   :focus-visible {
     outline: 2px solid var(--color-cobalt);
     outline-offset: 3px;
