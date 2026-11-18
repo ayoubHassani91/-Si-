@@ -1,0 +1,28 @@
+---
+interface Props { title: string; lead?: string; label?: string; pole?: string }
+const { title, lead, label, pole } = Astro.props;
+---
+<section class="page-hero" data-pole={pole}>
+  <div class="conteneur">
+    {label && <p class="pastille" data-pole={pole}>{label}</p>}
+    <h1 class="titre-1 mt-6 max-w-[22ch]" data-reveal>{title}</h1>
+    {lead && <p class="chapo mt-6 max-w-[56ch]" data-reveal data-reveal-delay="0.08">{lead}</p>}
+    <slot />
+  </div>
+  <span class="quart" aria-hidden="true"></span>
+</section>
+<style>
+  .page-hero { position: relative; padding-block: 96px 72px; overflow: clip; }
+  .quart {
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: 0;
+    inline-size: clamp(120px, 22vw, 300px);
+    aspect-ratio: 1;
+    background: var(--pole, var(--color-sable));
+    border-end-start-radius: 100%;
+    opacity: 0.9;
+  }
+  .page-hero:not([data-pole]) .quart { background: var(--color-sable); }
+  .page-hero h1 { position: relative; }
+</style>

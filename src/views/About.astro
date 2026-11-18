@@ -1,0 +1,57 @@
+---
+import { Code, Megaphone, Clapperboard } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Method from '../components/home/Method.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const a = t(lang).about;
+const icons = [Code, Megaphone, Clapperboard];
+---
+<Base lang={lang} title={a.metaTitle} description={a.metaDescription} current="about">
+  <PageHero title={a.title} lead={a.lead} />
+  <section class="pb-24" aria-labelledby="equipe">
+    <div class="conteneur">
+      <h2 id="equipe" class="titre-2" data-reveal>{a.teamTitle}</h2>
+      <ul class="mt-10 grid gap-4 md:grid-cols-3">
+        {a.team.map((m, i) => {
+          const Icon = icons[i];
+          return (
+            <li class:list={['carte p-8', i === 0 && 'vedette']} data-reveal data-reveal-delay={i * 0.08}>
+              <span class="avatar" aria-hidden="true"><Icon size={28} stroke-width={1.75} /></span>
+              <h3 class="titre-3 mt-6">{m.role}</h3>
+              <p class="mt-3 text-encre-douce">{m.text}</p>
+              <ul class="mt-6 flex flex-wrap gap-2">{m.tags.map((tg) => <li class="pastille">{tg}</li>)}</ul>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+  <section class="valeurs" aria-labelledby="valeurs">
+    <div class="conteneur">
+      <h2 id="valeurs" class="titre-2">{a.valuesTitle}</h2>
+      <dl class="mt-10 grid gap-10 md:grid-cols-3">
+        {a.values.map((v) => (
+          <div data-reveal>
+            <dt class="valeur-titre">{v.title}</dt>
+            <dd class="mt-3 text-[#a3a7b0]">{v.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+  <Method lang={lang} />
+  <FinalCta lang={lang} />
+</Base>
+<style>
+  .avatar {
+    display: grid; place-items: center; inline-size: 64px; block-size: 64px;
+    background: var(--color-sable); border-start-start-radius: 100%;
+  }
+  .vedette .avatar { background: var(--color-corail); }
+  .valeurs { background: var(--color-encre); color: var(--color-papier); padding-block: 96px; }
+  .valeur-titre { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 5vw, 56px); line-height: 1; color: var(--color-corail); }
+</style>
