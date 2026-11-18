@@ -74,8 +74,8 @@ const h = d.home.hero;
   }
   .hero-video, .hero-poster { mix-blend-mode: multiply; }
   @media (min-width: 1024px) {
-    .hero-video, .hero-poster { object-fit: cover; object-position: 78% 50%; }
-    :global(html[dir="rtl"]) :is(.hero-video, .hero-poster) { object-position: 22% 50%; }
+    /* Vidéo et image fixe : dans la moitié de fin, jamais sous le texte. */
+    .hero-video, .hero-poster { inset-inline-start: 46%; inline-size: auto; object-fit: contain; }
   }
   .terminal { color: var(--color-encre-douce); display: inline-flex; align-items: center; gap: 2px; direction: ltr; }
   .curseur {
@@ -90,8 +90,9 @@ const h = d.home.hero;
     position: absolute;
     inset-block-start: 0;
     left: 0;
-    translate: calc(var(--x, -999px) - 50%) calc(var(--y, -999px) + 44px);
+    translate: calc(var(--x, 0px) - 50%) calc(var(--y, 0px) + 44px);
   }
+  .hero-poles li:not([style]) { display: none; }
 </style>
 
 <script>

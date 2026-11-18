@@ -4,7 +4,7 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang).newsletter;
 ---
-<section class="grid gap-8 pb-14 md:grid-cols-2 md:items-end" aria-labelledby="nl-titre">
+<section class="grid grid-cols-1 gap-8 pb-14 md:grid-cols-2 md:items-end [&>*]:min-w-0" aria-labelledby="nl-titre">
   <div>
     <h2 id="nl-titre" class="titre-2">{d.title}</h2>
     <p class="mt-3 text-encre-douce">{d.text}</p>

@@ -107,7 +107,7 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
   }
   .choix input:checked + span { background: var(--color-encre); color: var(--color-papier); box-shadow: none; }
   .choix input:focus-visible + span { outline: 2px solid var(--color-cobalt); outline-offset: 2px; }
-  .piege { position: absolute; inset-inline-start: -9999px; }
+  .piege { position: absolute; inline-size: 1px; block-size: 1px; margin: 0; opacity: 0; clip-path: inset(50%); pointer-events: none; }
 </style>
 
 <script>
