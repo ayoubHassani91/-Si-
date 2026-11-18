@@ -4,7 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
-import { t, dirOf, htmlLang, href, slugOf, LOCALES, type Lang, type RouteKey } from '../i18n';
+import { t, dirOf, htmlLang, href, asset, slugOf, LOCALES, type Lang, type RouteKey } from '../i18n';
 
 interface Props {
   lang: Lang;
@@ -19,7 +19,7 @@ const pageTitle = title ?? d.meta.defaultTitle;
 const pageDesc = description ?? d.meta.defaultDescription;
 const slug = slugOf(Astro.url.pathname);
 const canonical = new URL(href(lang, slug), Astro.site);
-const ogImage = new URL('/og.png', Astro.site);
+const ogImage = new URL(asset('/og.png'), Astro.site);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
@@ -27,7 +27,7 @@ const jsonLd = {
   alternateName: 'Et si',
   description: d.meta.defaultDescription,
   url: new URL(href(lang), Astro.site).href,
-  logo: new URL('/brand/logo-couleur.svg', Astro.site).href,
+  logo: new URL(asset('/brand/logo-couleur.svg'), Astro.site).href,
   image: ogImage.href,
   telephone: '+33652277787',
   address: { '@type': 'PostalAddress', addressLocality: 'Paris', addressCountry: 'FR' },
@@ -47,7 +47,7 @@ const jsonLd = {
     {LOCALES.map((l) => <link rel="alternate" hreflang={htmlLang[l]} href={new URL(href(l, slug), Astro.site)} />)}
     <link rel="alternate" hreflang="x-default" href={new URL(href('fr', slug), Astro.site)} />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={asset('/favicon.svg')} type="image/svg+xml" />
     <meta name="theme-color" content="#F7F5F0" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={d.meta.siteName} />

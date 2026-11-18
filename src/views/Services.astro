@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Combo from '../components/home/Combo.astro';
 import FinalCta from '../components/home/FinalCta.astro';
-import { t, href, POLES, type Lang } from '../i18n';
+import { t, href, asset, POLES, type Lang } from '../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang);
@@ -18,7 +18,7 @@ const d = t(lang);
         return (
           <li class="carte flex flex-col p-8" data-pole={p} data-reveal data-reveal-delay={i * 0.08}>
             <span class="pastille self-start" data-pole={p}>{pole.verb}</span>
-            <img src={`/3d/pole-${p}.webp`} alt="" width="200" height="200" loading="lazy" class="-ms-4 my-4 w-40" />
+            <img src={asset(`/3d/pole-${p}.webp`)} alt="" width="200" height="200" loading="lazy" class="-ms-4 my-4 w-40" />
             <h2 class="titre-2">{pole.name}</h2>
             <p class="chapo mt-2">{pole.pitch}</p>
             <ul class="mt-6 space-y-2">

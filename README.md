@@ -18,7 +18,8 @@ npx astro check           # vérification TypeScript / Astro
 | Variable | Rôle |
 |---|---|
 | `PUBLIC_WEB3FORMS_KEY` | Clé d'accès Web3Forms (web3forms.com), qui envoie le formulaire de contact par e-mail. Sans elle, le formulaire invite à écrire sur WhatsApp. |
-| `SITE_URL` | Domaine définitif (liens canoniques, hreflang, sitemap, robots.txt). |
+| `SITE_URL` | Domaine du site (liens canoniques, hreflang, sitemap, robots.txt). |
+| `BASE_PATH` | Sous-dossier de publication : `/-Si-` sur GitHub Pages, `/` sur un domaine propre. |
 
 ## Organisation
 
@@ -29,6 +30,14 @@ npx astro check           # vérification TypeScript / Astro
 - `src/scripts/hero3d.ts` : scène three.js du hero (une seule animation dont le temps est piloté : construction 0–4 s, attente en boucle 4–8 s, pôles 8–11 s au scroll).
 - `src/styles/global.css` : jetons de la charte dans `@theme`.
 - `public/3d/` : modèles .glb (Draco), vidéos de repli, image fixe. `public/brand/` : logos SVG. `public/draco/` : décodeur Draco local.
+
+## Mise en ligne (GitHub Pages)
+
+Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque push sur `claude/eager-gates-7m1151`
+(ou à la main depuis l'onglet Actions). Adresse : https://ayoubhassani91.github.io/-Si-/
+
+- Clé Web3Forms : secret de dépôt `PUBLIC_WEB3FORMS_KEY` (Settings → Secrets and variables → Actions).
+- Domaine propre : variables de dépôt `SITE_URL` (ex. `https://www.exemple.fr`) et `BASE_PATH` = `/`, puis domaine à déclarer dans Settings → Pages.
 
 ## Comportement du hero
 

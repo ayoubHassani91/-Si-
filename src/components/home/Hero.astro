@@ -1,6 +1,6 @@
 ---
 import { ArrowRight, MessageCircle } from '@lucide/astro';
-import { t, href, whatsappHref, type Lang } from '../../i18n';
+import { t, href, asset, whatsappHref, type Lang } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang);
@@ -22,14 +22,14 @@ const h = d.home.hero;
     </div>
 
     <div class="hero-scene" aria-hidden="true">
-      <img class="hero-poster" data-hero-poster src="/3d/hero-poster.webp" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
-      <video class="hero-video" data-hero-video muted playsinline preload="none" poster="/3d/hero-poster.webp" hidden>
-        <source media="(max-width: 767px)" src="/3d/hero-1080x1350.webm" type="video/webm" />
-        <source media="(max-width: 767px)" src="/3d/hero-1080x1350.mp4" type="video/mp4" />
-        <source src="/3d/hero-1920x1080.webm" type="video/webm" />
-        <source src="/3d/hero-1920x1080.mp4" type="video/mp4" />
+      <img class="hero-poster" data-hero-poster src={asset('/3d/hero-poster.webp')} alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+      <video class="hero-video" data-hero-video muted playsinline preload="none" poster={asset('/3d/hero-poster.webp')} hidden>
+        <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.webm')} type="video/webm" />
+        <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.mp4')} type="video/mp4" />
+        <source src={asset('/3d/hero-1920x1080.webm')} type="video/webm" />
+        <source src={asset('/3d/hero-1920x1080.mp4')} type="video/mp4" />
       </video>
-      <canvas class="hero-canvas" data-hero-canvas></canvas>
+      <canvas class="hero-canvas" data-hero-canvas data-base={asset('/')}></canvas>
     </div>
   </div>
 </section>

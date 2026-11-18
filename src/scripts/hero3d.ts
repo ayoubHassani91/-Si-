@@ -26,9 +26,10 @@ export async function mountHero(canvas: HTMLCanvasElement): Promise<HeroScene> {
 
   const loader = new GLTFLoader();
   const draco = new DRACOLoader();
-  draco.setDecoderPath('/draco/');
+  const base = canvas.dataset.base ?? '/';
+  draco.setDecoderPath(`${base}draco/`);
   loader.setDRACOLoader(draco);
-  const gltf = await loader.loadAsync('/3d/hero.glb');
+  const gltf = await loader.loadAsync(`${base}3d/hero.glb`);
   scene.add(gltf.scene);
 
   const camera = (gltf.cameras[0] as THREE.PerspectiveCamera) ?? new THREE.PerspectiveCamera(30, 1, 0.1, 100);

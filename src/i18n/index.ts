@@ -44,15 +44,22 @@ export const ROUTES = {
 } as const;
 export type RouteKey = keyof typeof ROUTES;
 
+/** Préfixe de publication (vide sur un domaine propre, « /-Si- » sur GitHub Pages). */
+const BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
+
+/** Chemin d'un fichier de public/ (images, modèles 3D…), préfixe de publication compris. */
+export const asset = (path: string) => `${BASE}${path.startsWith('/') ? path : `/${path}`}`;
+
 export function href(lang: Lang, route: RouteKey | string = 'home', hash = ''): string {
   const slug = route in ROUTES ? ROUTES[route as RouteKey] : route;
   const prefix = lang === DEFAULT_LANG ? '/' : `/${lang}/`;
-  return `${prefix}${slug}${hash}`;
+  return `${BASE}${prefix}${slug}${hash}`;
 }
 
-/** Retrouve le slug courant (sans préfixe de langue) pour le sélecteur de langue. */
+/** Retrouve le slug courant (sans préfixe de publication ni de langue) pour le sélecteur de langue. */
 export function slugOf(pathname: string): string {
-  const parts = pathname.replace(/^\/+/, '').split('/');
+  const path = BASE && pathname.startsWith(BASE) ? pathname.slice(BASE.length) : pathname;
+  const parts = path.replace(/^\/+/, '').split('/');
   if (LOCALES.includes(parts[0] as Lang) && parts[0] !== DEFAULT_LANG) parts.shift();
   return parts.join('/');
 }
