@@ -10,7 +10,7 @@ let lenis: Lenis | null = null;
 
 /** Défilement doux (desktop uniquement, désactivé si l'utilisateur réduit les animations). */
 export function initLenis() {
-  if (lenis || reduceMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+  if (lenis || reduceMotion() || !window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches) return;
   lenis = new Lenis({ duration: 1.1, smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis?.raf(time * 1000));

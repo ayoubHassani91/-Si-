@@ -45,7 +45,7 @@ const w = t(lang).home.whatif;
     const s = document.querySelector<HTMLElement>('[data-etsi]');
     if (!s || reduceMotion()) return;
     s.querySelectorAll<HTMLElement>('[data-question]').forEach((q) => {
-      gsap.from(q.querySelector('.q'), { opacity: 0.15, ease: 'none', scrollTrigger: { trigger: q, start: 'top 85%', end: 'top 45%', scrub: true } });
+      gsap.fromTo(q.querySelector('.q'), { color: '#6e727a' }, { color: '#f7f5f0', ease: 'none', scrollTrigger: { trigger: q, start: 'top 85%', end: 'top 45%', scrub: true } });
       gsap.from(q.querySelector('.r'), { opacity: 0, y: 16, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: q, start: 'top 55%', once: true } });
     });
   });

@@ -42,7 +42,7 @@ const words = m.text.split(' ');
     background: var(--pole);
   }
   .mot-a-mot { font-weight: 500; }
-  .mot { opacity: 0.18; }
+  .mot { color: #8a8d93; }
 </style>
 
 <script>
@@ -52,13 +52,13 @@ const words = m.text.split(' ');
     if (!s) return;
     const mots = s.querySelectorAll<HTMLElement>('.mot');
     const lignes = s.querySelectorAll<HTMLElement>('.ligne-txt');
-    if (reduceMotion()) { gsap.set(mots, { opacity: 1 }); return; }
+    if (reduceMotion()) { gsap.set(mots, { color: 'var(--color-encre)' }); return; }
     gsap.from(lignes, {
       yPercent: 60, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12,
       scrollTrigger: { trigger: s, start: 'top 70%', once: true },
     });
     gsap.to(mots, {
-      opacity: 1, stagger: 0.08, ease: 'none',
+      color: '#15171c', stagger: 0.08, ease: 'none',
       scrollTrigger: { trigger: s.querySelector('[data-mots]'), start: 'top 80%', end: 'bottom 45%', scrub: true },
     });
   });

@@ -31,7 +31,7 @@ const h = d.home.hero;
           <source src="/3d/hero-1920x1080.webm" type="video/webm" />
           <source src="/3d/hero-1920x1080.mp4" type="video/mp4" />
         </video>
-        <img class="hero-poster" data-hero-poster src="/3d/hero-poster.webp" alt="" width="1920" height="1080" hidden />
+        <img class="hero-poster" data-hero-poster src="/3d/hero-poster.webp" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
         <ul class="hero-poles" data-hero-poles>
           <li data-pole="logiciels"><span class="pastille" data-pole="logiciels">{d.poles.logiciels.short}</span></li>
           <li data-pole="communication"><span class="pastille" data-pole="communication">{d.poles.communication.short}</span></li>
@@ -72,7 +72,10 @@ const h = d.home.hero;
     block-size: 100%;
     object-fit: contain;
   }
-  .hero-video, .hero-poster { mix-blend-mode: multiply; }
+  .hero-video, .hero-poster { mix-blend-mode: darken; }
+  /* Sur mobile, l'image fixe s'affiche tout de suite (élément LCP), puis la vidéo la remplace. */
+  @media (min-width: 768px) { .hero-poster:not([data-show]) { display: none; } }
+  .hero-poster[hidden] { display: none; }
   @media (min-width: 1024px) {
     /* Vidéo et image fixe : dans la moitié de fin, jamais sous le texte. */
     .hero-video, .hero-poster { inset-inline-start: 46%; inline-size: auto; object-fit: contain; }
@@ -110,25 +113,35 @@ const h = d.home.hero;
     const texte = section.querySelector<HTMLElement>('[data-hero-texte]')!;
     const poles = section.querySelector<HTMLElement>('[data-hero-poles]')!;
 
-    const faible = (navigator.hardwareConcurrency ?? 8) <= 4 && matchMedia('(pointer: coarse)').matches;
+    // 3D allégée sur mobile : vidéo sous 768 px ou sur appareil peu puissant.
+    const faible = matchMedia('(max-width: 767px)').matches
+      || ((navigator.hardwareConcurrency ?? 8) <= 4 && matchMedia('(pointer: coarse)').matches);
 
     if (reduceMotion()) {
       canvas.hidden = true;
-      poster.hidden = false;
+      poster.setAttribute('data-show', '');
       return;
     }
 
     // Entrée orchestrée : le seul moment « spectacle » de la page.
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.from(texte.querySelector('h1'), { y: 40, opacity: 0, duration: 0.9 }, 0.2)
+    tl.from(texte.querySelector('h1'), { y: 28, duration: 0.9 }, 0) // pas de fondu : le titre est l'élément LCP
       .from(texte.querySelectorAll('.chapo, .btn'), { y: 20, opacity: 0, duration: 0.7, stagger: 0.08 }, 0.45);
 
-    const { webglAvailable, mountHero } = await import('../../scripts/hero3d');
-    if (!faible && webglAvailable()) {
+    let webglAvailable = () => false;
+    let mountHero: typeof import('../../scripts/hero3d').mountHero | null = null;
+    if (!faible) {
+      // On attend que la page soit chargée et le navigateur au repos avant d'importer three.js.
+      await new Promise<void>((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
+      await new Promise<void>((r) => ('requestIdleCallback' in window ? requestIdleCallback(() => r(), { timeout: 1500 }) : setTimeout(r, 300)));
+      ({ webglAvailable, mountHero } = await import('../../scripts/hero3d'));
+    }
+    if (!faible && mountHero && webglAvailable()) {
       const rtl = document.documentElement.dir === 'rtl';
       canvas.dataset.shift = matchMedia('(min-width: 1024px)').matches ? String(rtl ? -0.24 : 0.24) : '0';
       try {
         hero = await mountHero(canvas);
+        poster.hidden = true;
         const labels = [...poles.querySelectorAll<HTMLElement>('li')];
         hero.onTiles((pts) => pts.forEach((pt, i) => {
           labels[i].style.setProperty('--x', `${pt.x}px`);
@@ -142,7 +155,8 @@ const h = d.home.hero;
       poles.hidden = true;
       canvas.hidden = true;
       video.hidden = false;
-      video.play().catch(() => { video.hidden = true; poster.hidden = false; });
+      video.addEventListener('playing', () => { poster.hidden = true; }, { once: true });
+      video.play().catch(() => { video.hidden = true; poster.setAttribute('data-show', ''); });
     }
 
     // Sortie du hero : le scroll pilote la séquence « 3 pôles » (8–11 s).
