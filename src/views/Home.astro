@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Manifesto from '../components/home/Manifesto.astro';
+import Poles from '../components/home/Poles.astro';
+import WhatIf from '../components/home/WhatIf.astro';
+import Proof from '../components/home/Proof.astro';
+import Method from '../components/home/Method.astro';
+import Combo from '../components/home/Combo.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+---
+<Base lang={lang} title={d.home.metaTitle} current="home">
+  <Hero lang={lang} />
+  <Manifesto lang={lang} />
+  <Poles lang={lang} />
+  <WhatIf lang={lang} />
+  <Proof lang={lang} />
+  <Method lang={lang} />
+  <Combo lang={lang} />
+  <FinalCta lang={lang} />
+</Base>

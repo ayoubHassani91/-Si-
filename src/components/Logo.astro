@@ -1,0 +1,11 @@
+---
+import paths from '../data/logo-paths.json';
+interface Props { variant?: 'couleur' | 'negatif' | 'mono'; class?: string; label?: string }
+const { variant = 'couleur', class: cls = '', label = 'et si' } = Astro.props;
+const amp = variant === 'mono' ? 'var(--color-encre)' : 'var(--color-corail)';
+const si = variant === 'negatif' ? 'var(--color-papier)' : 'var(--color-encre)';
+---
+<svg class={cls} viewBox={paths.viewBox} role="img" aria-label={label} xmlns="http://www.w3.org/2000/svg">
+  <path fill={amp} d={paths.amp} />
+  <path fill={si} d={paths.si} />
+</svg>

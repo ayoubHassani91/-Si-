@@ -1,0 +1,27 @@
+---
+import { MessageCircle } from '@lucide/astro';
+import { t, whatsappHref, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+---
+<a href={whatsappHref(lang)} target="_blank" rel="noopener" class="wa-flottant" aria-label={d.a11y.whatsappFloat}>
+  <MessageCircle size={24} stroke-width={1.75} aria-hidden="true" />
+</a>
+<style>
+  .wa-flottant {
+    position: fixed;
+    inset-inline-end: 20px;
+    inset-block-end: 20px;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    inline-size: 56px;
+    block-size: 56px;
+    border-radius: 999px;
+    background: var(--color-encre);
+    color: var(--color-papier);
+    transition: transform 0.25s var(--ease-sortie);
+  }
+  .wa-flottant:hover { transform: translateY(-3px); }
+</style>

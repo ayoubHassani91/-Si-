@@ -1,0 +1,110 @@
+---
+import { ArrowRight, Check } from '@lucide/astro';
+import { t, href, POLES, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+---
+<section class="poles" data-poles aria-labelledby="poles-titre">
+  <div class="poles-colle" data-poles-colle>
+    <div class="conteneur poles-tete">
+      <h2 id="poles-titre" class="titre-1 max-w-[18ch]">{d.home.poles.title}</h2>
+      <p class="chapo max-w-[40ch]">{d.home.poles.lead}</p>
+    </div>
+    <div class="poles-piste" data-poles-piste>
+      {POLES.map((p) => {
+        const pole = d.poles[p];
+        return (
+          <article class="panneau carte" data-pole={p}>
+            <div class="panneau-haut">
+              <span class="pastille" data-pole={p}>{pole.verb}</span>
+            </div>
+            <img src={`/3d/pole-${p}.webp`} alt="" width="280" height="280" loading="lazy" class="panneau-icone" />
+            <h3 class="titre-2">{pole.name}</h3>
+            <p class="chapo mt-2">{pole.pitch}</p>
+            <ul class="mt-6 space-y-2">
+              {pole.services.map((s) => (
+                <li class="flex items-center gap-2"><Check size={18} stroke-width={1.75} aria-hidden="true" class="coche" />{s}</li>
+              ))}
+            </ul>
+            <a href={href(lang, p)} class="lien mt-8 inline-flex items-center gap-2 self-start">
+              {d.home.poles.more}<span class="sr-only"> : {pole.name}</span><ArrowRight size={16} stroke-width={1.75} class="fleche" aria-hidden="true" />
+            </a>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .poles { background: var(--color-papier); }
+  .poles-colle { padding-block: 96px; }
+  .poles-tete {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-block-end: 48px;
+  }
+  .poles-piste {
+    display: grid;
+    gap: 16px;
+    padding-inline: var(--marge);
+  }
+  .panneau {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    min-block-size: 520px;
+  }
+  .panneau-haut { display: flex; justify-content: space-between; align-items: center; }
+  .panneau-icone { inline-size: 200px; block-size: auto; margin-block: 16px 8px; margin-inline-start: -20px; }
+  .coche { color: var(--pole); flex: none; }
+  .panneau .pastille { background: var(--color-corail-pale); }
+  @media (min-width: 1024px) {
+    .poles-colle {
+      block-size: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: clip;
+      padding-block: 72px 48px;
+    }
+    .poles-piste {
+      display: flex;
+      gap: 24px;
+      inline-size: max-content;
+      padding-inline: var(--marge) calc(var(--marge) + 10vw);
+    }
+    .panneau { inline-size: min(560px, 42vw); min-block-size: 0; block-size: min(62svh, 600px); }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, reduceMotion } from '../../scripts/motion';
+  document.addEventListener('astro:page-load', () => {
+    const s = document.querySelector<HTMLElement>('[data-poles]');
+    if (!s || reduceMotion()) return;
+    const piste = s.querySelector<HTMLElement>('[data-poles-piste]')!;
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 1024px)', () => {
+      const rtl = document.documentElement.dir === 'rtl';
+      const dist = () => Math.max(0, piste.scrollWidth - window.innerWidth);
+      gsap.to(piste, {
+        x: () => (rtl ? dist() : -dist()),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: s,
+          start: 'top top',
+          end: () => `+=${dist()}`,
+          pin: s.querySelector('[data-poles-colle]'),
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
+      });
+    });
+    ScrollTrigger.refresh();
+  });
+</script>

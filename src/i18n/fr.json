@@ -1,0 +1,404 @@
+{
+  "meta": {
+    "siteName": "&si — Et si, agence digitale",
+    "defaultTitle": "Et si · Agence digitale à Paris : logiciels, communication, conseil",
+    "defaultDescription": "Et si (&si) est une agence parisienne : un ingénieur informatique et deux experts marketing. Sites, logiciels sur mesure, automatisation, publicité, vidéo et accompagnement d'entreprise.",
+    "ogLocale": "fr_FR"
+  },
+  "a11y": {
+    "skip": "Aller au contenu",
+    "logo": "et si — accueil",
+    "menuOpen": "Ouvrir le menu",
+    "menuClose": "Fermer le menu",
+    "langLabel": "Langue",
+    "whatsappFloat": "Nous écrire sur WhatsApp"
+  },
+  "nav": {
+    "home": "Accueil",
+    "services": "Services",
+    "about": "À propos",
+    "contact": "Contact",
+    "cta": "Démarrer un projet"
+  },
+  "langs": {
+    "fr": "Français",
+    "en": "English",
+    "ar": "العربية"
+  },
+  "whatsapp": {
+    "label": "Écrire sur WhatsApp",
+    "message": "Bonjour &si, je souhaite parler d'un projet."
+  },
+  "poles": {
+    "logiciels": {
+      "name": "Logiciels & produits",
+      "short": "Logiciels",
+      "verb": "Construire",
+      "pitch": "Des outils qui travaillent pour vous.",
+      "services": [
+        "Création de sites",
+        "Automatisation",
+        "Logiciels sur mesure"
+      ],
+      "intro": "Votre site doit vendre, vos tâches répétitives doivent disparaître, votre outil métier doit enfin exister. Notre ingénieur informatique conçoit et code ces outils, puis les maintient.",
+      "details": [
+        {
+          "title": "Création de sites",
+          "text": "Sites vitrines et boutiques rapides, lisibles sur mobile, pensés pour transformer une visite en demande de contact. Vous gardez la main sur vos contenus."
+        },
+        {
+          "title": "Automatisation",
+          "text": "Relances, devis, factures, synchronisations entre vos logiciels : on repère ce qui vous prend du temps chaque semaine et on l'automatise."
+        },
+        {
+          "title": "Logiciels sur mesure",
+          "text": "Quand aucun outil du marché ne colle à votre façon de travailler, on code le vôtre : application web, tableau de bord, outil interne."
+        }
+      ],
+      "deliverables": [
+        "Cahier des charges court et validé",
+        "Maquette avant développement",
+        "Code documenté, hébergement configuré",
+        "Formation et suivi après la mise en ligne"
+      ]
+    },
+    "communication": {
+      "name": "Communication & création",
+      "short": "Communication",
+      "verb": "Imaginer",
+      "pitch": "Être vu par les bonnes personnes.",
+      "services": [
+        "Gestion des ads",
+        "Création vidéo",
+        "Marketing"
+      ],
+      "intro": "Une bonne offre que personne ne voit ne vend pas. Nos deux spécialistes marketing construisent des campagnes, des vidéos et des messages qui amènent des clients, et mesurent ce que chaque euro rapporte.",
+      "details": [
+        {
+          "title": "Gestion des ads",
+          "text": "Campagnes sur Google, Meta et LinkedIn : ciblage, annonces, budget, suivi des conversions. Un rapport clair chaque mois."
+        },
+        {
+          "title": "Création vidéo",
+          "text": "Vidéos courtes pour les réseaux, présentations produit, motion design : du script au montage final, au bon format pour chaque canal."
+        },
+        {
+          "title": "Marketing",
+          "text": "Positionnement, messages, plan d'action et contenus : on clarifie ce que vous vendez et à qui, puis on le fait savoir."
+        }
+      ],
+      "deliverables": [
+        "Audit de départ et objectifs chiffrés",
+        "Calendrier de diffusion",
+        "Créations prêtes à publier",
+        "Rapport mensuel des résultats"
+      ]
+    },
+    "conseil": {
+      "name": "Accompagnement & conseil",
+      "short": "Conseil",
+      "verb": "Structurer",
+      "pitch": "Avancer avec un plan, pas au hasard.",
+      "services": [
+        "Accompagnement professionnel",
+        "Création d'entreprise ou de boutique",
+        "Développement d'activité"
+      ],
+      "intro": "Créer une entreprise, ouvrir une boutique, passer un cap : on vous aide à décider, à organiser et à lancer, avec des étapes claires et un interlocuteur qui connaît votre dossier.",
+      "details": [
+        {
+          "title": "Accompagnement professionnel",
+          "text": "Des points réguliers pour prioriser, débloquer les décisions et tenir le cap. Vous n'êtes plus seul face aux choix importants."
+        },
+        {
+          "title": "Création d'entreprise ou de boutique",
+          "text": "Statut, offre, prix, présence en ligne, premiers clients : on prépare le lancement étape par étape."
+        },
+        {
+          "title": "Développement d'activité",
+          "text": "Nouveaux marchés, nouvelles offres, organisation de l'équipe : on construit le plan et on le suit avec vous."
+        }
+      ],
+      "deliverables": [
+        "Diagnostic de départ",
+        "Feuille de route datée",
+        "Points de suivi planifiés",
+        "Outils et modèles prêts à l'emploi"
+      ]
+    }
+  },
+  "home": {
+    "metaTitle": "Et si · Agence digitale à Paris : logiciels, communication, conseil",
+    "hero": {
+      "kicker": "Agence &si · Paris",
+      "title": "Et si on passait à la suite ?",
+      "lead": "Sites, logiciels, publicité, vidéo, conseil : une équipe de trois qui conçoit, code et fait connaître ce dont votre entreprise a besoin pour avancer.",
+      "cta": "Démarrer un projet",
+      "terminal": "> imaginer · structurer · construire"
+    },
+    "manifesto": {
+      "label": "Notre méthode en trois verbes",
+      "lines": [
+        "Imaginer.",
+        "Structurer.",
+        "Construire."
+      ],
+      "text": "On commence par comprendre ce qui bloque. On organise la réponse. Puis on la fabrique, avec la même équipe du premier appel à la mise en ligne."
+    },
+    "poles": {
+      "title": "Trois pôles, un seul objectif : vos résultats.",
+      "lead": "Prenez un service seul ou combinez-les. Le devis suit votre besoin, pas un forfait.",
+      "more": "Voir le pôle"
+    },
+    "whatif": {
+      "title": "Et si…",
+      "items": [
+        {
+          "q": "votre site vous apportait des clients ?",
+          "a": "Un site rapide, clair sur mobile, avec un seul objectif par page : vous faire contacter. On le construit, on mesure, on l'améliore."
+        },
+        {
+          "q": "votre entreprise tournait sans vous, le temps d'un week-end ?",
+          "a": "Relances, devis, rendez-vous, reporting : ce qui se répète peut tourner tout seul. On automatise vos tâches pour vous rendre du temps."
+        },
+        {
+          "q": "l'outil dont vous rêvez existait déjà, parce qu'on l'a codé ?",
+          "a": "Votre façon de travailler ne rentre dans aucun logiciel du marché ? Notre ingénieur conçoit et code un outil fait pour vous."
+        }
+      ]
+    },
+    "proof": {
+      "title": "Une petite équipe, des compétences complètes.",
+      "team": [
+        {
+          "role": "Ingénieur informatique",
+          "text": "Conçoit et code vos sites, vos automatisations et vos logiciels. Il sait ce qui est faisable, en combien de temps, et le fait."
+        },
+        {
+          "role": "Deux experts marketing et communication",
+          "text": "Ont accompagné des dizaines d'entreprises dont le chiffre d'affaires a augmenté. Ils savent faire venir des clients et le prouver."
+        }
+      ],
+      "stat": "des dizaines",
+      "statLabel": "d'entreprises accompagnées",
+      "casesTitle": "Études de cas",
+      "casesNote": "Exemples à venir, présentés de façon anonyme.",
+      "cases": [
+        {
+          "pole": "logiciels",
+          "title": "[Étude de cas à compléter] Automatisation des devis",
+          "text": "Secteur, problème de départ, solution livrée, résultat mesuré."
+        },
+        {
+          "pole": "communication",
+          "title": "[Étude de cas à compléter] Campagne d'acquisition",
+          "text": "Secteur, problème de départ, solution livrée, résultat mesuré."
+        },
+        {
+          "pole": "conseil",
+          "title": "[Étude de cas à compléter] Ouverture d'une boutique",
+          "text": "Secteur, problème de départ, solution livrée, résultat mesuré."
+        }
+      ]
+    },
+    "method": {
+      "title": "Comment on travaille",
+      "steps": [
+        {
+          "title": "Écoute",
+          "text": "Un premier échange, gratuit, pour comprendre votre activité et ce qui bloque.",
+          "tag": "1 appel · 30 min"
+        },
+        {
+          "title": "Devis",
+          "text": "Une proposition claire : ce qu'on livre, en combien de temps, pour quel prix.",
+          "tag": "sous 72 h"
+        },
+        {
+          "title": "Construction",
+          "text": "On conçoit, on code, on crée. Vous validez à chaque étape importante.",
+          "tag": "points hebdo"
+        },
+        {
+          "title": "Suivi",
+          "text": "Après la livraison, on mesure les résultats et on ajuste.",
+          "tag": "rapport mensuel"
+        }
+      ]
+    },
+    "combo": {
+      "title": "Un seul interlocuteur, un seul devis.",
+      "text": "Un site qui doit être vu, une campagne qui doit mener quelque part, un lancement qui a besoin des deux : quand vos besoins se croisent, on les réunit dans un même projet. Moins de coordination pour vous, une seule équipe responsable du résultat.",
+      "cta": "Demander un devis"
+    },
+    "final": {
+      "title": "Votre projet commence par un message.",
+      "text": "Racontez-nous où vous en êtes. On vous répond sous 24 heures ouvrées.",
+      "cta": "Démarrer un projet"
+    }
+  },
+  "newsletter": {
+    "title": "Une lettre par mois, utile et courte.",
+    "text": "Outils, méthodes et retours d'expérience pour développer votre activité.",
+    "label": "Votre e-mail",
+    "placeholder": "nom@entreprise.fr",
+    "cta": "S'inscrire",
+    "soon": "L'inscription ouvre bientôt. Votre adresse n'a pas été enregistrée."
+  },
+  "footer": {
+    "signature": "Et si on passait à la suite ?",
+    "tagline": "Imaginer. Structurer. Construire.",
+    "about": "&si est une agence parisienne : un ingénieur informatique et deux experts marketing, pour des entreprises de tous secteurs, en France et à l'international.",
+    "contact": "Contact",
+    "nav": "Navigation",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "rights": "Tous droits réservés."
+  },
+  "services": {
+    "metaTitle": "Services · Et si (&si) : logiciels, communication, conseil",
+    "metaDescription": "Les trois pôles d'Et si : logiciels et produits, communication et création, accompagnement et conseil. Services séparés ou combinés sur un seul devis.",
+    "title": "Nos services",
+    "lead": "Trois pôles qui se complètent. Prenez-en un, deux ou les trois : le devis s'adapte à votre projet.",
+    "includes": "Ce que comprend ce pôle",
+    "deliverables": "Ce que vous recevez",
+    "otherPoles": "Les autres pôles",
+    "cta": "Parler de mon projet"
+  },
+  "about": {
+    "metaTitle": "À propos · Et si (&si), agence digitale à Paris",
+    "metaDescription": "L'équipe d'Et si : un ingénieur informatique et deux experts marketing. Notre méthode, nos valeurs, notre façon de travailler.",
+    "title": "Trois personnes, un seul projet : le vôtre.",
+    "lead": "&si est née d'un constat simple : les entreprises ont besoin d'outils qui marchent et de clients qui arrivent. Rarement de l'un sans l'autre.",
+    "teamTitle": "L'équipe",
+    "team": [
+      {
+        "role": "Ingénieur informatique",
+        "text": "Architecture, développement web, automatisation, logiciels sur mesure. Il garantit que ce qui est promis est faisable, et le livre.",
+        "tags": [
+          "Web",
+          "Automatisation",
+          "Logiciel"
+        ]
+      },
+      {
+        "role": "Spécialiste marketing",
+        "text": "Stratégie, campagnes publicitaires, mesure des résultats. A accompagné des dizaines d'entreprises dans leur croissance.",
+        "tags": [
+          "Ads",
+          "Stratégie",
+          "Données"
+        ]
+      },
+      {
+        "role": "Spécialiste communication",
+        "text": "Messages, contenus, création vidéo. Donne une voix claire à votre offre, sur chaque canal.",
+        "tags": [
+          "Vidéo",
+          "Contenus",
+          "Marque"
+        ]
+      }
+    ],
+    "valuesTitle": "Ce qui guide notre travail",
+    "values": [
+      {
+        "title": "Direct",
+        "text": "On dit ce qui marchera et ce qui ne marchera pas. Avant de signer, pas après."
+      },
+      {
+        "title": "Concret",
+        "text": "Des livrables, des délais, des chiffres. Pas de jargon pour remplir les slides."
+      },
+      {
+        "title": "Engagé",
+        "text": "La même équipe du premier appel au suivi. Vous savez toujours à qui parler."
+      }
+    ],
+    "methodTitle": "Notre méthode"
+  },
+  "contact": {
+    "metaTitle": "Contact et devis · Et si (&si)",
+    "metaDescription": "Parlez de votre projet à l'équipe d'Et si : formulaire de devis ou WhatsApp. Réponse sous 24 heures ouvrées.",
+    "title": "Parlons de votre projet.",
+    "lead": "Quelques lignes suffisent. On revient vers vous sous 24 heures ouvrées avec des questions précises ou une première proposition.",
+    "orWhatsapp": "Vous préférez écrire directement ?",
+    "form": {
+      "name": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "optional": "facultatif",
+      "poles": "Pôle(s) concerné(s)",
+      "polesHint": "Plusieurs choix possibles.",
+      "unsure": "Je ne sais pas encore",
+      "message": "Votre projet",
+      "messagePlaceholder": "Où en êtes-vous, que voulez-vous obtenir, dans quel délai ?",
+      "consent": "En envoyant ce formulaire, vous acceptez que vos données servent uniquement à vous répondre.",
+      "submit": "Envoyer ma demande",
+      "sending": "Envoi en cours…",
+      "success": "Demande envoyée. On vous répond sous 24 heures ouvrées.",
+      "error": "L'envoi a échoué. Vérifiez votre connexion et réessayez, ou écrivez-nous sur WhatsApp.",
+      "notConfigured": "Le formulaire n'est pas encore relié à notre messagerie. Écrivez-nous sur WhatsApp en attendant.",
+      "errors": {
+        "required": "Ce champ est obligatoire.",
+        "email": "Saisissez une adresse e-mail valide, par exemple nom@entreprise.fr.",
+        "message": "Décrivez votre projet en quelques mots (20 caractères minimum)."
+      }
+    }
+  },
+  "legal": {
+    "metaTitle": "Mentions légales · Et si (&si)",
+    "title": "Mentions légales",
+    "todo": "[À COMPLÉTER]",
+    "sections": [
+      {
+        "title": "Éditeur du site",
+        "text": "Raison sociale, forme juridique, capital, SIREN, adresse du siège, directeur de la publication : [À COMPLÉTER]."
+      },
+      {
+        "title": "Hébergement",
+        "text": "Nom, adresse et téléphone de l'hébergeur : [À COMPLÉTER]."
+      },
+      {
+        "title": "Propriété intellectuelle",
+        "text": "L'ensemble des contenus de ce site (textes, logos, éléments 3D) appartient à &si, sauf mention contraire. Toute reproduction sans autorisation est interdite."
+      },
+      {
+        "title": "Contact",
+        "text": "Pour toute question : via le formulaire de la page Contact ou WhatsApp."
+      }
+    ]
+  },
+  "privacy": {
+    "metaTitle": "Politique de confidentialité · Et si (&si)",
+    "title": "Confidentialité",
+    "sections": [
+      {
+        "title": "Données collectées",
+        "text": "Le formulaire de contact recueille votre nom, votre e-mail, votre téléphone (facultatif) et votre message, uniquement pour répondre à votre demande."
+      },
+      {
+        "title": "Transmission",
+        "text": "Les messages transitent par le service Web3Forms, qui les achemine vers notre boîte e-mail. Ils ne sont ni revendus ni utilisés à des fins publicitaires."
+      },
+      {
+        "title": "Durée de conservation",
+        "text": "[À COMPLÉTER]"
+      },
+      {
+        "title": "Vos droits",
+        "text": "Vous pouvez demander l'accès, la rectification ou la suppression de vos données à tout moment : [À COMPLÉTER : adresse de contact dédiée]."
+      },
+      {
+        "title": "Mesure d'audience",
+        "text": "Aucun cookie publicitaire n'est déposé. [À COMPLÉTER si un outil de mesure est ajouté]."
+      }
+    ]
+  },
+  "notFound": {
+    "metaTitle": "Page introuvable · Et si (&si)",
+    "title": "Et si cette page n'existait pas ?",
+    "text": "C'est le cas. Le lien est peut-être ancien ou mal saisi.",
+    "cta": "Retour à l'accueil"
+  }
+}

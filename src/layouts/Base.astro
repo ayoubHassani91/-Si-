@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { t, dirOf, htmlLang, href, slugOf, LOCALES, type Lang, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  current?: RouteKey;
+  noindex?: boolean;
+}
+const { lang, title, description, current, noindex = false } = Astro.props;
+const d = t(lang);
+const pageTitle = title ?? d.meta.defaultTitle;
+const pageDesc = description ?? d.meta.defaultDescription;
+const slug = slugOf(Astro.url.pathname);
+const canonical = new URL(href(lang, slug), Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+---
+<!doctype html>
+<html lang={htmlLang[lang]} dir={dirOf(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={htmlLang[l]} href={new URL(href(l, slug), Astro.site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(href('fr', slug), Astro.site)} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#F7F5F0" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={d.meta.siteName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={d.meta.ogLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#contenu" class="sr-only-focusable btn btn-principal fixed start-4 top-4 z-[70]">{d.a11y.skip}</a>
+    <Header lang={lang} current={current} />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppFloat lang={lang} />
+    <script>
+      import { initLenis, initReveals, scrollToTop } from '../scripts/motion';
+      document.addEventListener('astro:page-load', () => {
+        initLenis();
+        initReveals();
+      });
+      document.addEventListener('astro:after-swap', scrollToTop);
+    </script>
+  </body>
+</html>

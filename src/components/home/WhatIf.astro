@@ -1,0 +1,52 @@
+---
+import { t, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const w = t(lang).home.whatif;
+---
+<section class="etsi" data-etsi aria-labelledby="etsi-titre">
+  <div class="conteneur grid gap-10 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <h2 id="etsi-titre" class="etsi-titre">{w.title}</h2>
+    </div>
+    <ol class="lg:col-span-8">
+      {w.items.map((it) => (
+        <li class="question" data-question>
+          <p class="titre-1 q">{it.q}</p>
+          <p class="chapo mt-5 max-w-[52ch] r">{it.a}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .etsi { background: var(--color-encre); color: var(--color-papier); padding-block: 128px; }
+  .etsi-titre {
+    position: sticky;
+    inset-block-start: 120px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(56px, 9vw, 120px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--color-corail);
+  }
+  :global(html[dir="rtl"]) .etsi-titre { letter-spacing: 0; line-height: 1.2; }
+  .question { padding-block: 48px; border-block-start: 1px solid #2c3038; }
+  .question:first-child { border: 0; padding-block-start: 0; }
+  .q { font-family: var(--font-display); }
+  .r { color: #a3a7b0; }
+</style>
+
+<script>
+  import { gsap, reduceMotion } from '../../scripts/motion';
+  document.addEventListener('astro:page-load', () => {
+    const s = document.querySelector<HTMLElement>('[data-etsi]');
+    if (!s || reduceMotion()) return;
+    s.querySelectorAll<HTMLElement>('[data-question]').forEach((q) => {
+      gsap.from(q.querySelector('.q'), { opacity: 0.15, ease: 'none', scrollTrigger: { trigger: q, start: 'top 85%', end: 'top 45%', scrub: true } });
+      gsap.from(q.querySelector('.r'), { opacity: 0, y: 16, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: q, start: 'top 55%', once: true } });
+    });
+  });
+</script>

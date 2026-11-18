@@ -1,0 +1,23 @@
+---
+import { ArrowRight, MessageCircle } from '@lucide/astro';
+import { t, href, whatsappHref, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+const f = d.home.final;
+---
+<section class="final" aria-labelledby="final-titre">
+  <div class="conteneur grid gap-10 lg:grid-cols-12 lg:items-end">
+    <h2 id="final-titre" class="titre-1 lg:col-span-7">{f.title}</h2>
+    <div class="lg:col-span-5">
+      <p class="chapo text-encre">{f.text}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={href(lang, 'contact')} class="btn btn-principal">{f.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+        <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire"><MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .final { padding-block: 96px 128px; }
+</style>

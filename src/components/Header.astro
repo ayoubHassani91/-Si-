@@ -1,0 +1,176 @@
+---
+import { ArrowRight, Menu, X } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { t, href, slugOf, LOCALES, type Lang, type RouteKey } from '../i18n';
+
+interface Props { lang: Lang; current?: RouteKey }
+const { lang, current } = Astro.props;
+const d = t(lang);
+const slug = slugOf(Astro.url.pathname);
+const links: { key: RouteKey; label: string }[] = [
+  { key: 'services', label: d.nav.services },
+  { key: 'about', label: d.nav.about },
+  { key: 'contact', label: d.nav.contact },
+];
+const isActive = (k: RouteKey) =>
+  current === k || (k === 'services' && ['logiciels', 'communication', 'conseil'].includes(current ?? ''));
+---
+<header class="site-header" data-header>
+  <div class="conteneur flex h-[72px] items-center justify-between gap-6">
+    <a href={href(lang)} class="logo-lien shrink-0" aria-label={d.a11y.logo}>
+      <Logo class="h-7 w-auto" label={d.a11y.logo} />
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex" aria-label={d.nav.home}>
+      {links.map((l) => (
+        <a href={href(lang, l.key)} class="nav-lien" aria-current={isActive(l.key) ? 'page' : undefined}>{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <div class="langues hidden sm:flex" role="group" aria-label={d.a11y.langLabel}>
+        {LOCALES.map((l) => (
+          <a href={href(l, slug)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-astro-reload>
+            {l.toUpperCase()}
+          </a>
+        ))}
+      </div>
+      <a href={href(lang, 'contact')} class="btn btn-principal hidden md:inline-flex">
+        {d.nav.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
+      </a>
+      <button type="button" class="burger lg:hidden" aria-expanded="false" aria-controls="menu-mobile" data-menu-open>
+        <Menu size={26} stroke-width={1.75} aria-hidden="true" />
+        <span class="sr-only">{d.a11y.menuOpen}</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="menu-mobile" class="menu-mobile" hidden data-menu>
+    <div class="conteneur flex h-[72px] items-center justify-between">
+      <Logo variant="negatif" class="h-7 w-auto" label={d.a11y.logo} />
+      <button type="button" class="burger" data-menu-close>
+        <X size={26} stroke-width={1.75} aria-hidden="true" />
+        <span class="sr-only">{d.a11y.menuClose}</span>
+      </button>
+    </div>
+    <nav class="conteneur mt-10 flex flex-col gap-2">
+      <a href={href(lang)} class="menu-grand">{d.nav.home}</a>
+      {links.map((l) => <a href={href(lang, l.key)} class="menu-grand">{l.label}</a>)}
+    </nav>
+    <div class="conteneur mt-auto flex flex-col gap-6 pb-10">
+      <a href={href(lang, 'contact')} class="btn btn-principal self-start">
+        {d.nav.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
+      </a>
+      <div class="langues langues-sombre flex" role="group" aria-label={d.a11y.langLabel}>
+        {LOCALES.map((l) => (
+          <a href={href(l, slug)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-astro-reload>{d.langs[l]}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--color-papier) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-block-end: 1px solid transparent;
+    transition: border-color 0.3s, transform 0.4s var(--ease-sortie);
+  }
+  .site-header[data-scrolled] { border-color: var(--color-trait); }
+  .site-header[data-hidden] { transform: translateY(-100%); }
+  .nav-lien {
+    position: relative;
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: 6px;
+  }
+  .nav-lien::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    height: 1.5px;
+    background: var(--color-encre);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-sortie);
+  }
+  :global(html[dir="rtl"]) .nav-lien::after { transform-origin: right; }
+  .nav-lien:hover::after, .nav-lien[aria-current="page"]::after { transform: scaleX(1); }
+  .langues { gap: 2px; font-family: var(--font-mono); font-size: 12px; }
+  .langues a {
+    padding: 6px 8px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--color-encre-douce);
+  }
+  .langues a[aria-current="true"] { color: var(--color-encre); box-shadow: inset 0 0 0 1px var(--color-trait); }
+  .langues-sombre { font-size: 14px; gap: 8px; }
+  .langues-sombre a { color: #a3a7b0; }
+  .langues-sombre a[aria-current="true"] { color: var(--color-papier); box-shadow: inset 0 0 0 1px #2c3038; }
+  .burger {
+    display: grid;
+    place-items: center;
+    inline-size: 48px;
+    block-size: 48px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .menu-mobile {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-encre);
+    color: var(--color-papier);
+  }
+  .menu-mobile[hidden] { display: none; }
+  .menu-grand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(36px, 10vw, 56px);
+    line-height: 1.1;
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  function initHeader() {
+    const header = document.querySelector<HTMLElement>('[data-header]');
+    if (!header) return;
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      header.toggleAttribute('data-scrolled', y > 8);
+      header.toggleAttribute('data-hidden', y > 400 && y > last && !document.querySelector('[data-menu]:not([hidden])'));
+      last = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    const menu = header.querySelector<HTMLElement>('[data-menu]');
+    const openBtn = header.querySelector<HTMLButtonElement>('[data-menu-open]');
+    const closeBtn = header.querySelector<HTMLButtonElement>('[data-menu-close]');
+    if (!menu || !openBtn || !closeBtn) return;
+    const close = () => {
+      menu.hidden = true;
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      openBtn.focus();
+    };
+    openBtn.addEventListener('click', () => {
+      menu.hidden = false;
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn.focus();
+    });
+    closeBtn.addEventListener('click', close);
+    menu.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  }
+  document.addEventListener('astro:page-load', initHeader);
+</script>

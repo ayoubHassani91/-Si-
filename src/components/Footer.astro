@@ -1,0 +1,73 @@
+---
+import { MessageCircle } from '@lucide/astro';
+import Logo from './Logo.astro';
+import Newsletter from './Newsletter.astro';
+import { t, href, slugOf, whatsappHref, LOCALES, POLES, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+const slug = slugOf(Astro.url.pathname);
+const year = new Date().getFullYear();
+---
+<footer class="pied">
+  <div class="conteneur">
+    <Newsletter lang={lang} />
+
+    <div class="grid gap-12 border-t border-encre/15 pt-14 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <Logo class="h-10 w-auto" />
+        <p class="mt-6 max-w-[42ch] text-encre-douce">{d.footer.about}</p>
+        <p class="etiquette mt-6 text-encre">{d.footer.tagline}</p>
+      </div>
+
+      <nav class="md:col-span-3" aria-label={d.footer.nav}>
+        <p class="etiquette mb-4 text-encre-douce">{d.footer.nav}</p>
+        <ul class="space-y-2">
+          <li><a class="lien-pied" href={href(lang, 'services')}>{d.nav.services}</a></li>
+          {POLES.map((p) => <li><a class="lien-pied" href={href(lang, p)}>{d.poles[p].name}</a></li>)}
+          <li><a class="lien-pied" href={href(lang, 'about')}>{d.nav.about}</a></li>
+          <li><a class="lien-pied" href={href(lang, 'contact')}>{d.nav.contact}</a></li>
+        </ul>
+      </nav>
+
+      <div class="md:col-span-4">
+        <p class="etiquette mb-4 text-encre-douce">{d.footer.contact}</p>
+        <a class="btn btn-secondaire" href={whatsappHref(lang)} target="_blank" rel="noopener">
+          <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
+        </a>
+        <p class="mt-4"><a class="lien-pied" href="tel:+33652277787" dir="ltr">06 52 27 77 87</a></p>
+        <div class="mt-8 flex gap-2" role="group" aria-label={d.a11y.langLabel}>
+          {LOCALES.map((l) => (
+            <a class="langue-pied" href={href(l, slug)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-astro-reload>{d.langs[l]}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="pied-logo" aria-hidden="true"><Logo class="h-auto w-full" /></div>
+
+    <div class="flex flex-col gap-3 border-t border-encre/15 py-6 text-legende text-encre-douce sm:flex-row sm:justify-between">
+      <p>© {year} &si. {d.footer.rights}</p>
+      <p class="flex gap-6">
+        <a class="lien-pied" href={href(lang, 'legal')}>{d.footer.legal}</a>
+        <a class="lien-pied" href={href(lang, 'privacy')}>{d.footer.privacy}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pied { background: var(--color-sable); padding-block-start: 64px; margin-block-start: 0; }
+  .lien-pied { text-decoration: none; }
+  .lien-pied:hover { color: var(--color-corail-texte); }
+  .langue-pied {
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-encre) 20%, transparent);
+  }
+  .langue-pied[aria-current="true"] { background: var(--color-encre); color: var(--color-papier); }
+  .pied-logo { margin-block: 72px 24px; opacity: 0.95; }
+</style>

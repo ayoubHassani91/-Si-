@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@import "@fontsource/bricolage-grotesque/700.css";
+@import "@fontsource/bricolage-grotesque/800.css";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
+
+/* Jetons de la charte « Proposition 1 » */
+@theme {
+  --color-papier: #f7f5f0;
+  --color-encre: #15171c;
+  --color-corail: #ff5a36;
+  --color-sable: #eadfcb;
+  --color-surface: #ffffff;
+  --color-encre-douce: #5b5f68;
+  --color-trait: #e2ded5;
+  --color-corail-texte: #c2361a;
+  --color-corail-pale: #ffe3da;
+  --color-cobalt: #3346d3;
+  --color-vert: #1e6b5c;
+
+  --font-display: "Bricolage Grotesque", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-sans: "DM Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --text-display: clamp(44px, 9vw, 88px);
+  --text-display--line-height: 0.92;
+  --text-titre-1: clamp(34px, 5vw, 56px);
+  --text-titre-1--line-height: 1;
+  --text-titre-2: clamp(26px, 3.5vw, 36px);
+  --text-titre-2--line-height: 1.1;
+  --text-titre-3: 24px;
+  --text-titre-3--line-height: 1.2;
+  --text-chapo: 20px;
+  --text-chapo--line-height: 30px;
+  --text-corps: 16px;
+  --text-corps--line-height: 26px;
+  --text-legende: 13px;
+  --text-legende--line-height: 18px;
+  --text-etiquette: 12px;
+  --text-etiquette--line-height: 16px;
+
+  --radius-s: 4px;
+  --radius-m: 12px;
+  --radius-l: 24px;
+
+  --ease-sortie: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    --marge: 24px;
+    color-scheme: light;
+  }
+  @media (min-width: 1024px) {
+    :root { --marge: 64px; }
+  }
+  html {
+    background: var(--color-papier);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 26px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  html[dir="rtl"] {
+    --font-display: "IBM Plex Sans Arabic", "Bricolage Grotesque", system-ui, sans-serif;
+    --font-sans: "IBM Plex Sans Arabic", "DM Sans", system-ui, sans-serif;
+  }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  body { min-height: 100dvh; overflow-x: clip; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-corail); color: var(--color-encre); }
+  :focus-visible {
+    outline: 2px solid var(--color-cobalt);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  a { color: inherit; }
+}
+
+@layer components {
+  .conteneur {
+    width: 100%;
+    max-width: 1312px;
+    margin-inline: auto;
+    padding-inline: var(--marge);
+  }
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-display);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+  }
+  html[dir="rtl"] .display { letter-spacing: 0; line-height: 1.15; }
+  .titre-1 { font-weight: 700; font-size: var(--text-titre-1); line-height: 1; letter-spacing: -0.025em; }
+  .titre-2 { font-weight: 700; font-size: var(--text-titre-2); line-height: 1.1; letter-spacing: -0.02em; }
+  .titre-3 { font-weight: 700; font-size: 24px; line-height: 1.2; letter-spacing: -0.01em; }
+  html[dir="rtl"] :is(.titre-1, .titre-2, .titre-3) { letter-spacing: 0; line-height: 1.3; }
+  .chapo { font-size: 20px; line-height: 30px; color: var(--color-encre-douce); }
+  .etiquette {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Boutons : un seul principal par écran */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding-inline: 22px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1;
+    text-decoration: none;
+    transition: transform 0.25s var(--ease-sortie), background-color 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  .btn svg { transition: transform 0.25s var(--ease-sortie); }
+  .btn:hover svg { transform: translateX(4px); }
+  html[dir="rtl"] .btn:hover svg { transform: translateX(-4px) scaleX(-1); }
+  html[dir="rtl"] .btn svg.fleche { transform: scaleX(-1); }
+  .btn-principal { background: var(--color-corail); color: var(--color-encre); }
+  .btn-principal:hover { transform: translateY(-2px); }
+  .btn-secondaire { box-shadow: inset 0 0 0 1.5px currentColor; color: inherit; }
+  .btn-secondaire:hover { background: var(--color-encre); color: var(--color-papier); box-shadow: inset 0 0 0 1.5px var(--color-encre); }
+
+  .lien {
+    color: var(--color-corail-texte);
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1.5px;
+    transition: background-size 0.3s var(--ease-sortie);
+  }
+  html[dir="rtl"] .lien { background-position: 100% 100%; }
+  .lien:hover { background-size: 100% 1.5px; }
+
+  .carte {
+    background: var(--color-surface);
+    border: 1px solid var(--color-trait);
+    border-radius: var(--radius-m);
+    transition: border-color 0.2s;
+  }
+  .carte:hover { border-color: var(--color-encre); }
+
+  .pastille {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    background: var(--color-corail-pale);
+    color: var(--color-encre);
+  }
+  .pastille[data-pole]::before {
+    content: "";
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 999px;
+    background: var(--pole, var(--color-corail));
+  }
+  [data-pole="logiciels"] { --pole: var(--color-cobalt); }
+  [data-pole="communication"] { --pole: var(--color-corail); }
+  [data-pole="conseil"] { --pole: var(--color-vert); }
+
+  .sr-only-focusable:not(:focus) {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 150ms !important;
+  }
+}

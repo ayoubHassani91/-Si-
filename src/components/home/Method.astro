@@ -1,0 +1,77 @@
+---
+import { t, type Lang } from '../../i18n';
+interface Props { lang: Lang; titleTag?: 'h2' | 'h3' }
+const { lang } = Astro.props;
+const m = t(lang).home.method;
+---
+<section class="methode" data-methode aria-labelledby="methode-titre">
+  <div class="conteneur">
+    <h2 id="methode-titre" class="titre-1" data-reveal>{m.title}</h2>
+    <ol class="frise mt-16">
+      <span class="frise-ligne" aria-hidden="true"><span class="frise-remplie" data-frise></span></span>
+      {m.steps.map((s, i) => (
+        <li class="etape" data-etape>
+          <span class="noeud" aria-hidden="true"></span>
+          <p class="etiquette text-encre-douce">{String(i + 1).padStart(2, '0')}</p>
+          <h3 class="titre-3 mt-2">{s.title}</h3>
+          <p class="mt-3 text-encre-douce">{s.text}</p>
+          <p class="pastille mt-5">{s.tag}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .methode { background: var(--color-sable); padding-block: 128px; }
+  .frise { position: relative; display: grid; gap: 40px; padding-inline-start: 32px; }
+  .frise-ligne {
+    position: absolute;
+    inset-inline-start: 7px;
+    inset-block: 8px;
+    inline-size: 2px;
+    background: color-mix(in srgb, var(--color-encre) 15%, transparent);
+  }
+  .frise-remplie { position: absolute; inset: 0; background: var(--color-encre); transform-origin: top; }
+  .noeud {
+    position: absolute;
+    inset-inline-start: -32px;
+    inset-block-start: 2px;
+    inline-size: 16px;
+    block-size: 16px;
+    border-radius: 999px;
+    background: var(--color-papier);
+    box-shadow: inset 0 0 0 2px var(--color-encre);
+    transition: background-color 0.3s;
+  }
+  .etape { position: relative; }
+  .etape[data-actif] .noeud { background: var(--color-corail); }
+  .etape .pastille { background: var(--color-papier); }
+  @media (min-width: 1024px) {
+    .frise { grid-template-columns: repeat(4, 1fr); gap: 32px; padding-inline-start: 0; padding-block-start: 40px; }
+    .frise-ligne { inset-inline: 8px; inset-block: 7px auto; inline-size: auto; block-size: 2px; }
+    .frise-remplie { transform-origin: left; }
+    :global(html[dir="rtl"]) .frise-remplie { transform-origin: right; }
+    .noeud { inset-inline-start: 0; inset-block-start: -40px; }
+  }
+</style>
+
+<script>
+  import { gsap, reduceMotion } from '../../scripts/motion';
+  document.addEventListener('astro:page-load', () => {
+    const s = document.querySelector<HTMLElement>('[data-methode]');
+    if (!s) return;
+    const etapes = [...s.querySelectorAll<HTMLElement>('[data-etape]')];
+    const remplie = s.querySelector<HTMLElement>('[data-frise]')!;
+    if (reduceMotion()) { etapes.forEach((e) => e.setAttribute('data-actif', '')); return; }
+    const horizontal = matchMedia('(min-width: 1024px)').matches;
+    gsap.fromTo(remplie, { [horizontal ? 'scaleX' : 'scaleY']: 0 }, {
+      [horizontal ? 'scaleX' : 'scaleY']: 1, ease: 'none',
+      scrollTrigger: {
+        trigger: s.querySelector('.frise'), start: 'top 75%', end: horizontal ? 'top 25%' : 'bottom 60%', scrub: true,
+        onUpdate: (self) => etapes.forEach((e, i) => e.toggleAttribute('data-actif', self.progress >= i / etapes.length + 0.01)),
+      },
+    });
+    gsap.from(etapes, { opacity: 0, y: 20, duration: 0.6, stagger: 0.1, ease: 'power3.out', scrollTrigger: { trigger: s.querySelector('.frise'), start: 'top 80%', once: true } });
+  });
+</script>
