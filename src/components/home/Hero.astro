@@ -6,104 +6,68 @@ const { lang } = Astro.props;
 const d = t(lang);
 const h = d.home.hero;
 ---
-<section id="hero" class="hero" data-hero>
-  <div class="hero-colle">
-    <div class="conteneur hero-grille">
-      <div class="hero-texte" data-hero-texte>
-        <h1 class="display">{h.title}</h1>
-        <p class="chapo mt-6 max-w-[46ch]">{h.lead}</p>
-        <div class="mt-9 flex flex-wrap gap-3">
-          <a href={href(lang, 'contact')} class="btn btn-principal">
-            {h.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
-          </a>
-          <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire">
-            <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
-          </a>
-        </div>
-        <p class="etiquette terminal mt-10" aria-hidden="true"><span>{h.terminal}</span><span class="curseur"></span></p>
+<section class="hero" data-hero>
+  <div class="conteneur hero-grille">
+    <div class="hero-texte" data-hero-texte>
+      <h1 class="display">{h.title}</h1>
+      <p class="chapo mt-6 max-w-[46ch]">{h.lead}</p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a href={href(lang, 'contact')} class="btn btn-principal">
+          {h.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
+        </a>
+        <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire">
+          <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
+        </a>
       </div>
+    </div>
 
-      <div class="hero-scene" aria-hidden="true">
-        <canvas class="hero-canvas" data-hero-canvas></canvas>
-        <video class="hero-video" data-hero-video muted loop playsinline preload="none" poster="/3d/hero-poster.webp" hidden>
-          <source media="(max-width: 767px)" src="/3d/hero-1080x1350.webm" type="video/webm" />
-          <source media="(max-width: 767px)" src="/3d/hero-1080x1350.mp4" type="video/mp4" />
-          <source src="/3d/hero-1920x1080.webm" type="video/webm" />
-          <source src="/3d/hero-1920x1080.mp4" type="video/mp4" />
-        </video>
-        <img class="hero-poster" data-hero-poster src="/3d/hero-poster.webp" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
-        <ul class="hero-poles" data-hero-poles>
-          <li data-pole="logiciels"><span class="pastille" data-pole="logiciels">{d.poles.logiciels.short}</span></li>
-          <li data-pole="communication"><span class="pastille" data-pole="communication">{d.poles.communication.short}</span></li>
-          <li data-pole="conseil"><span class="pastille" data-pole="conseil">{d.poles.conseil.short}</span></li>
-        </ul>
-      </div>
+    <div class="hero-scene" aria-hidden="true">
+      <img class="hero-poster" data-hero-poster src="/3d/hero-poster.webp" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+      <video class="hero-video" data-hero-video muted playsinline preload="none" poster="/3d/hero-poster.webp" hidden>
+        <source media="(max-width: 767px)" src="/3d/hero-1080x1350.webm" type="video/webm" />
+        <source media="(max-width: 767px)" src="/3d/hero-1080x1350.mp4" type="video/mp4" />
+        <source src="/3d/hero-1920x1080.webm" type="video/webm" />
+        <source src="/3d/hero-1920x1080.mp4" type="video/mp4" />
+      </video>
+      <canvas class="hero-canvas" data-hero-canvas></canvas>
     </div>
   </div>
 </section>
 
 <style>
-  .hero { position: relative; block-size: 210vh; }
-  .hero-colle {
-    position: sticky;
-    inset-block-start: 0;
-    block-size: 100svh;
-    display: flex;
-    align-items: center;
-    overflow: clip;
-    background: var(--color-papier); /* fond pour le mélange « darken » de la vidéo et de l'image fixe */
-  }
+  .hero { background: var(--color-papier); }
   .hero-grille {
     display: grid;
-    gap: 16px;
+    gap: 8px;
     align-items: center;
-    padding-block: 88px 32px;
+    min-block-size: calc(100svh - 72px);
+    padding-block: 24px 64px;
   }
-  .hero-scene { position: relative; order: -1; block-size: 38svh; }
-  .hero-texte { position: relative; z-index: 1; }
+  .hero-scene { position: relative; order: -1; block-size: 36svh; }
   @media (min-width: 1024px) {
-    .hero-grille { grid-template-columns: 7fr 5fr; gap: 32px; padding-block: 72px 0; }
-    /* La scène couvre tout le hero : le & est décalé vers la fin de ligne, puis recentré pour les pôles. */
-    .hero-scene { position: absolute; inset: 0; order: 0; block-size: auto; }
+    .hero-grille { grid-template-columns: 7fr 5fr; gap: 32px; padding-block: 48px 96px; }
+    .hero-scene { order: 0; block-size: min(64svh, 600px); }
   }
   .hero-canvas, .hero-video, .hero-poster {
     position: absolute;
     inset: 0;
     inline-size: 100%;
     block-size: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
+  /* Le fond papier des images se fond exactement dans celui de la page. */
   .hero-video, .hero-poster { mix-blend-mode: darken; }
-  /* Sur mobile, l'image fixe s'affiche tout de suite (élément LCP), puis la vidéo la remplace. */
+  .hero-poster[hidden], .hero-canvas[hidden] { display: none; }
+  /* Sur grand écran, la 3D construit le & : l'image fixe ne sert qu'en repli. */
   @media (min-width: 768px) { .hero-poster:not([data-show]) { display: none; } }
-  .hero-poster[hidden] { display: none; }
-  @media (min-width: 1024px) {
-    /* Vidéo et image fixe : dans la moitié de fin, jamais sous le texte. */
-    .hero-video, .hero-poster { inset-inline-start: 46%; inline-size: 54%; object-fit: contain; }
-  }
-  .terminal { color: var(--color-encre-douce); display: inline-flex; align-items: center; gap: 2px; direction: ltr; }
-  .curseur {
-    inline-size: 7px;
-    block-size: 14px;
-    background: var(--color-corail);
-    animation: clignote 1s steps(1) infinite;
-  }
-  @keyframes clignote { 50% { opacity: 0; } }
-  .hero-poles { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
-  .hero-poles li {
-    position: absolute;
-    inset-block-start: 0;
-    left: 0;
-    translate: calc(var(--x, 0px) - 50%) calc(var(--y, 0px) + 44px);
-  }
-  .hero-poles li:not([style]) { display: none; }
 </style>
 
 <script>
-  import { gsap, ScrollTrigger, reduceMotion } from '../../scripts/motion';
+  import { gsap, reduceMotion } from '../../scripts/motion';
   import type { HeroScene } from '../../scripts/hero3d';
 
   let hero: HeroScene | null = null;
+  const BUILD_END = 4; // secondes : le & est assemblé
 
   async function init() {
     const section = document.querySelector<HTMLElement>('[data-hero]');
@@ -112,67 +76,39 @@ const h = d.home.hero;
     const video = section.querySelector<HTMLVideoElement>('[data-hero-video]')!;
     const poster = section.querySelector<HTMLImageElement>('[data-hero-poster]')!;
     const texte = section.querySelector<HTMLElement>('[data-hero-texte]')!;
-    const poles = section.querySelector<HTMLElement>('[data-hero-poles]')!;
 
-    // 3D allégée sur mobile : vidéo sous 768 px ou sur appareil peu puissant.
-    const faible = matchMedia('(max-width: 767px)').matches
+    // Animations réduites : image fixe du & assemblé, rien d'autre.
+    if (reduceMotion()) { canvas.hidden = true; poster.setAttribute('data-show', ''); return; }
+
+    gsap.timeline({ defaults: { ease: 'power3.out' } })
+      .from(texte.querySelector('h1'), { y: 24, duration: 0.8 }, 0) // pas de fondu : le titre est l'élément LCP
+      .from(texte.querySelectorAll('.chapo, .btn'), { y: 16, opacity: 0, duration: 0.6, stagger: 0.06 }, 0.3);
+
+    const mobile = matchMedia('(max-width: 767px)').matches
       || ((navigator.hardwareConcurrency ?? 8) <= 4 && matchMedia('(pointer: coarse)').matches);
 
-    if (reduceMotion()) {
-      canvas.hidden = true;
-      poster.setAttribute('data-show', '');
-      return;
-    }
-
-    // Entrée orchestrée : le seul moment « spectacle » de la page.
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.from(texte.querySelector('h1'), { y: 28, duration: 0.9 }, 0) // pas de fondu : le titre est l'élément LCP
-      .from(texte.querySelectorAll('.chapo, .btn'), { y: 20, opacity: 0, duration: 0.7, stagger: 0.08 }, 0.45);
-
-    let webglAvailable = () => false;
-    let mountHero: typeof import('../../scripts/hero3d').mountHero | null = null;
-    if (!faible) {
-      // On attend que la page soit chargée et le navigateur au repos avant d'importer three.js.
+    if (!mobile) {
+      // three.js n'est chargé qu'une fois la page affichée et le navigateur au repos.
       await new Promise<void>((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
       await new Promise<void>((r) => ('requestIdleCallback' in window ? requestIdleCallback(() => r(), { timeout: 1500 }) : setTimeout(r, 300)));
-      ({ webglAvailable, mountHero } = await import('../../scripts/hero3d'));
-    }
-    if (!faible && mountHero && webglAvailable()) {
-      const rtl = document.documentElement.dir === 'rtl';
-      canvas.dataset.shift = matchMedia('(min-width: 1024px)').matches ? String(rtl ? -0.24 : 0.24) : '0';
-      try {
-        hero = await mountHero(canvas);
-        poster.hidden = true;
-        const labels = [...poles.querySelectorAll<HTMLElement>('li')];
-        hero.onTiles((pts) => pts.forEach((pt, i) => {
-          labels[i].style.setProperty('--x', `${pt.x}px`);
-          labels[i].style.setProperty('--y', `${pt.y}px`);
-        }));
-      } catch {
-        hero = null;
+      const { webglAvailable, mountHero } = await import('../../scripts/hero3d');
+      if (webglAvailable()) {
+        try {
+          hero = await mountHero(canvas);
+          poster.hidden = true;
+          return;
+        } catch {
+          hero = null;
+        }
       }
     }
-    if (!hero) {
-      poles.hidden = true;
-      canvas.hidden = true;
-      video.hidden = false;
-      video.addEventListener('playing', () => { poster.hidden = true; }, { once: true });
-      video.play().catch(() => { video.hidden = true; poster.setAttribute('data-show', ''); });
-    }
 
-    // Sortie du hero : le scroll pilote la séquence « 3 pôles » (8–11 s).
-    ScrollTrigger.create({
-      trigger: section,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: true,
-      onUpdate: (self) => {
-        const p = self.progress;
-        hero?.setScroll(p);
-        gsap.set(texte, { opacity: 1 - Math.min(p * 2.2, 1), y: -p * 60 });
-        gsap.set(poles, { opacity: Math.max(0, (p - 0.75) * 4) });
-      },
-    });
+    // Mobile ou sans WebGL : la vidéo joue la construction une fois, puis s'arrête sur le & assemblé.
+    canvas.hidden = true;
+    video.hidden = false;
+    video.addEventListener('playing', () => { poster.hidden = true; }, { once: true });
+    video.addEventListener('timeupdate', () => { if (video.currentTime >= BUILD_END) video.pause(); });
+    video.play().catch(() => { video.hidden = true; poster.hidden = false; poster.setAttribute('data-show', ''); });
   }
 
   document.addEventListener('astro:page-load', init);

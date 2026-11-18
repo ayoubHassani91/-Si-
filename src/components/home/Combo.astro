@@ -8,12 +8,9 @@ const c = t(lang).home.combo;
 <section class="py-32" aria-labelledby="combo-titre">
   <div class="conteneur">
     <div class="combo">
-      <div class="formes" aria-hidden="true" data-quarts>
-        <span class="q q1"></span><span class="q q2"></span><span class="q q3"></span><span class="q q4"></span>
-      </div>
-      <div class="combo-texte">
-        <h2 id="combo-titre" class="titre-1 max-w-[16ch]">{c.title}</h2>
-        <p class="chapo mt-6 max-w-[52ch] text-encre">{c.text}</p>
+      <h2 id="combo-titre" class="titre-1 max-w-[14ch]" data-reveal>{c.title}</h2>
+      <div data-reveal>
+        <p class="chapo max-w-[52ch] text-encre">{c.text}</p>
         <a href={href(lang, 'contact')} class="btn btn-secondaire mt-8">{c.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
       </div>
     </div>
@@ -25,34 +22,10 @@ const c = t(lang).home.combo;
     display: grid;
     gap: 40px;
     padding: clamp(28px, 5vw, 64px);
-    border-radius: var(--radius-l);
-    background: var(--color-surface);
-    border: 1px solid var(--color-trait);
+    border-radius: var(--radius-m);
+    background: var(--color-sable);
     align-items: center;
   }
-  @media (min-width: 900px) { .combo { grid-template-columns: 5fr 7fr; } }
-  .formes {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    inline-size: min(100%, 360px);
-    aspect-ratio: 1;
-  }
-  .q { display: block; }
-  .q1 { background: var(--color-corail); border-end-end-radius: 100%; }
-  .q2 { background: var(--color-sable); border-start-start-radius: 100%; }
-  .q3 { background: var(--color-encre); border-end-end-radius: 100%; }
-  .q4 { background: var(--color-sable); border-start-start-radius: 100%; }
+  @media (min-width: 900px) { .combo { grid-template-columns: 5fr 7fr; align-items: start; } }
 </style>
 
-<script>
-  import { gsap, reduceMotion } from '../../scripts/motion';
-  document.addEventListener('astro:page-load', () => {
-    const f = document.querySelector<HTMLElement>('[data-quarts]');
-    if (!f || reduceMotion()) return;
-    gsap.from(f.children, {
-      rotate: (i) => [-90, 90, 90, -90][i], scale: 0.4, opacity: 0, duration: 0.9, ease: 'back.out(1.6)', stagger: 0.09,
-      scrollTrigger: { trigger: f, start: 'top 75%', once: true },
-    });
-  });
-</script>
