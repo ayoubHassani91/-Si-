@@ -297,25 +297,28 @@
     "team": [
       {
         "role": "Ingénieur informatique",
-        "text": "Architecture, développement web, automatisation, logiciels sur mesure. Il garantit que ce qui est promis est faisable, et le livre.",
+        "proof": "Plusieurs années d'expérience · de nombreux clients accompagnés",
+        "text": "Développement web, automatisation, logiciels sur mesure : il conçoit et code vos outils, de la première maquette à la mise en ligne. Il a accompagné de nombreux clients et garantit que ce qui est promis est faisable, puis le livre.",
         "tags": [
           "Web",
           "Automatisation",
-          "Logiciel"
+          "Logiciel sur mesure"
         ]
       },
       {
-        "role": "Spécialiste marketing",
-        "text": "Stratégie, campagnes publicitaires, mesure des résultats. A accompagné des dizaines d'entreprises dans leur croissance.",
+        "role": "Expert marketing",
+        "proof": "Des dizaines d'entreprises accompagnées, chiffre d'affaires en hausse",
+        "text": "Stratégie, campagnes publicitaires, mesure des résultats : il a accompagné des dizaines d'entreprises qui ont vu leur chiffre d'affaires augmenter. Il sait faire venir des clients et le prouver, chiffres à l'appui.",
         "tags": [
           "Ads",
           "Stratégie",
-          "Données"
+          "Croissance"
         ]
       },
       {
         "role": "Spécialiste communication",
-        "text": "Messages, contenus, création vidéo. Donne une voix claire à votre offre, sur chaque canal.",
+        "proof": "Messages, contenus et vidéos qui font vendre",
+        "text": "Messages, contenus, création vidéo : il donne une voix claire à votre offre sur chaque canal, en lien direct avec les campagnes de l'expert marketing.",
         "tags": [
           "Vidéo",
           "Contenus",
@@ -340,7 +343,45 @@
     ],
     "methodTitle": "Notre méthode",
     "teamHint": "Survolez ou touchez un membre de l'équipe.",
-    "stripLabel": "Ce que nous faisons"
+    "cred": {
+      "title": "Une expérience qui se mesure.",
+      "lead": "Pas de promesses vagues : un parcours, des clients, des résultats.",
+      "items": [
+        {
+          "big": "Plusieurs années",
+          "text": "d'expérience en ingénierie logicielle, au service de nombreux clients."
+        },
+        {
+          "big": "Des dizaines",
+          "text": "d'entreprises accompagnées par notre expert marketing."
+        },
+        {
+          "big": "En hausse",
+          "text": "le chiffre d'affaires des entreprises que nous avons accompagnées."
+        },
+        {
+          "big": "9",
+          "unit": "services",
+          "text": "sous un même toit, du logiciel sur mesure à la gestion des ads, sur un seul devis.",
+          "count": 9
+        }
+      ]
+    },
+    "compare": {
+      "title": "Ce que les autres font en partie, nous le faisons en entier.",
+      "lead": "Une agence de communication ne code pas vos outils. Un prestataire informatique ne gère pas vos campagnes. Chez &si, la même équipe s'occupe de tout, du logiciel à la publicité.",
+      "colService": "Service",
+      "cols": {
+        "agence": "Agence de communication",
+        "info": "Prestataire informatique",
+        "nous": "&si"
+      },
+      "yes": "Inclus",
+      "no": "Non proposé",
+      "part": "En partie",
+      "switchLabel": "Comparer avec",
+      "note": "Comparaison indicative, d'après les offres habituellement proposées par ces deux types de prestataires."
+    }
   },
   "contact": {
     "metaTitle": "Contact et devis · Et si (&si)",

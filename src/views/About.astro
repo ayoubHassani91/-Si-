@@ -1,5 +1,5 @@
 ---
-import { ArrowRight } from '@lucide/astro';
+import { ArrowRight, Check, X, Minus } from '@lucide/astro';
 import Base from '../layouts/Base.astro';
 import PoleMedia from '../components/PoleMedia.astro';
 import Method from '../components/home/Method.astro';
@@ -11,7 +11,16 @@ const d = t(lang);
 const a = d.about;
 // Chaque membre est relié au pôle qu'il porte.
 const polesEquipe: PoleKey[] = ['logiciels', 'conseil', 'communication'];
-const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })));
+// Comparatif : ce que proposent habituellement une agence de communication et un prestataire informatique.
+type Etat = 'oui' | 'non' | 'partiel';
+const offre: Record<PoleKey, { agence: Etat; info: Etat }[]> = {
+  logiciels: [{ agence: 'partiel', info: 'oui' }, { agence: 'non', info: 'oui' }, { agence: 'non', info: 'oui' }],
+  communication: [{ agence: 'oui', info: 'non' }, { agence: 'oui', info: 'non' }, { agence: 'oui', info: 'non' }],
+  conseil: [{ agence: 'non', info: 'non' }, { agence: 'non', info: 'non' }, { agence: 'partiel', info: 'non' }],
+};
+const lignes = POLES.flatMap((p) => d.poles[p].services.map((s, i) => ({ s, p, ...offre[p][i] })));
+const cmp = a.compare;
+const etatTexte = { oui: cmp.yes, non: cmp.no, partiel: cmp.part };
 ---
 <Base lang={lang} title={a.metaTitle} description={a.metaDescription} current="about">
   <section class="tete">
@@ -31,19 +40,22 @@ const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })))
     </div>
   </section>
 
-  <!-- Bandeau : tout ce que fait l'équipe, en étiquettes qui défilent doucement sur deux rangées. -->
-  <section class="bandeau" aria-label={a.stripLabel}>
-    {[0, 1].map((rang) => (
-      <div class:list={['rangee', rang === 1 && 'rangee-inverse']}>
-        <div class="piste">
-          {[0, 1].map((k) => (
-            <ul class="piste-liste" aria-hidden={k === 1 || rang === 1 ? 'true' : undefined}>
-              {(rang === 0 ? bandeau : [...bandeau].reverse()).map((x) => <li class="etiq" data-pole={x.p}>{x.s}</li>)}
-            </ul>
-          ))}
-        </div>
-      </div>
-    ))}
+  <!-- Crédibilité : l'expérience de l'équipe, sans chiffres inventés. -->
+  <section class="cred" aria-labelledby="cred-titre">
+    <div class="conteneur">
+      <h2 id="cred-titre" class="titre-1 max-w-[18ch]" data-reveal>{a.cred.title}</h2>
+      <p class="chapo mt-4 max-w-[48ch]" data-reveal>{a.cred.lead}</p>
+      <ul class="cred-grille">
+        {a.cred.items.map((it, i) => (
+          <li class="cred-tuile" data-reveal data-reveal-delay={i * 0.07}>
+            <p class="cred-grand">
+              {'count' in it ? <><span data-compte={it.count}>{it.big}</span> <span class="cred-unite">{it.unit}</span></> : it.big}
+            </p>
+            <p class="cred-texte">{it.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   <section class="equipe" aria-labelledby="equipe-titre">
@@ -59,6 +71,7 @@ const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })))
             <div class="membre-corps">
               <p class="membre-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
               <h3 class="membre-role">{m.role}</h3>
+              <p class="membre-preuve">{m.proof}</p>
               <div class="membre-detail">
                 <p class="text-encre-douce">{m.text}</p>
                 <ul class="mt-4 flex flex-wrap gap-2">{m.tags.map((tg) => <li class="tag">{tg}</li>)}</ul>
@@ -67,6 +80,49 @@ const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })))
           </li>
         ))}
       </ul>
+    </div>
+  </section>
+
+  <!-- Comparatif : un seul prestataire pour tout le parcours. -->
+  <section class="comparatif" data-comparatif data-avec="agence" aria-labelledby="cmp-titre">
+    <div class="conteneur">
+      <h2 id="cmp-titre" class="titre-1 max-w-[20ch]" data-reveal>{cmp.title}</h2>
+      <p class="chapo mt-4 max-w-[56ch]" data-reveal>{cmp.lead}</p>
+      <div class="bascule" role="group" aria-label={cmp.switchLabel}>
+        <span class="etiquette text-encre-douce">{cmp.switchLabel}</span>
+        <button type="button" class="bascule-btn" aria-pressed="true" data-avec-btn="agence">{cmp.cols.agence}</button>
+        <button type="button" class="bascule-btn" aria-pressed="false" data-avec-btn="info">{cmp.cols.info}</button>
+      </div>
+      <div class="tableau-boite">
+        <table class="tableau">
+          <thead>
+            <tr>
+              <th scope="col">{cmp.colService}</th>
+              <th scope="col" class="col-agence">{cmp.cols.agence}</th>
+              <th scope="col" class="col-info">{cmp.cols.info}</th>
+              <th scope="col" class="col-nous">{cmp.cols.nous}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lignes.map((l) => (
+              <tr data-pole={l.p} data-ligne>
+                <th scope="row"><span class="point" aria-hidden="true"></span>{l.s}</th>
+                {(['agence', 'info'] as const).map((c) => (
+                  <td class={`col-${c} etat-${l[c]}`}>
+                    <span class="marque" aria-hidden="true">{l[c] === 'oui' ? <Check size={18} stroke-width={2} /> : l[c] === 'non' ? <X size={18} stroke-width={2} /> : <Minus size={18} stroke-width={2} />}</span>
+                    <span class="marque-texte">{etatTexte[l[c]]}</span>
+                  </td>
+                ))}
+                <td class="col-nous etat-oui">
+                  <span class="marque marque-nous" aria-hidden="true" data-coche><Check size={18} stroke-width={2.25} /></span>
+                  <span class="marque-texte">{cmp.yes}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="legende-note">{cmp.note}</p>
     </div>
   </section>
 
@@ -96,28 +152,64 @@ const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })))
   @media (min-width: 1024px) { .tete-media { inline-size: min(100%, 520px); } }
   .tete-media video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
 
-  .bandeau { display: grid; gap: 12px; padding-block: 8px clamp(24px, 4vw, 40px); overflow: hidden; }
-  .rangee { overflow: hidden; }
-  .piste { display: flex; inline-size: max-content; animation: defile 60s linear infinite; }
-  .rangee-inverse .piste { animation-direction: reverse; animation-duration: 72s; }
-  .rangee:hover .piste { animation-play-state: paused; }
-  :global(html[dir="rtl"]) .piste { animation-direction: reverse; }
-  :global(html[dir="rtl"]) .rangee-inverse .piste { animation-direction: normal; }
-  .piste-liste { display: flex; flex: none; gap: 10px; padding-inline-end: 10px; }
-  .etiq {
-    display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
-    padding: 12px 20px; border-radius: 999px;
-    background: var(--color-surface); border: 1px solid var(--color-trait);
-    font-weight: 500; font-size: clamp(15px, 1.6vw, 18px);
-    transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+
+  .cred { padding-block: clamp(48px, 7vw, 88px); border-block-start: 1px solid var(--color-trait); }
+  .cred-grille { display: grid; gap: 12px; margin-block-start: 36px; }
+  @media (min-width: 640px) { .cred-grille { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .cred-grille { grid-template-columns: repeat(4, 1fr); } }
+  .cred-tuile {
+    display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
+    padding: 28px; border-radius: var(--radius-m); background: var(--color-surface); border: 1px solid var(--color-trait);
+    transition: transform 0.3s var(--ease-sortie), border-color 0.2s, background-color 0.3s, color 0.3s;
   }
-  .etiq::before { content: ""; inline-size: 9px; block-size: 9px; border-radius: 999px; background: var(--pole); flex: none; }
-  .etiq:hover { background: var(--color-encre); border-color: var(--color-encre); color: var(--color-papier); }
-  @keyframes defile { to { transform: translateX(-50%); } }
-  @media (prefers-reduced-motion: reduce) {
-    .piste { animation: none; inline-size: auto; padding-inline: 24px; }
-    .rangee-inverse, .piste-liste[aria-hidden] { display: none; }
-    .piste-liste { flex-wrap: wrap; }
+  .cred-tuile:hover { transform: translateY(-4px); border-color: var(--color-encre); }
+  .cred-tuile:last-child { background: var(--color-encre); color: var(--color-papier); border-color: var(--color-encre); }
+  @media (min-width: 1100px) { .cred-tuile { min-block-size: 220px; gap: 32px; } }
+  .cred-grand { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 3.6vw, 48px); line-height: 1; letter-spacing: -0.03em; }
+  .cred-tuile:last-child .cred-grand { color: var(--color-corail); font-size: clamp(56px, 6vw, 80px); }
+  .cred-unite { font-size: 0.4em; letter-spacing: 0; color: var(--color-papier); }
+  .cred-texte { color: var(--color-encre-douce); }
+  .cred-tuile:last-child .cred-texte { color: #a3a7b0; }
+  :global(html[dir="rtl"]) .cred-grand { letter-spacing: 0; line-height: 1.25; }
+  .membre-preuve { margin-block-start: 6px; font-weight: 500; color: var(--color-corail-texte); }
+
+  .comparatif { padding-block: clamp(64px, 9vw, 112px); background: var(--color-sable); }
+  .bascule { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-block-start: 28px; }
+  .bascule-btn {
+    min-block-size: 44px; padding-inline: 16px; border-radius: 999px; font-weight: 500; cursor: pointer;
+    box-shadow: inset 0 0 0 1.5px var(--color-encre); transition: background-color 0.2s, color 0.2s, scale 0.15s;
+  }
+  .bascule-btn[aria-pressed="true"] { background: var(--color-encre); color: var(--color-papier); }
+  .bascule-btn:active { scale: 0.97; }
+  @media (min-width: 900px) { .bascule { display: none; } }
+  .tableau-boite { margin-block-start: 24px; border-radius: var(--radius-m); background: var(--color-surface); overflow: hidden; border: 1px solid color-mix(in srgb, var(--color-encre) 12%, transparent); }
+  .tableau { inline-size: 100%; border-collapse: collapse; }
+  .tableau th, .tableau td { padding: 14px 16px; text-align: start; border-block-end: 1px solid var(--color-trait); }
+  .tableau tr:last-child > * { border-block-end: 0; }
+  .tableau thead th { font-family: var(--font-display); font-weight: 700; font-size: 16px; background: var(--color-papier); }
+  .tableau thead .col-nous { background: var(--color-corail); color: var(--color-encre); font-size: 20px; }
+  .tableau tbody th { font-weight: 500; display: flex; align-items: center; gap: 10px; }
+  .tableau tbody tr { transition: background-color 0.2s; }
+  .tableau tbody tr:hover { background: var(--color-papier); }
+  .point { inline-size: 8px; block-size: 8px; border-radius: 999px; background: var(--pole); flex: none; }
+  .tableau td { white-space: nowrap; }
+  .marque { display: inline-grid; place-items: center; inline-size: 28px; block-size: 28px; border-radius: 999px; vertical-align: middle; margin-inline-end: 8px; }
+  .etat-oui .marque { background: #e3f0ec; color: var(--color-vert); }
+  .etat-non .marque { background: var(--color-papier); color: #8a8d93; }
+  .etat-partiel .marque { background: var(--color-sable); color: var(--color-encre-douce); }
+  .col-nous { background: color-mix(in srgb, var(--color-corail) 7%, var(--color-surface)); }
+  .marque-nous { background: var(--color-corail) !important; color: var(--color-encre) !important; }
+  .marque-texte { font-size: 14px; color: var(--color-encre-douce); }
+  .col-nous .marque-texte { color: var(--color-encre); font-weight: 500; }
+  .legende-note { margin-block-start: 12px; font-size: 13px; color: var(--color-encre-douce); }
+  /* Mobile : une seule colonne de comparaison à la fois, choisie avec la bascule. */
+  @media (max-width: 899px) {
+    /* Texte masqué visuellement, mais toujours lu par les lecteurs d'écran. */
+    .marque-texte { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .tableau th, .tableau td { padding: 12px 10px; }
+    .tableau tbody th { font-size: 14px; white-space: normal; }
+    [data-avec="agence"] .col-info, [data-avec="info"] .col-agence { display: none; }
+    .tableau td { text-align: center; }
   }
 
   .equipe { padding-block: clamp(64px, 9vw, 112px); }
@@ -177,6 +269,27 @@ const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })))
       m.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') activer(m); });
       m.addEventListener('click', () => activer(m));
       m.addEventListener('focus', () => activer(m));
+    });
+
+    // Comparatif : bascule mobile entre les deux types de prestataires.
+    const cmp = document.querySelector<HTMLElement>('[data-comparatif]');
+    cmp?.querySelectorAll<HTMLButtonElement>('[data-avec-btn]').forEach((b) => b.addEventListener('click', () => {
+      cmp.dataset.avec = b.dataset.avecBtn;
+      cmp.querySelectorAll('[data-avec-btn]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    }));
+    if (cmp && !reduceMotion()) {
+      gsap.from(cmp.querySelectorAll('[data-coche]'), {
+        scale: 0, rotate: -40, duration: 0.5, ease: 'back.out(2.2)', stagger: 0.07,
+        scrollTrigger: { trigger: cmp.querySelector('table'), start: 'top 75%', once: true },
+      });
+    }
+    // Chiffres-clés : le nombre de services se compte jusqu'à sa valeur.
+    document.querySelectorAll<HTMLElement>('[data-compte]').forEach((el) => {
+      const fin = Number(el.dataset.compte);
+      if (reduceMotion()) return;
+      const o = { v: 0 };
+      gsap.to(o, { v: fin, duration: 1.2, ease: 'power2.out', onUpdate: () => (el.textContent = String(Math.round(o.v))),
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
     });
 
     // Valeurs : chaque mot se colore en corail au fil du défilement.

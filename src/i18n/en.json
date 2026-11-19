@@ -292,25 +292,28 @@
     "team": [
       {
         "role": "Software engineer",
-        "text": "Architecture, web development, automation, custom software. He makes sure what is promised is feasible, and delivers it.",
+        "proof": "Several years of experience · many clients supported",
+        "text": "Web development, automation, custom software: he designs and codes your tools, from the first mock-up to launch. He has supported many clients and makes sure what is promised is feasible, then delivers it.",
         "tags": [
           "Web",
           "Automation",
-          "Software"
+          "Custom software"
         ]
       },
       {
-        "role": "Marketing specialist",
-        "text": "Strategy, ad campaigns, results tracking. Has supported dozens of companies in their growth.",
+        "role": "Marketing expert",
+        "proof": "Dozens of companies supported, revenue up",
+        "text": "Strategy, ad campaigns, results tracking: he has supported dozens of companies that saw their revenue grow. He knows how to bring in customers and prove it with numbers.",
         "tags": [
           "Ads",
           "Strategy",
-          "Data"
+          "Growth"
         ]
       },
       {
         "role": "Communication specialist",
-        "text": "Messaging, content, video production. Gives your offer a clear voice on every channel.",
+        "proof": "Messages, content and videos that sell",
+        "text": "Messaging, content, video production: gives your offer a clear voice on every channel, working hand in hand with the marketing expert's campaigns.",
         "tags": [
           "Video",
           "Content",
@@ -335,7 +338,45 @@
     ],
     "methodTitle": "Our method",
     "teamHint": "Hover or tap a team member.",
-    "stripLabel": "What we do"
+    "cred": {
+      "title": "Experience you can measure.",
+      "lead": "No vague promises: a track record, clients, results.",
+      "items": [
+        {
+          "big": "Several years",
+          "text": "of software engineering experience, serving many clients."
+        },
+        {
+          "big": "Dozens",
+          "text": "of companies supported by our marketing expert."
+        },
+        {
+          "big": "Growing",
+          "text": "revenue for the companies we have supported."
+        },
+        {
+          "big": "9",
+          "unit": "services",
+          "text": "under one roof, from custom software to ad management, on a single quote.",
+          "count": 9
+        }
+      ]
+    },
+    "compare": {
+      "title": "What others do in part, we do in full.",
+      "lead": "A communication agency doesn't code your tools. An IT provider doesn't run your campaigns. At &si, the same team handles everything, from software to advertising.",
+      "colService": "Service",
+      "cols": {
+        "agence": "Communication agency",
+        "info": "IT provider",
+        "nous": "&si"
+      },
+      "yes": "Included",
+      "no": "Not offered",
+      "part": "Partly",
+      "switchLabel": "Compare with",
+      "note": "Indicative comparison, based on what these two types of providers usually offer."
+    }
   },
   "contact": {
     "metaTitle": "Contact and quote · Et si (&si)",
