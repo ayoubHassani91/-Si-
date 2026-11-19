@@ -1,37 +1,138 @@
 ---
-import { ArrowRight, Check } from '@lucide/astro';
+import { ArrowRight, ArrowDown } from '@lucide/astro';
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
+import PoleMedia from '../components/PoleMedia.astro';
 import Combo from '../components/home/Combo.astro';
 import FinalCta from '../components/home/FinalCta.astro';
-import { t, href, asset, POLES, type Lang } from '../i18n';
+import { t, href, POLES, type Lang } from '../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang);
+const s = d.services;
 ---
-<Base lang={lang} title={d.services.metaTitle} description={d.services.metaDescription} current="services">
-  <PageHero title={d.services.title} lead={d.services.lead} />
-  <section class="pb-24">
-    <ul class="conteneur grid gap-4 lg:grid-cols-3">
-      {POLES.map((p, i) => {
-        const pole = d.poles[p];
-        return (
-          <li class="carte flex flex-col p-8" data-pole={p} data-reveal data-reveal-delay={i * 0.08}>
-            <span class="pastille self-start" data-pole={p}>{pole.verb}</span>
-            <img src={asset(`/3d/pole-${p}.webp`)} alt="" width="200" height="200" loading="lazy" class="-ms-4 my-4 w-40" />
-            <h2 class="titre-2">{pole.name}</h2>
-            <p class="chapo mt-2">{pole.pitch}</p>
-            <ul class="mt-6 space-y-2">
-              {pole.services.map((s) => <li class="flex gap-2"><Check size={18} stroke-width={1.75} class="mt-1 flex-none" style="color: var(--pole)" aria-hidden="true" />{s}</li>)}
-            </ul>
-            <a href={href(lang, p)} class="lien mt-8 inline-flex items-center gap-2 self-start">
-              {d.home.poles.more}<span class="sr-only"> : {pole.name}</span><ArrowRight size={16} stroke-width={1.75} class="fleche" aria-hidden="true" />
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+<Base lang={lang} title={s.metaTitle} description={s.metaDescription} current="services">
+  <section class="tete">
+    <div class="conteneur">
+      <h1 class="titre-1" data-reveal>{s.title}</h1>
+      <p class="chapo mt-5 max-w-[56ch]" data-reveal>{s.lead}</p>
+      <!-- Sommaire : un bouton par pôle, qui descend jusqu'à sa bande. -->
+      <nav class="sommaire" aria-label={s.jump} data-reveal>
+        {POLES.map((p) => (
+          <a href={`#${p}`} class="saut" data-pole={p}>
+            <span class="saut-verbe">{d.poles[p].verb}</span>
+            <span class="saut-nom">{d.poles[p].name}</span>
+            <ArrowDown size={18} stroke-width={1.75} aria-hidden="true" class="saut-fleche" />
+          </a>
+        ))}
+      </nav>
+    </div>
   </section>
+
+  {POLES.map((p, i) => {
+    const pole = d.poles[p];
+    return (
+      <section id={p} class:list={['bande', i % 2 === 1 && 'inverse']} data-pole={p} aria-labelledby={`titre-${p}`}>
+        <div class="conteneur bande-grille">
+          <div class="bande-media" data-reveal>
+            <PoleMedia lang={lang} pole={p} ratio="4 / 3" />
+          </div>
+          <div class="bande-texte">
+            <h2 id={`titre-${p}`} class="titre-1" data-reveal>{pole.name}</h2>
+            <p class="chapo mt-4 max-w-[48ch]" data-reveal>{pole.intro}</p>
+            <ol class="liste">
+              {pole.details.map((x, j) => (
+                <li class="ligne" data-reveal data-reveal-delay={j * 0.05}>
+                  <span class="num" aria-hidden="true">{String(j + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3 class="ligne-titre">{x.title}</h3>
+                    <p class="ligne-texte">{x.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href={href(lang, p)} class="action">{s.discover}<span class="sr-only"> : {pole.name}</span><ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+              <a href={href(lang, 'contact', `?pole=${p}`)} class="action action-ligne">{s.cta}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
   <Combo lang={lang} />
   <FinalCta lang={lang} />
 </Base>
+
+<style>
+  .tete { padding-block: clamp(48px, 8vw, 96px) clamp(32px, 5vw, 56px); }
+  .sommaire { display: grid; gap: 8px; margin-block-start: 40px; }
+  @media (min-width: 768px) { .sommaire { grid-template-columns: repeat(3, 1fr); } }
+  .saut {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+    padding: 18px 20px;
+    border-radius: var(--radius-s);
+    background: var(--color-surface);
+    border: 1px solid var(--color-trait);
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.25s var(--ease-sortie);
+  }
+  .saut::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 4px; background: var(--pole); transition: inline-size 0.3s var(--ease-sortie); }
+  .saut:hover { border-color: var(--color-encre); transform: translateY(-2px); }
+  .saut:hover::before { inline-size: 8px; }
+  .saut:active { transform: translateY(0); }
+  .saut-verbe { font-family: var(--font-mono); font-size: 12px; color: var(--color-encre-douce); }
+  .saut-nom { grid-column: 1; font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.2; }
+  .saut-fleche { grid-column: 2; grid-row: 1 / span 2; align-self: center; transition: transform 0.25s var(--ease-sortie); }
+  .saut:hover .saut-fleche { transform: translateY(3px); }
+
+  .bande { padding-block: clamp(56px, 8vw, 104px); border-block-start: 1px solid var(--color-trait); scroll-margin-block-start: 72px; }
+  .bande-grille { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 1024px) {
+    .bande-grille { grid-template-columns: 5fr 6fr; gap: 72px; }
+    .inverse .bande-media { order: 2; }
+  }
+  .liste { margin-block-start: 32px; border-block-start: 1px solid var(--color-trait); }
+  .ligne {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 12px;
+    padding-block: 18px;
+    border-block-end: 1px solid var(--color-trait);
+    transition: background-color 0.2s;
+  }
+  .ligne:hover .num { color: var(--color-encre); }
+  .ligne:hover .num::after { transform: scaleX(1); }
+  .num { position: relative; font-family: var(--font-mono); font-size: 13px; color: var(--color-encre-douce); padding-block-start: 4px; transition: color 0.2s; }
+  .num::after { content: ""; position: absolute; inset-inline-start: 0; inset-block-end: -4px; inline-size: 20px; block-size: 2px; background: var(--pole); transform: scaleX(0); transform-origin: left; transition: transform 0.25s var(--ease-sortie); }
+  .ligne-titre { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.25; }
+  .ligne-texte { margin-block-start: 4px; color: var(--color-encre-douce); }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-block-size: 52px;
+    padding-inline: 20px;
+    border-radius: var(--radius-s);
+    background: var(--color-encre);
+    color: var(--color-papier);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s, scale 0.15s;
+  }
+  .action:hover { background: var(--pole); }
+  [data-pole="communication"] .action:hover { color: var(--color-encre); }
+  .action:active { scale: 0.97; }
+  .action .fleche { transition: transform 0.25s var(--ease-sortie); }
+  .action:hover .fleche { transform: translateX(4px); }
+  :global(html[dir="rtl"]) .action .fleche { transform: scaleX(-1); }
+  :global(html[dir="rtl"]) .action:hover .fleche { transform: translateX(-4px) scaleX(-1); }
+  .action-ligne { background: transparent; color: var(--color-encre); box-shadow: inset 0 0 0 1.5px var(--color-encre); }
+  .action-ligne:hover { background: var(--color-encre); color: var(--color-papier); }
+  [data-pole="communication"] .action-ligne:hover { color: var(--color-papier); }
+</style>

@@ -1,0 +1,36 @@
+---
+import { t, asset, type Lang, type PoleKey } from '../i18n';
+interface Props { lang: Lang; pole: PoleKey; ratio?: string; label?: boolean; class?: string }
+const { lang, pole, ratio = '4 / 3', label = true, class: cls = '' } = Astro.props;
+const verb = t(lang).poles[pole].verb;
+---
+<!-- Vidéo motion du pôle (rendue dans Blender) : ne joue que lorsqu'elle est à l'écran. -->
+<div class:list={['pm', cls]} data-pole={pole} style={`aspect-ratio: ${ratio}`}>
+  <video muted loop playsinline preload="none" poster={asset(`/poles/${pole}.webp`)} data-motion-auto aria-hidden="true">
+    <source src={asset(`/poles/${pole}.webm`)} type="video/webm" />
+    <source src={asset(`/poles/${pole}.mp4`)} type="video/mp4" />
+  </video>
+  {label && <span class="pm-verbe" aria-hidden="true">{verb}</span>}
+</div>
+<style>
+  .pm { position: relative; overflow: hidden; border-radius: var(--radius-m); background: var(--color-sable); }
+  .pm video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
+  .pm-verbe {
+    position: absolute; inset-block-start: 16px; inset-inline-start: 16px;
+    padding: 4px 10px; border-radius: var(--radius-s); background: var(--color-papier);
+    font-family: var(--font-mono); font-size: 12px; line-height: 16px;
+    box-shadow: inset 3px 0 0 var(--pole);
+  }
+  :global(html[dir="rtl"]) .pm-verbe { box-shadow: inset -3px 0 0 var(--pole); }
+</style>
+<script>
+  import { reduceMotion } from '../scripts/motion';
+  document.addEventListener('astro:page-load', () => {
+    if (reduceMotion()) return;
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      const v = e.target as HTMLVideoElement;
+      if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+    }), { threshold: 0.25 });
+    document.querySelectorAll<HTMLVideoElement>('[data-motion-auto]').forEach((v) => io.observe(v));
+  });
+</script>

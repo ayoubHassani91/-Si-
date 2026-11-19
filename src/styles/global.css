@@ -152,6 +152,7 @@
   }
   html[dir="rtl"] .lien { background-position: 100% 100%; }
   .lien:hover { background-size: 100% 1.5px; }
+  html[dir="rtl"] .lien svg.fleche { transform: scaleX(-1); }
 
   .carte {
     background: var(--color-surface);

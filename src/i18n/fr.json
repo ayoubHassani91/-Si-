@@ -282,7 +282,11 @@
     "includes": "Ce que comprend ce pôle",
     "deliverables": "Ce que vous recevez",
     "otherPoles": "Les autres pôles",
-    "cta": "Parler de mon projet"
+    "cta": "Parler de mon projet",
+    "jump": "Aller au pôle",
+    "discover": "Découvrir le pôle",
+    "pickService": "Choisissez un service pour voir le détail.",
+    "step": "Étape"
   },
   "about": {
     "metaTitle": "À propos · Et si (&si), agence digitale à Paris",

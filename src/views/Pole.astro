@@ -1,61 +1,98 @@
 ---
-import { ArrowRight, CircleCheck } from '@lucide/astro';
+import { ArrowRight, MessageCircle, Check } from '@lucide/astro';
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
+import PoleMedia from '../components/PoleMedia.astro';
 import Method from '../components/home/Method.astro';
 import FinalCta from '../components/home/FinalCta.astro';
-import { t, href, POLES, type Lang, type PoleKey } from '../i18n';
+import { t, href, whatsappHref, POLES, type Lang, type PoleKey } from '../i18n';
 interface Props { lang: Lang; pole: PoleKey }
 const { lang, pole } = Astro.props;
 const d = t(lang);
+const s = d.services;
 const p = d.poles[pole];
 const others = POLES.filter((x) => x !== pole);
 ---
 <Base lang={lang} title={`${p.name} · Et si (&si)`} description={p.intro} current={pole}>
-  <PageHero title={p.name} lead={p.intro} pole={pole}>
-    <a href={href(lang, 'contact', `?pole=${pole}`)} class="btn btn-principal mt-10">{d.services.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
-  </PageHero>
-
-  <section class="pb-24" aria-labelledby="inclus">
-    <div class="conteneur">
-      <h2 id="inclus" class="titre-2" data-reveal>{d.services.includes}</h2>
-      <div class="mt-10 grid gap-x-10 md:grid-cols-3">
-        {p.details.map((x, i) => (
-          <article class="detail" data-pole={pole} data-reveal data-reveal-delay={i * 0.08}>
-            <h3 class="titre-3">{x.title}</h3>
-            <p class="mt-3 text-encre-douce">{x.text}</p>
-          </article>
-        ))}
+  <!-- En-tête : titre et actions d'un côté, vidéo motion du pôle de l'autre. -->
+  <section class="tete" data-pole={pole}>
+    <div class="conteneur tete-grille">
+      <div>
+        <p class="fil"><a href={href(lang, 'services')} class="fil-lien">{d.nav.services}</a><span aria-hidden="true">/</span><span>{p.verb}</span></p>
+        <h1 class="titre-1 mt-4" data-reveal>{p.name}</h1>
+        <p class="chapo mt-5 max-w-[48ch]" data-reveal>{p.intro}</p>
+        <div class="mt-8 flex flex-wrap gap-3" data-reveal>
+          <a href={href(lang, 'contact', `?pole=${pole}`)} class="btn btn-principal" data-magnet>{s.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+          <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire" data-magnet><MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}</a>
+        </div>
+      </div>
+      <div data-reveal>
+        <PoleMedia lang={lang} pole={pole} ratio="4 / 3" />
       </div>
     </div>
   </section>
 
-  <section class="livrables" aria-labelledby="livrables">
-    <div class="conteneur grid gap-10 lg:grid-cols-12">
-      <h2 id="livrables" class="titre-2 lg:col-span-5">{d.services.deliverables}</h2>
-      <ul class="space-y-4 lg:col-span-7">
-        {p.deliverables.map((x) => (
-          <li class="flex items-start gap-3 titre-3"><CircleCheck size={26} stroke-width={1.75} class="mt-0.5 flex-none" style="color: var(--pole)" data-pole={pole} aria-hidden="true" />{x}</li>
+  <!-- Services du pôle : onglets verticaux, le détail s'affiche à côté. -->
+  <section class="services" data-pole={pole} data-onglets aria-labelledby="inclus">
+    <div class="conteneur">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="inclus" class="titre-2" data-reveal>{s.includes}</h2>
+        <p class="etiquette text-encre-douce">{s.pickService}</p>
+      </div>
+      <div class="onglets-grille">
+        <div class="onglets" role="tablist" aria-label={s.includes}>
+          {p.details.map((x, i) => (
+            <button type="button" role="tab" class="onglet" id={`svc-${i}`} aria-controls={`svc-panneau-${i}`}
+              aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-onglet={i}>
+              <span class="onglet-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span class="onglet-titre">{x.title}</span>
+              <ArrowRight size={20} stroke-width={1.75} aria-hidden="true" class="onglet-fleche" />
+            </button>
+          ))}
+        </div>
+        <div class="panneaux">
+          {p.details.map((x, i) => (
+            <div class="panneau" role="tabpanel" id={`svc-panneau-${i}`} aria-labelledby={`svc-${i}`} data-panneau={i} hidden={i !== 0}>
+              <p class="panneau-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+              <h3 class="titre-2">{x.title}</h3>
+              <p class="chapo mt-4">{x.text}</p>
+              <a href={href(lang, 'contact', `?pole=${pole}`)} class="lien mt-6 inline-flex items-center gap-2">{s.cta}<ArrowRight size={16} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="livrables" data-pole={pole} aria-labelledby="livrables">
+    <div class="conteneur">
+      <h2 id="livrables" class="titre-2" data-reveal>{s.deliverables}</h2>
+      <ol class="tuiles">
+        {p.deliverables.map((x, i) => (
+          <li class="tuile" data-reveal data-reveal-delay={i * 0.06}>
+            <span class="tuile-haut"><span class="etiquette">{s.step} {i + 1}</span><Check size={18} stroke-width={1.75} aria-hidden="true" /></span>
+            <span class="tuile-texte">{x}</span>
+          </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
 
   <Method lang={lang} />
 
-  <section class="py-24" aria-labelledby="autres">
+  <section class="autres" aria-labelledby="autres">
     <div class="conteneur">
-      <h2 id="autres" class="titre-2">{d.services.otherPoles}</h2>
-      <ul class="mt-8 grid gap-4 md:grid-cols-2">
+      <h2 id="autres" class="titre-2">{s.otherPoles}</h2>
+      <ul class="mt-8 grid gap-5 md:grid-cols-2">
         {others.map((o) => (
-          <li>
-            <a href={href(lang, o)} class="carte autre flex items-center justify-between gap-6 p-8" data-pole={o}>
-              <span>
-                <span class="pastille" data-pole={o}>{d.poles[o].verb}</span>
-                <span class="titre-3 mt-4 block">{d.poles[o].name}</span>
-              </span>
-              <ArrowRight size={24} stroke-width={1.75} class="fleche flex-none" aria-hidden="true" />
-            </a>
+          <li class="autre" data-pole={o}>
+            <PoleMedia lang={lang} pole={o} ratio="16 / 9" />
+            <div class="autre-bas">
+              <div>
+                <p class="titre-3">{d.poles[o].name}</p>
+                <p class="mt-1 text-encre-douce">{d.poles[o].pitch}</p>
+              </div>
+              <a href={href(lang, o)} class="autre-btn" aria-label={`${s.discover} : ${d.poles[o].name}`}><ArrowRight size={20} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+            </div>
           </li>
         ))}
       </ul>
@@ -65,9 +102,94 @@ const others = POLES.filter((x) => x !== pole);
 </Base>
 
 <style>
-  .detail { padding-block: 28px 8px; border-block-start: 2px solid var(--pole); }
-  @media (max-width: 767px) { .detail + .detail { margin-block-start: 24px; } }
-  .livrables { background: var(--color-surface); border-block: 1px solid var(--color-trait); padding-block: 96px; }
-  .autre { text-decoration: none; }
-  :global(html[dir="rtl"]) .fleche { transform: scaleX(-1); }
+  .tete { padding-block: clamp(40px, 7vw, 88px); }
+  .tete-grille { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 1024px) { .tete-grille { grid-template-columns: 6fr 5fr; gap: 64px; } }
+  .fil { display: flex; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--color-encre-douce); }
+  .fil-lien { text-decoration: none; }
+  .fil-lien:hover { color: var(--color-encre); text-decoration: underline; }
+
+  .services { padding-block: clamp(56px, 8vw, 96px); border-block-start: 1px solid var(--color-trait); }
+  .onglets-grille { display: grid; gap: 24px; margin-block-start: 32px; }
+  @media (min-width: 1024px) { .onglets-grille { grid-template-columns: 5fr 7fr; gap: 48px; } }
+  .onglets { display: flex; flex-direction: column; border-block-start: 1px solid var(--color-trait); }
+  .onglet {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    min-block-size: 64px;
+    padding-inline: 12px;
+    border-block-end: 1px solid var(--color-trait);
+    text-align: start;
+    cursor: pointer;
+    color: var(--color-encre-douce);
+    transition: color 0.2s, background-color 0.2s, padding 0.3s var(--ease-sortie);
+  }
+  .onglet::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 4px; background: var(--pole); transform: scaleY(0); transition: transform 0.3s var(--ease-sortie); }
+  .onglet:hover { color: var(--color-encre); background: var(--color-surface); }
+  .onglet[aria-selected="true"] { color: var(--color-encre); background: var(--color-surface); padding-inline-start: 20px; }
+  .onglet[aria-selected="true"]::before { transform: scaleY(1); }
+  .onglet-num { font-family: var(--font-mono); font-size: 13px; }
+  .onglet-titre { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.25; }
+  .onglet-fleche { opacity: 0; transform: translateX(-6px); transition: opacity 0.2s, transform 0.25s var(--ease-sortie); }
+  .onglet[aria-selected="true"] .onglet-fleche, .onglet:hover .onglet-fleche { opacity: 1; transform: none; }
+  :global(html[dir="rtl"]) .onglet-fleche { scale: -1 1; }
+  .panneau { padding: clamp(24px, 4vw, 40px); border-radius: var(--radius-m); background: var(--color-surface); border: 1px solid var(--color-trait); animation: apparait 0.4s var(--ease-sortie); }
+  .panneau-num { font-family: var(--font-display); font-weight: 800; font-size: 64px; line-height: 1; color: var(--pole); margin-block-end: 16px; }
+  @keyframes apparait { from { opacity: 0; transform: translateY(8px); } }
+
+  .livrables { padding-block: clamp(56px, 8vw, 96px); background: var(--color-surface); border-block: 1px solid var(--color-trait); }
+  .tuiles { display: grid; gap: 12px; margin-block-start: 32px; }
+  @media (min-width: 640px) { .tuiles { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .tuiles { grid-template-columns: repeat(4, 1fr); } }
+  .tuile {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 20px;
+    border-radius: var(--radius-s);
+    background: var(--color-papier);
+    border-block-start: 3px solid var(--pole);
+    transition: transform 0.25s var(--ease-sortie);
+  }
+  .tuile:hover { transform: translateY(-3px); }
+  .tuile-haut { display: flex; justify-content: space-between; align-items: center; color: var(--color-encre-douce); }
+  .tuile-texte { font-family: var(--font-display); font-weight: 700; font-size: 19px; line-height: 1.3; }
+
+  .autres { padding-block: clamp(56px, 8vw, 96px); }
+  .autre { position: relative; padding: 12px; border-radius: var(--radius-m); background: var(--color-surface); border: 1px solid var(--color-trait); transition: border-color 0.2s, transform 0.3s var(--ease-sortie); }
+  .autre:hover { border-color: var(--color-encre); transform: translateY(-4px); }
+  .autre-bas { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 8px 4px; }
+  .autre-btn {
+    display: grid; place-items: center; flex: none; inline-size: 52px; block-size: 52px;
+    border-radius: var(--radius-s); background: var(--color-encre); color: var(--color-papier);
+    transition: background-color 0.2s;
+  }
+  .autre-btn::after { content: ""; position: absolute; inset: 0; }
+  .autre:hover .autre-btn { background: var(--pole); }
+  :global(html[dir="rtl"]) .autre-btn .fleche { transform: scaleX(-1); }
 </style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const s = document.querySelector<HTMLElement>('[data-onglets]');
+    if (!s) return;
+    const tabs = [...s.querySelectorAll<HTMLButtonElement>('[data-onglet]')];
+    const panels = [...s.querySelectorAll<HTMLElement>('[data-panneau]')];
+    const choisir = (i: number, focus = false) => {
+      tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(j === i)); t.tabIndex = j === i ? 0 : -1; });
+      panels.forEach((p, j) => { p.hidden = j !== i; });
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => choisir(i));
+      t.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') choisir(i); });
+      t.addEventListener('keydown', (e) => {
+        const n = ['ArrowDown', 'ArrowRight'].includes(e.key) ? 1 : ['ArrowUp', 'ArrowLeft'].includes(e.key) ? -1 : 0;
+        if (n) { e.preventDefault(); choisir((i + n + tabs.length) % tabs.length, true); }
+      });
+    });
+  });
+</script>

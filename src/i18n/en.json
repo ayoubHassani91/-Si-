@@ -277,7 +277,11 @@
     "includes": "What this area covers",
     "deliverables": "What you receive",
     "otherPoles": "Our other areas",
-    "cta": "Discuss my project"
+    "cta": "Discuss my project",
+    "jump": "Go to area",
+    "discover": "Explore this area",
+    "pickService": "Pick a service to see the details.",
+    "step": "Step"
   },
   "about": {
     "metaTitle": "About · Et si (&si), digital agency in Paris",
