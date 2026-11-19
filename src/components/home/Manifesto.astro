@@ -1,55 +1,139 @@
 ---
-import { t, type Lang } from '../../i18n';
+import { ArrowRight } from '@lucide/astro';
+import { t, href, asset, type Lang, type PoleKey } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const m = t(lang).home.manifesto;
-const words = m.text.split(' ');
+const d = t(lang);
+const m = d.home.manifesto;
+const steps = m.steps as { pole: PoleKey; text: string }[];
 ---
+<!-- Les trois verbes sont des onglets : survol, clic ou toucher affichent le pôle et sa vidéo motion. -->
 <section class="manifeste" data-manifeste aria-labelledby="manifeste-titre">
-  <div class="conteneur grid gap-8 lg:gap-12 lg:grid-cols-12">
-    <h2 id="manifeste-titre" class="lg:col-span-7">
-      {m.lines.map((l) => (
-        <span class="ligne"><span class="ligne-txt">{l}</span></span>
+  <div class="conteneur grid gap-10 lg:grid-cols-12 lg:items-center">
+    <div class="lg:col-span-7">
+      <h2 id="manifeste-titre" class="sr-only">{m.lines.join(' ')}</h2>
+      <div class="verbes" role="tablist" aria-label={m.label}>
+        {m.lines.map((l, i) => (
+          <button type="button" class="verbe" role="tab" id={`verbe-${i}`} aria-controls={`verbe-panneau-${i}`}
+            aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-pole={steps[i].pole} data-verbe={i}>
+            <span class="verbe-txt">{l}</span>
+            <span class="verbe-trait" aria-hidden="true"></span>
+          </button>
+        ))}
+      </div>
+      <p class="mt-8 max-w-[52ch] text-encre-douce">{m.text}</p>
+      <p class="etiquette mt-4 text-encre-douce indice-verbes" aria-hidden="true">{m.hint}</p>
+    </div>
+
+    <div class="lg:col-span-5">
+      {steps.map((s, i) => (
+        <div class="panneau" role="tabpanel" id={`verbe-panneau-${i}`} aria-labelledby={`verbe-${i}`} data-pole={s.pole} data-panneau={i} hidden={i !== 0}>
+          <div class="media">
+            <video muted loop playsinline preload="none" poster={asset(`/poles/${s.pole}.webp`)} data-motion aria-hidden="true">
+              <source src={asset(`/poles/${s.pole}.webm`)} type="video/webm" />
+              <source src={asset(`/poles/${s.pole}.mp4`)} type="video/mp4" />
+            </video>
+          </div>
+          <p class="pole-nom"><span class="point" aria-hidden="true"></span>{d.poles[s.pole].name}</p>
+          <p class="titre-3 mt-2">{s.text}</p>
+          <a href={href(lang, s.pole)} class="lien mt-5 inline-flex items-center gap-2">
+            {d.home.poles.more}<ArrowRight size={16} stroke-width={1.75} class="fleche" aria-hidden="true" />
+          </a>
+        </div>
       ))}
-    </h2>
-    <p class="mot-a-mot titre-3 lg:col-span-5 lg:self-end" data-mots>
-      {words.map((w) => <span class="mot">{w} </span>)}
-    </p>
+    </div>
   </div>
 </section>
 
 <style>
-  .manifeste { padding-block: clamp(72px, 12vw, 128px); }
-  .ligne {
+  .manifeste { padding-block: clamp(64px, 10vw, 120px); }
+  .verbes { display: flex; flex-direction: column; align-items: flex-start; }
+  .verbe {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.3em;
+    gap: 0.25em;
+    padding-block: 2px;
     font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(48px, 8vw, 104px);
-    line-height: 1;
+    line-height: 1.02;
     letter-spacing: -0.035em;
+    color: #8a8d93;
+    cursor: pointer;
+    text-align: start;
+    transition: color 0.3s, transform 0.4s var(--ease-sortie);
   }
-  :global(html[dir="rtl"]) .ligne { letter-spacing: 0; line-height: 1.25; }
-  .mot-a-mot { font-weight: 500; }
-  .mot { color: #8a8d93; }
+  :global(html[dir="rtl"]) .verbe { letter-spacing: 0; line-height: 1.3; }
+  .verbe:hover { color: var(--color-encre-douce); }
+  .verbe[aria-selected="true"] { color: var(--color-encre); transform: translateX(12px); }
+  :global(html[dir="rtl"]) .verbe[aria-selected="true"] { transform: translateX(-12px); }
+  .verbe-trait {
+    position: absolute;
+    inset-inline-start: -24px;
+    inset-block: 18%;
+    inline-size: 6px;
+    border-radius: 2px;
+    background: var(--pole);
+    transform: scaleY(0);
+    transition: transform 0.35s var(--ease-sortie);
+  }
+  .verbe[aria-selected="true"] .verbe-trait { transform: scaleY(1); }
+  .verbe:focus-visible { outline-offset: 6px; }
+
+  .media {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-m);
+    background: var(--color-sable);
+    overflow: hidden;
+  }
+  .media video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
+  .pole-nom { display: flex; align-items: center; gap: 8px; margin-block-start: 20px; font-weight: 500; color: var(--color-encre-douce); }
+  .point { inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--pole); }
+  .panneau:not([hidden]) { animation: apparait 0.45s var(--ease-sortie); }
+  @keyframes apparait { from { opacity: 0; transform: translateY(10px); } }
+  .indice-verbes { display: none; }
+  @media (min-width: 640px) { .indice-verbes { display: block; } }
 </style>
 
 <script>
-  import { gsap, reduceMotion } from '../../scripts/motion';
+  import { reduceMotion } from '../../scripts/motion';
   document.addEventListener('astro:page-load', () => {
     const s = document.querySelector<HTMLElement>('[data-manifeste]');
     if (!s) return;
-    const mots = s.querySelectorAll<HTMLElement>('.mot');
-    const lignes = s.querySelectorAll<HTMLElement>('.ligne-txt');
-    if (reduceMotion()) { gsap.set(mots, { color: 'var(--color-encre)' }); return; }
-    gsap.from(lignes, {
-      yPercent: 60, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12,
-      scrollTrigger: { trigger: s, start: 'top 70%', once: true },
+    const tabs = [...s.querySelectorAll<HTMLButtonElement>('[data-verbe]')];
+    const panels = [...s.querySelectorAll<HTMLElement>('[data-panneau]')];
+    let actif = 0;
+    let visible = false;
+    let touche = false; // l'utilisateur a choisi : on arrête le défilement automatique
+    let minuterie = 0;
+
+    const lire = () => panels.forEach((p, i) => {
+      const v = p.querySelector('video')!;
+      if (i === actif && visible && !reduceMotion()) v.play().catch(() => {}); else v.pause();
     });
-    gsap.to(mots, {
-      color: '#15171c', stagger: 0.08, ease: 'none',
-      scrollTrigger: { trigger: s.querySelector('[data-mots]'), start: 'top 80%', end: 'bottom 45%', scrub: true },
+    const choisir = (i: number, focus = false) => {
+      actif = i;
+      tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(j === i)); t.tabIndex = j === i ? 0 : -1; });
+      panels.forEach((p, j) => { p.hidden = j !== i; });
+      if (focus) tabs[i].focus();
+      lire();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => { touche = true; choisir(i); });
+      t.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { touche = true; choisir(i); } });
+      t.addEventListener('keydown', (e) => {
+        const n = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+        if (n) { e.preventDefault(); touche = true; choisir((i + n + tabs.length) % tabs.length, true); }
+      });
     });
+
+    // Tant que personne n'a touché aux verbes, ils défilent seuls quand la section est visible.
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      lire();
+      clearInterval(minuterie);
+      if (visible && !reduceMotion()) minuterie = window.setInterval(() => { if (!touche) choisir((actif + 1) % tabs.length); }, 3600);
+    }, { threshold: 0.35 }).observe(s);
   });
 </script>

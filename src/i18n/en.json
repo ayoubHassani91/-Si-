@@ -131,7 +131,7 @@
       "cta": "Start a project",
       "terminal": "> imagine · structure · build",
       "replay": "Rebuild the &si logo",
-      "hintMouse": "Click the & to rebuild it",
+      "hintMouse": "Move your mouse: the & reacts. Click to rebuild it.",
       "hintTouch": "Tap the & to rebuild it"
     },
     "manifesto": {
@@ -141,7 +141,22 @@
         "Structure.",
         "Build."
       ],
-      "text": "We start by understanding what's holding you back. We organise the answer. Then we build it, with the same team from the first call to launch."
+      "text": "We start by understanding what's holding you back. We organise the answer. Then we build it, with the same team from the first call to launch.",
+      "steps": [
+        {
+          "pole": "communication",
+          "text": "We imagine how to make you visible: message, campaigns, videos."
+        },
+        {
+          "pole": "conseil",
+          "text": "We structure your business: priorities, organisation, a dated action plan."
+        },
+        {
+          "pole": "logiciels",
+          "text": "We build your tools: website, automations, custom software."
+        }
+      ],
+      "hint": "Hover or tap a verb."
     },
     "poles": {
       "title": "Three areas, one goal: your results.",

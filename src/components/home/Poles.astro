@@ -1,33 +1,39 @@
 ---
-import { ArrowRight, Check } from '@lucide/astro';
+import { ArrowRight } from '@lucide/astro';
 import { t, href, asset, POLES, type Lang } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang);
 ---
-<section class="poles" aria-labelledby="poles-titre">
+<section class="poles" data-poles aria-labelledby="poles-titre">
   <div class="conteneur">
     <div class="poles-tete">
       <h2 id="poles-titre" class="titre-1 max-w-[18ch]" data-reveal>{d.home.poles.title}</h2>
       <p class="chapo max-w-[40ch]" data-reveal>{d.home.poles.lead}</p>
     </div>
-    <ul class="grid gap-4 lg:grid-cols-3">
+    <ul class="grid gap-5 lg:grid-cols-3">
       {POLES.map((p, i) => {
         const pole = d.poles[p];
         return (
-          <li class="panneau carte" data-pole={p} data-reveal data-reveal-delay={i * 0.06}>
-            <span class="pastille self-start" data-pole={p}>{pole.verb}</span>
-            <img src={asset(`/3d/pole-${p}.webp`)} alt="" width="280" height="280" loading="lazy" class="panneau-icone" />
-            <h3 class="titre-2">{pole.name}</h3>
-            <p class="chapo mt-2">{pole.pitch}</p>
-            <ul class="mt-6 space-y-2">
-              {pole.services.map((s) => (
-                <li class="flex items-center gap-2"><Check size={18} stroke-width={1.75} aria-hidden="true" class="coche" />{s}</li>
-              ))}
-            </ul>
-            <a href={href(lang, p)} class="lien mt-auto inline-flex items-center gap-2 self-start pt-8">
-              {d.home.poles.more}<span class="sr-only"> : {pole.name}</span><ArrowRight size={16} stroke-width={1.75} class="fleche" aria-hidden="true" />
-            </a>
+          <li class="carte-pole" data-pole={p} data-reveal data-reveal-delay={i * 0.06}>
+            <div class="media">
+              <video muted loop playsinline preload="none" poster={asset(`/poles/${p}.webp`)} data-motion aria-hidden="true">
+                <source src={asset(`/poles/${p}.webm`)} type="video/webm" />
+                <source src={asset(`/poles/${p}.mp4`)} type="video/mp4" />
+              </video>
+              <span class="verbe" aria-hidden="true">{pole.verb}</span>
+            </div>
+            <div class="corps">
+              <h3 class="nom">{pole.name}</h3>
+              <p class="mt-2 text-encre-douce">{pole.pitch}</p>
+              <ul class="services">
+                {pole.services.map((s) => <li>{s}</li>)}
+              </ul>
+              <a href={href(lang, p)} class="action">
+                <span>{d.home.poles.more}<span class="sr-only"> : {pole.name}</span></span>
+                <ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
+              </a>
+            </div>
           </li>
         );
       })}
@@ -43,20 +49,82 @@ const d = t(lang);
     align-items: end;
     justify-content: space-between;
     gap: 24px;
-    margin-block-end: 48px;
+    margin-block-end: 40px;
   }
-  .panneau { position: relative; display: flex; flex-direction: column; padding: 32px; transition: border-color 0.2s, transform 0.3s var(--ease-sortie); }
-  /* Toute la carte est cliquable : le lien s'étend sur la carte. */
-  .panneau .lien::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-  .panneau:hover { transform: translateY(-4px); }
-  .panneau:active { transform: translateY(-1px); }
-  .panneau:has(.lien:focus-visible) { outline: 2px solid var(--color-cobalt); outline-offset: 3px; }
-  .panneau .lien:focus-visible { outline: none; }
-  .panneau:hover .lien { background-size: 100% 1.5px; }
-  .panneau:hover .fleche { transform: translateX(4px); }
-  :global(html[dir="rtl"]) .panneau:hover .fleche { transform: translateX(-4px) scaleX(-1); }
-  .panneau .fleche { transition: transform 0.25s var(--ease-sortie); }
-  .panneau-icone { inline-size: 160px; block-size: auto; margin-block: 12px 4px; margin-inline-start: -16px; transition: transform 0.4s var(--ease-sortie); }
-  .panneau:hover .panneau-icone { transform: translateY(-4px) rotate(-3deg); }
-  .coche { color: var(--pole); flex: none; }
+  .carte-pole {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-trait);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.3s var(--ease-sortie);
+  }
+  .carte-pole:hover { border-color: var(--color-encre); transform: translateY(-4px); }
+  .media { position: relative; aspect-ratio: 4 / 3; background: var(--color-sable); border-block-end: 1px solid var(--color-trait); }
+  .media video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
+  .verbe {
+    position: absolute;
+    inset-block-start: 16px;
+    inset-inline-start: 16px;
+    padding: 4px 10px;
+    border-radius: var(--radius-s);
+    background: var(--color-papier);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--color-encre);
+    box-shadow: inset 3px 0 0 var(--pole);
+  }
+  :global(html[dir="rtl"]) .verbe { box-shadow: inset -3px 0 0 var(--pole); }
+  .corps { display: flex; flex-direction: column; flex: 1; padding: 24px; }
+  .nom { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.15; letter-spacing: -0.015em; }
+  .services { margin-block: 20px 28px; border-block-start: 1px solid var(--color-trait); }
+  .services li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 10px;
+    border-block-end: 1px solid var(--color-trait);
+    font-size: 15px;
+  }
+  .services li::before { content: ""; inline-size: 6px; block-size: 6px; border-radius: 1px; background: var(--pole); flex: none; }
+  /* Bouton rectangulaire sur toute la largeur ; toute la carte est cliquable. */
+  .action {
+    margin-block-start: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-block-size: 52px;
+    padding-inline: 18px;
+    border-radius: var(--radius-s);
+    background: var(--color-encre);
+    color: var(--color-papier);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .action::after { content: ""; position: absolute; inset: 0; }
+  .carte-pole:hover .action { background: var(--pole); }
+  .carte-pole[data-pole="communication"]:hover .action { color: var(--color-encre); }
+  .action .fleche { transition: transform 0.25s var(--ease-sortie); }
+  .carte-pole:hover .action .fleche { transform: translateX(4px); }
+  :global(html[dir="rtl"]) .action .fleche { transform: scaleX(-1); }
+  :global(html[dir="rtl"]) .carte-pole:hover .action .fleche { transform: translateX(-4px) scaleX(-1); }
+  .carte-pole:has(.action:focus-visible) { outline: 2px solid var(--color-cobalt); outline-offset: 3px; }
+  .action:focus-visible { outline: none; }
 </style>
+
+<script>
+  import { reduceMotion } from '../../scripts/motion';
+  // Les vidéos motion ne jouent que lorsqu'elles sont à l'écran.
+  document.addEventListener('astro:page-load', () => {
+    if (reduceMotion()) return;
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      const v = e.target as HTMLVideoElement;
+      if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+    }), { threshold: 0.3 });
+    document.querySelectorAll<HTMLVideoElement>('[data-poles] [data-motion]').forEach((v) => io.observe(v));
+  });
+</script>

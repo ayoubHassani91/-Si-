@@ -136,7 +136,7 @@
       "cta": "Démarrer un projet",
       "terminal": "> imaginer · structurer · construire",
       "replay": "Reconstruire le logo &si",
-      "hintMouse": "Cliquez sur le & pour le reconstruire",
+      "hintMouse": "Bougez la souris : le & réagit. Cliquez pour le reconstruire.",
       "hintTouch": "Touchez le & pour le reconstruire"
     },
     "manifesto": {
@@ -146,7 +146,22 @@
         "Structurer.",
         "Construire."
       ],
-      "text": "On commence par comprendre ce qui bloque. On organise la réponse. Puis on la fabrique, avec la même équipe du premier appel à la mise en ligne."
+      "text": "On commence par comprendre ce qui bloque. On organise la réponse. Puis on la fabrique, avec la même équipe du premier appel à la mise en ligne.",
+      "steps": [
+        {
+          "pole": "communication",
+          "text": "On imagine comment vous rendre visible : message, campagnes, vidéos."
+        },
+        {
+          "pole": "conseil",
+          "text": "On structure votre activité : priorités, organisation, plan d'action daté."
+        },
+        {
+          "pole": "logiciels",
+          "text": "On construit vos outils : site, automatisations, logiciel sur mesure."
+        }
+      ],
+      "hint": "Survolez ou touchez un verbe."
     },
     "poles": {
       "title": "Trois pôles, un seul objectif : vos résultats.",

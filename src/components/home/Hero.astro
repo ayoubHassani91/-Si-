@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, MessageCircle, MousePointerClick } from '@lucide/astro';
+import { ArrowRight, MessageCircle, MousePointer2 } from '@lucide/astro';
 import { t, href, asset, whatsappHref, type Lang } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -7,76 +7,71 @@ const d = t(lang);
 const h = d.home.hero;
 ---
 <section class="hero" data-hero>
-  <div class="conteneur hero-pile">
-    <!-- Le & : il se construit à partir de fragments de code, suit le pointeur et se reconstruit au clic. -->
-    <button type="button" class="scene" data-scene aria-label={h.replay}>
-      <img class="scene-img" data-poster src={asset('/3d/hero-poster.webp')} alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
-      <video class="scene-img" data-video muted playsinline preload="none" poster={asset('/3d/hero-poster.webp')} hidden>
-        <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.webm')} type="video/webm" />
-        <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.mp4')} type="video/mp4" />
-        <source src={asset('/3d/hero-1920x1080.webm')} type="video/webm" />
-        <source src={asset('/3d/hero-1920x1080.mp4')} type="video/mp4" />
-      </video>
-      <canvas class="scene-img" data-canvas data-base={asset('/')} hidden></canvas>
-    </button>
-    <p class="indice etiquette" aria-hidden="true" data-hero-in>
-      <MousePointerClick size={14} stroke-width={1.75} />
-      <span class="indice-souris">{h.hintMouse}</span><span class="indice-tactile">{h.hintTouch}</span>
-    </p>
+  <!-- Arrière-plan : le & 3D, en grand, qui réagit au pointeur. -->
+  <div class="fond" aria-hidden="true">
+    <img class="fond-media" data-poster src={asset('/3d/hero-poster.webp')} alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+    <video class="fond-media" data-video muted playsinline preload="none" poster={asset('/3d/hero-poster.webp')} hidden>
+      <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.webm')} type="video/webm" />
+      <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.mp4')} type="video/mp4" />
+      <source src={asset('/3d/hero-1920x1080.webm')} type="video/webm" />
+      <source src={asset('/3d/hero-1920x1080.mp4')} type="video/mp4" />
+    </video>
+    <canvas class="fond-media" data-canvas data-base={asset('/')} hidden></canvas>
+  </div>
 
-    <h1 class="display mt-6" data-hero-titre>{h.title}</h1>
-    <p class="chapo mx-auto mt-5 max-w-[50ch]" data-hero-in>{h.lead}</p>
-    <div class="mt-8 flex flex-wrap justify-center gap-3" data-hero-in>
-      <a href={href(lang, 'contact')} class="btn btn-principal" data-magnet>
-        {h.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
-      </a>
-      <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire" data-magnet>
-        <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
-      </a>
+  <div class="conteneur hero-contenu">
+    <div class="hero-texte">
+      <h1 class="display" data-hero-titre>{h.title}</h1>
+      <p class="chapo mt-6 max-w-[42ch]" data-hero-in>{h.lead}</p>
+      <div class="mt-8 flex flex-wrap gap-3" data-hero-in>
+        <a href={href(lang, 'contact')} class="btn btn-principal" data-magnet>
+          {h.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
+        </a>
+        <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire hero-wa" data-magnet>
+          <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
+        </a>
+      </div>
+      <p class="indice etiquette" aria-hidden="true" data-hero-in>
+        <MousePointer2 size={14} stroke-width={1.75} />
+        <span class="indice-souris">{h.hintMouse}</span><span class="indice-tactile">{h.hintTouch}</span>
+      </p>
     </div>
   </div>
+  <button type="button" class="sr-only" data-replay>{h.replay}</button>
 </section>
 
 <style>
-  .hero { background: var(--color-papier); }
-  .hero-pile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-block-size: calc(100svh - 72px);
-    justify-content: center;
-    padding-block: 16px 64px;
-  }
-  .hero-pile h1 { max-inline-size: 14ch; }
-  .scene {
+  .hero {
     position: relative;
-    inline-size: min(100%, 720px);
-    block-size: clamp(240px, 44svh, 500px);
-    cursor: pointer;
-    border-radius: var(--radius-m);
-    -webkit-tap-highlight-color: transparent;
+    overflow: clip;
+    background: var(--color-papier);
+    min-block-size: calc(100svh - 72px);
+    display: flex;
+    align-items: flex-end;
   }
-  .scene:focus-visible { outline: 2px solid var(--color-cobalt); outline-offset: 4px; }
-  .scene-img {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: contain;
-  }
-  /* Le fond papier des images se fond exactement dans celui de la page. */
-  img.scene-img, video.scene-img { mix-blend-mode: darken; }
-  .scene-img[hidden] { display: none; }
-  .indice {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-block-start: 4px;
-    color: var(--color-encre-douce);
-  }
+  .fond { position: absolute; inset: 0; }
+  .fond-media { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+  img.fond-media, video.fond-media { mix-blend-mode: darken; }
+  .fond-media[hidden] { display: none; }
+  /* Mobile : le & dans un bloc au-dessus du texte. */
+  .hero { flex-direction: column; align-items: stretch; justify-content: center; }
+  .fond { position: relative; block-size: 38svh; flex: none; }
+  .fond-media { object-fit: cover; }
+  .hero-contenu { position: relative; z-index: 1; padding-block: 8px 48px; pointer-events: none; }
+  .hero-contenu :is(a, button) { pointer-events: auto; }
+  .hero-texte { max-inline-size: 640px; }
+  .hero-texte h1 { max-inline-size: 12ch; }
+  .indice { display: inline-flex; align-items: center; gap: 6px; margin-block-start: 28px; color: var(--color-encre-douce); }
   .indice-tactile { display: none; }
   @media (pointer: coarse) { .indice-souris { display: none; } .indice-tactile { display: inline; } }
+  @media (min-width: 1024px) {
+    .hero { flex-direction: row; align-items: center; }
+    .fond { position: absolute; inset: 0; block-size: auto; }
+    /* La vidéo et l'image fixe placent le & dans la moitié de fin. */
+    img.fond-media, video.fond-media { inset-inline-start: 34%; inline-size: 66%; object-fit: contain; transform: scale(1.35); }
+    .hero-contenu { padding-block: 48px 64px; }
+  }
+  @media (max-width: 1023px) { .hero-wa { background: var(--color-papier); } }
 </style>
 
 <script>
@@ -89,39 +84,45 @@ const h = d.home.hero;
   async function init() {
     const section = document.querySelector<HTMLElement>('[data-hero]');
     if (!section) return;
-    const scene = section.querySelector<HTMLButtonElement>('[data-scene]')!;
     const canvas = section.querySelector<HTMLCanvasElement>('[data-canvas]')!;
     const video = section.querySelector<HTMLVideoElement>('[data-video]')!;
     const poster = section.querySelector<HTMLImageElement>('[data-poster]')!;
+    const replayBtn = section.querySelector<HTMLButtonElement>('[data-replay]')!;
 
-    if (reduceMotion()) return; // image fixe du & assemblé, sans animation
+    if (reduceMotion()) return; // image fixe du & assemblé
 
     const delay = document.querySelector('[data-intro]') ? 1.6 : 0.1;
-    gsap.from(section.querySelector('[data-hero-titre]'), { y: 24, duration: 0.8, ease: 'power3.out', delay, clearProps: 'transform' });
-    gsap.from(section.querySelectorAll('[data-hero-in]'), { y: 16, opacity: 0, duration: 0.6, ease: 'power3.out', stagger: 0.06, delay: delay + 0.15, clearProps: 'all' });
+    gsap.from(section.querySelector('[data-hero-titre]'), { y: 28, duration: 0.8, ease: 'power3.out', delay, clearProps: 'transform' });
+    gsap.from(section.querySelectorAll('[data-hero-in]'), { y: 16, opacity: 0, duration: 0.6, ease: 'power3.out', stagger: 0.07, delay: delay + 0.15, clearProps: 'all' });
+
+    // Un clic sur le fond (hors liens et boutons) reconstruit le &.
+    const surFond = (e: Event) => !(e.target as Element).closest('a, button');
 
     const mobile = matchMedia('(max-width: 767px)').matches
       || ((navigator.hardwareConcurrency ?? 8) <= 4 && matchMedia('(pointer: coarse)').matches);
 
     if (!mobile) {
-      // three.js n'est chargé qu'une fois la page affichée et le navigateur au repos.
       await new Promise<void>((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
       await new Promise<void>((r) => ('requestIdleCallback' in window ? requestIdleCallback(() => r(), { timeout: 1500 }) : setTimeout(r, 300)));
       const { webglAvailable, mountHero } = await import('../../scripts/hero3d');
       if (webglAvailable()) {
         try {
           canvas.hidden = false;
-          hero = await mountHero(canvas);
+          const large = matchMedia('(min-width: 1024px)').matches;
+          const rtl = document.documentElement.dir === 'rtl';
+          hero = await mountHero(canvas, { shift: large ? (rtl ? -0.24 : 0.24) : 0 });
           poster.hidden = true;
-          // Le & suit le pointeur partout dans le haut de page.
           section.addEventListener('pointermove', (e) => {
-            const r = scene.getBoundingClientRect();
-            const nx = (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2);
-            const ny = (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2);
-            hero?.point(Math.max(-1, Math.min(1, nx)), Math.max(-1, Math.min(1, ny)));
+            const r = section.getBoundingClientRect();
+            const cx = r.left + r.width * (large ? (rtl ? 0.26 : 0.74) : 0.5);
+            const cy = r.top + r.height / 2;
+            const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width / 2)));
+            const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2)));
+            hero?.point(nx, ny);
           });
           section.addEventListener('pointerleave', () => hero?.point(0, 0));
-          scene.addEventListener('click', () => hero?.replay());
+          section.addEventListener('click', (e) => { if (surFond(e)) hero?.replay(); });
+          replayBtn.addEventListener('click', () => hero?.replay());
           return;
         } catch {
           canvas.hidden = true;
@@ -130,14 +131,15 @@ const h = d.home.hero;
       }
     }
 
-    // Mobile ou sans WebGL : la vidéo joue la construction puis s'arrête sur le & ; un toucher la rejoue.
+    // Mobile ou sans WebGL : la vidéo joue la construction ; un toucher sur le fond la rejoue.
     const play = () => {
       video.hidden = false;
       video.currentTime = 0;
       video.play().then(() => { poster.hidden = true; }).catch(() => { video.hidden = true; poster.hidden = false; });
     };
     video.addEventListener('timeupdate', () => { if (video.currentTime >= BUILD_END) video.pause(); });
-    scene.addEventListener('click', play);
+    section.addEventListener('click', (e) => { if (surFond(e)) play(); });
+    replayBtn.addEventListener('click', play);
     play();
   }
 
