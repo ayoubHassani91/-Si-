@@ -69,15 +69,13 @@ const d = t(lang);
     inset-block-start: 16px;
     inset-inline-start: 16px;
     padding: 4px 10px;
-    border-radius: var(--radius-s);
+    border-radius: 999px;
     background: var(--color-papier);
     font-family: var(--font-mono);
     font-size: 12px;
     line-height: 16px;
-    color: var(--color-encre);
-    box-shadow: inset 3px 0 0 var(--pole);
-  }
-  :global(html[dir="rtl"]) .verbe { box-shadow: inset -3px 0 0 var(--pole); }
+    color: var(--color-encre); display: inline-flex; align-items: center; gap: 6px; }
+  .verbe::before { content: ""; inline-size: 7px; block-size: 7px; border-radius: 999px; background: var(--pole); flex: none; }
   .corps { display: flex; flex-direction: column; flex: 1; padding: 24px; }
   .nom { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.15; letter-spacing: -0.015em; }
   .services { margin-block: 20px 28px; border-block-start: 1px solid var(--color-trait); }
@@ -98,7 +96,7 @@ const d = t(lang);
     justify-content: space-between;
     min-block-size: 52px;
     padding-inline: 18px;
-    border-radius: var(--radius-s);
+    border-radius: 999px;
     background: var(--color-encre);
     color: var(--color-papier);
     font-weight: 500;

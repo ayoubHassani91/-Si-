@@ -18,7 +18,7 @@ const others = POLES.filter((x) => x !== pole);
     <div class="conteneur tete-grille">
       <div>
         <p class="fil"><a href={href(lang, 'services')} class="fil-lien">{d.nav.services}</a><span aria-hidden="true">/</span><span>{p.verb}</span></p>
-        <h1 class="titre-1 mt-4" data-reveal>{p.name}</h1>
+        <h1 class="titre-1 mt-4" data-titre>{p.name}</h1>
         <p class="chapo mt-5 max-w-[48ch]" data-reveal>{p.intro}</p>
         <div class="mt-8 flex flex-wrap gap-3" data-reveal>
           <a href={href(lang, 'contact', `?pole=${pole}`)} class="btn btn-principal" data-magnet>{s.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
@@ -164,7 +164,7 @@ const others = POLES.filter((x) => x !== pole);
   .autre-bas { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 8px 4px; }
   .autre-btn {
     display: grid; place-items: center; flex: none; inline-size: 52px; block-size: 52px;
-    border-radius: var(--radius-s); background: var(--color-encre); color: var(--color-papier);
+    border-radius: 999px; background: var(--color-encre); color: var(--color-papier);
     transition: background-color 0.2s;
   }
   .autre-btn::after { content: ""; position: absolute; inset: 0; }

@@ -338,7 +338,9 @@
         "text": "La même équipe du premier appel au suivi. Vous savez toujours à qui parler."
       }
     ],
-    "methodTitle": "Notre méthode"
+    "methodTitle": "Notre méthode",
+    "teamHint": "Survolez ou touchez un membre de l'équipe.",
+    "stripLabel": "Ce que nous faisons"
   },
   "contact": {
     "metaTitle": "Contact et devis · Et si (&si)",
@@ -367,7 +369,29 @@
         "email": "Saisissez une adresse e-mail valide, par exemple nom@entreprise.fr.",
         "message": "Décrivez votre projet en quelques mots (20 caractères minimum)."
       }
-    }
+    },
+    "channelsTitle": "Trois façons de nous joindre",
+    "channels": {
+      "wa": {
+        "title": "WhatsApp",
+        "text": "Le plus rapide : une réponse dans la journée.",
+        "cta": "Ouvrir WhatsApp"
+      },
+      "phone": {
+        "title": "Téléphone",
+        "text": "Appelez-nous ou copiez le numéro.",
+        "cta": "Appeler",
+        "copy": "Copier le numéro",
+        "copied": "Numéro copié"
+      },
+      "form": {
+        "title": "Formulaire",
+        "text": "Décrivez votre projet, on revient vers vous sous 24 h ouvrées.",
+        "cta": "Remplir le formulaire"
+      }
+    },
+    "counter": "{n} / 20 caractères minimum",
+    "counterOk": "Longueur suffisante"
   },
   "legal": {
     "metaTitle": "Mentions légales · Et si (&si)",

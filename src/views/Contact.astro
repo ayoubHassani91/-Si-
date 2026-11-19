@@ -1,7 +1,7 @@
 ---
-import { MessageCircle, Phone, Send } from '@lucide/astro';
+import { MessageCircle, Phone, Send, Copy, Check, FileText, ArrowRight } from '@lucide/astro';
 import Base from '../layouts/Base.astro';
-import { t, whatsappHref, POLES, type Lang } from '../i18n';
+import { t, asset, whatsappHref, POLES, type Lang } from '../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang);
@@ -10,23 +10,58 @@ const f = c.form;
 const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 ---
 <Base lang={lang} title={c.metaTitle} description={c.metaDescription} current="contact">
-  <section class="py-20 lg:py-28">
-    <div class="conteneur grid gap-14 lg:grid-cols-12">
-      <div class="lg:col-span-5">
-        <h1 class="titre-1 max-w-[14ch]">{c.title}</h1>
-        <p class="chapo mt-6 max-w-[44ch]">{c.lead}</p>
-        <div class="wa-bloc mt-12">
-          <p class="titre-3">{c.orWhatsapp}</p>
-          <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire mt-5">
-            <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
-          </a>
-          <p class="mt-4 flex items-center gap-2 text-encre-douce">
-            <Phone size={16} stroke-width={1.75} aria-hidden="true" /><a href="tel:+33652277787" dir="ltr" class="lien">06 52 27 77 87</a>
-          </p>
-        </div>
+  <section class="tete">
+    <div class="conteneur tete-grille">
+      <div>
+        <h1 class="titre-1 max-w-[14ch]" data-titre>{c.title}</h1>
+        <p class="chapo mt-6 max-w-[44ch]" data-reveal>{c.lead}</p>
       </div>
+      <!-- Motion Blender : une conversation, « vous écrivez, on répond ». -->
+      <div class="tete-media" aria-hidden="true">
+        <video muted loop playsinline preload="none" poster={asset('/motion/message.webp')} data-motion-contact>
+          <source src={asset('/motion/message.webm')} type="video/webm" />
+          <source src={asset('/motion/message.mp4')} type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
 
-      <form class="formulaire carte lg:col-span-7" data-contact data-key={key} novalidate
+  <section class="canaux" aria-labelledby="canaux-titre">
+    <div class="conteneur">
+      <h2 id="canaux-titre" class="titre-3" data-reveal>{c.channelsTitle}</h2>
+      <ul class="canaux-grille">
+        <li class="canal" data-reveal>
+          <span class="canal-icone"><MessageCircle size={26} stroke-width={1.75} aria-hidden="true" /></span>
+          <h3 class="canal-titre">{c.channels.wa.title}</h3>
+          <p class="text-encre-douce">{c.channels.wa.text}</p>
+          <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="canal-action canal-lien">{c.channels.wa.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+        </li>
+        <li class="canal" data-reveal data-reveal-delay="0.06">
+          <span class="canal-icone"><Phone size={26} stroke-width={1.75} aria-hidden="true" /></span>
+          <h3 class="canal-titre">{c.channels.phone.title}</h3>
+          <p class="text-encre-douce"><a href="tel:+33652277787" dir="ltr" class="numero">06 52 27 77 87</a></p>
+          <div class="canal-action flex gap-2">
+            <a href="tel:+33652277787" class="canal-bouton">{c.channels.phone.cta}</a>
+            <button type="button" class="canal-bouton canal-copie" data-copie="+33652277787" data-copie-ok={c.channels.phone.copied}>
+              <span class="copie-icones" aria-hidden="true"><Copy size={16} stroke-width={1.75} class="i-copie" /><Check size={16} stroke-width={1.75} class="i-ok" /></span>
+              <span data-copie-label>{c.channels.phone.copy}</span>
+            </button>
+          </div>
+          <p class="sr-only" role="status" aria-live="polite" data-copie-statut></p>
+        </li>
+        <li class="canal" data-reveal data-reveal-delay="0.12">
+          <span class="canal-icone"><FileText size={26} stroke-width={1.75} aria-hidden="true" /></span>
+          <h3 class="canal-titre">{c.channels.form.title}</h3>
+          <p class="text-encre-douce">{c.channels.form.text}</p>
+          <a href="#formulaire" class="canal-action canal-lien">{c.channels.form.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche fleche-bas" aria-hidden="true" /></a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="formulaire" class="zone-form">
+    <div class="conteneur">
+      <form class="formulaire carte" data-contact data-key={key} novalidate
         data-msg-required={f.errors.required} data-msg-email={f.errors.email} data-msg-message={f.errors.message}
         data-msg-sending={f.sending} data-msg-success={f.success} data-msg-error={f.error} data-msg-nokey={f.notConfigured}>
         <input type="hidden" name="subject" value="Nouvelle demande depuis le site &si" />
@@ -62,6 +97,8 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
         <div class="champ">
           <label for="c-msg">{f.message}</label>
           <textarea id="c-msg" name="message" rows="6" required minlength="20" placeholder={f.messagePlaceholder} aria-describedby="c-msg-err"></textarea>
+          <div class="compteur" aria-hidden="true"><span class="compteur-barre" data-compteur-barre></span></div>
+          <p class="compteur-texte" data-compteur data-tpl={c.counter} data-ok={c.counterOk}></p>
           <p class="erreur" id="c-msg-err" hidden></p>
         </div>
         <p class="text-legende text-encre-douce">{f.consent}</p>
@@ -75,7 +112,66 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 </Base>
 
 <style>
-  .wa-bloc { padding-block-start: 32px; border-block-start: 1px solid var(--color-trait); }
+  .tete { padding-block: clamp(32px, 6vw, 72px) clamp(24px, 4vw, 40px); }
+  .tete-grille { display: grid; gap: 16px; align-items: center; }
+  @media (min-width: 1024px) { .tete-grille { grid-template-columns: 7fr 5fr; gap: 48px; } }
+  .tete-media { aspect-ratio: 1; inline-size: min(64%, 260px); justify-self: center; }
+  @media (min-width: 1024px) { .tete-media { inline-size: min(100%, 440px); } }
+  .tete-media video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
+
+  .canaux { padding-block: 8px clamp(48px, 7vw, 80px); }
+  .canaux-grille { display: grid; gap: 12px; margin-block-start: 20px; }
+  @media (min-width: 900px) { .canaux-grille { grid-template-columns: repeat(3, 1fr); } }
+  .canal {
+    position: relative; display: flex; flex-direction: column; gap: 8px; padding: 24px;
+    border-radius: var(--radius-m); background: var(--color-surface); border: 1px solid var(--color-trait);
+    transition: border-color 0.2s, transform 0.3s var(--ease-sortie);
+  }
+  .canal:hover { border-color: var(--color-encre); transform: translateY(-4px); }
+  .canal-icone {
+    display: grid; place-items: center; inline-size: 52px; block-size: 52px; margin-block-end: 8px;
+    border-radius: var(--radius-s); background: var(--color-sable); transition: background-color 0.25s, transform 0.4s var(--ease-sortie);
+  }
+  .canal:hover .canal-icone { background: var(--color-corail); transform: rotate(-6deg); }
+  .canal-titre { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+  .numero { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--color-encre); text-decoration: none; }
+  .canal-action { margin-block-start: auto; padding-block-start: 12px; }
+  .canal-lien {
+    display: flex; align-items: center; justify-content: space-between; min-block-size: 48px; padding-inline: 16px;
+    border-radius: 999px; background: var(--color-encre); color: var(--color-papier); font-weight: 500; text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .canal-lien::after { content: ""; position: absolute; inset: 0; }
+  .canal:hover .canal-lien { background: var(--color-corail); color: var(--color-encre); }
+  .canal-lien .fleche { transition: transform 0.25s var(--ease-sortie); }
+  .canal:hover .canal-lien .fleche { transform: translateX(4px); }
+  .canal:hover .canal-lien .fleche-bas { transform: rotate(90deg) translateX(4px); }
+  :global(html[dir="rtl"]) .canal-lien .fleche { transform: scaleX(-1); }
+  .canal-bouton {
+    display: inline-flex; align-items: center; gap: 8px; min-block-size: 48px; padding-inline: 16px;
+    border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--color-encre); font-weight: 500; text-decoration: none; cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, scale 0.15s;
+  }
+  .canal-bouton:hover { background: var(--color-encre); color: var(--color-papier); }
+  .canal-bouton:active { scale: 0.96; }
+  .copie-icones { position: relative; inline-size: 16px; block-size: 16px; }
+  .copie-icones :global(svg) { position: absolute; inset: 0; transition: opacity 0.2s, transform 0.3s var(--ease-sortie); }
+  .i-ok { opacity: 0; transform: scale(0.4); }
+  .canal-copie[data-fait] .i-copie { opacity: 0; transform: scale(0.4); }
+  .canal-copie[data-fait] .i-ok { opacity: 1; transform: none; color: var(--color-vert); }
+  .canal-copie[data-fait]:hover .i-ok { color: #4fbfa6; }
+
+  .zone-form { padding-block: 0 clamp(64px, 9vw, 112px); scroll-margin-block-start: 88px; }
+  .zone-form .formulaire { max-inline-size: 820px; margin-inline: auto; }
+  .compteur { block-size: 3px; border-radius: 2px; background: var(--color-trait); overflow: hidden; }
+  .compteur-barre { display: block; block-size: 100%; inline-size: 100%; background: var(--color-corail); transform: scaleX(0); transform-origin: left; transition: transform 0.25s var(--ease-sortie), background-color 0.25s; }
+  :global(html[dir="rtl"]) .compteur-barre { transform-origin: right; }
+  .compteur-barre[data-ok] { background: var(--color-vert); }
+  .compteur-texte { font-family: var(--font-mono); font-size: 12px; color: var(--color-encre-douce); }
+  [data-submit][data-envoi] .fleche { animation: envol 0.9s var(--ease-sortie) infinite; }
+  @keyframes envol { 0% { transform: translate(0, 0); opacity: 1; } 60% { transform: translate(14px, -10px); opacity: 0; } 61% { transform: translate(-10px, 8px); opacity: 0; } 100% { transform: translate(0, 0); opacity: 1; } }
+  .statut[data-type="success"] { animation: succes 0.5s var(--ease-sortie); }
+  @keyframes succes { from { transform: scale(0.96); opacity: 0; } }
   .formulaire { display: flex; flex-direction: column; gap: 24px; padding: clamp(24px, 4vw, 48px); }
   .champ { display: flex; flex-direction: column; gap: 8px; border: 0; padding: 0; margin: 0; min-width: 0; }
   .champ label, .champ legend { font-weight: 500; }
@@ -118,6 +214,21 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 
 <script>
   document.addEventListener('astro:page-load', () => {
+    const copie = document.querySelector<HTMLButtonElement>('[data-copie]');
+    copie?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(copie.dataset.copie!); } catch { return; }
+      const lab = copie.querySelector<HTMLElement>('[data-copie-label]')!;
+      const avant = lab.textContent;
+      copie.setAttribute('data-fait', '');
+      lab.textContent = copie.dataset.copieOk!;
+      const st = document.querySelector<HTMLElement>('[data-copie-statut]');
+      if (st) st.textContent = copie.dataset.copieOk!;
+      setTimeout(() => { copie.removeAttribute('data-fait'); lab.textContent = avant; }, 2200);
+    });
+    const v = document.querySelector<HTMLVideoElement>('[data-motion-contact]');
+    if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      new IntersectionObserver(([en]) => { en.isIntersecting ? v.play().catch(() => {}) : v.pause(); }).observe(v);
+    }
     const form = document.querySelector<HTMLFormElement>('[data-contact]');
     if (!form) return;
     const msg = (k: string) => form.dataset[k] ?? '';
@@ -155,6 +266,20 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
       status.dataset.type = type; status.textContent = text; status.hidden = false;
     };
 
+    // Compteur du message : jauge corail jusqu'à 20 caractères, verte ensuite.
+    const msgBox = form.elements.namedItem('message') as HTMLTextAreaElement;
+    const barre = form.querySelector<HTMLElement>('[data-compteur-barre]')!;
+    const compteur = form.querySelector<HTMLElement>('[data-compteur]')!;
+    const majCompteur = () => {
+      const n = msgBox.value.trim().length;
+      barre.style.transform = `scaleX(${Math.min(n / 20, 1)})`;
+      barre.toggleAttribute('data-ok', n >= 20);
+      compteur.textContent = n >= 20 ? compteur.dataset.ok! : compteur.dataset.tpl!.replace('{n}', String(n));
+    };
+    msgBox.addEventListener('input', majCompteur);
+    form.addEventListener('reset', () => requestAnimationFrame(majCompteur));
+    majCompteur();
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       status.hidden = true;
@@ -168,6 +293,7 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
       data.set('poles', poles);
       data.set('access_key', key);
       btn.disabled = true;
+      btn.setAttribute('data-envoi', '');
       label.textContent = msg('msgSending');
       try {
         const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data, headers: { Accept: 'application/json' } });
@@ -178,6 +304,7 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
         show('error', msg('msgError'));
       } finally {
         btn.disabled = false;
+        btn.removeAttribute('data-envoi');
         label.textContent = idle;
       }
     });

@@ -1,64 +1,191 @@
 ---
-import { Code, Megaphone, Clapperboard } from '@lucide/astro';
+import { ArrowRight } from '@lucide/astro';
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
+import PoleMedia from '../components/PoleMedia.astro';
 import Method from '../components/home/Method.astro';
 import FinalCta from '../components/home/FinalCta.astro';
-import { t, type Lang } from '../i18n';
+import { t, href, asset, POLES, type Lang, type PoleKey } from '../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const a = t(lang).about;
-const icons = [Code, Megaphone, Clapperboard];
+const d = t(lang);
+const a = d.about;
+// Chaque membre est relié au pôle qu'il porte.
+const polesEquipe: PoleKey[] = ['logiciels', 'conseil', 'communication'];
+const bandeau = POLES.flatMap((p) => d.poles[p].services.map((s) => ({ s, p })));
 ---
 <Base lang={lang} title={a.metaTitle} description={a.metaDescription} current="about">
-  <PageHero title={a.title} lead={a.lead} />
-  <section class="pb-24" aria-labelledby="equipe">
+  <section class="tete">
+    <div class="conteneur tete-grille">
+      <div>
+        <h1 class="titre-1 max-w-[16ch]" data-titre>{a.title}</h1>
+        <p class="chapo mt-6 max-w-[48ch]" data-reveal>{a.lead}</p>
+        <a href={href(lang, 'contact')} class="btn btn-principal mt-8" data-magnet data-reveal>{d.nav.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+      </div>
+      <!-- Motion Blender : les trois pôles tournent autour du &, trois personnes autour d'un projet. -->
+      <div class="tete-media" aria-hidden="true">
+        <video muted loop playsinline preload="none" poster={asset('/motion/equipe.webp')} data-motion-auto>
+          <source src={asset('/motion/equipe.webm')} type="video/webm" />
+          <source src={asset('/motion/equipe.mp4')} type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bandeau : tout ce que fait l'équipe, en étiquettes qui défilent doucement sur deux rangées. -->
+  <section class="bandeau" aria-label={a.stripLabel}>
+    {[0, 1].map((rang) => (
+      <div class:list={['rangee', rang === 1 && 'rangee-inverse']}>
+        <div class="piste">
+          {[0, 1].map((k) => (
+            <ul class="piste-liste" aria-hidden={k === 1 || rang === 1 ? 'true' : undefined}>
+              {(rang === 0 ? bandeau : [...bandeau].reverse()).map((x) => <li class="etiq" data-pole={x.p}>{x.s}</li>)}
+            </ul>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="equipe" aria-labelledby="equipe-titre">
     <div class="conteneur">
-      <h2 id="equipe" class="titre-2" data-reveal>{a.teamTitle}</h2>
-      <ul class="mt-10">
-        {a.team.map((m, i) => {
-          const Icon = icons[i];
-          return (
-            <li class:list={['membre', i === 0 && 'vedette']} data-reveal>
-              <span class="avatar" aria-hidden="true"><Icon size={28} stroke-width={1.75} /></span>
-              <h3 class="titre-2">{m.role}</h3>
-              <div>
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="equipe-titre" class="titre-1" data-reveal>{a.teamTitle}</h2>
+        <p class="etiquette text-encre-douce">{a.teamHint}</p>
+      </div>
+      <ul class="membres" data-membres>
+        {a.team.map((m, i) => (
+          <li class="membre" data-pole={polesEquipe[i]} tabindex="0" data-membre data-actif={i === 0 ? '' : undefined}>
+            <PoleMedia lang={lang} pole={polesEquipe[i]} ratio="16 / 10" label={false} class="membre-media" />
+            <div class="membre-corps">
+              <p class="membre-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+              <h3 class="membre-role">{m.role}</h3>
+              <div class="membre-detail">
                 <p class="text-encre-douce">{m.text}</p>
-                <ul class="mt-4 flex flex-wrap gap-2">{m.tags.map((tg) => <li class="pastille">{tg}</li>)}</ul>
+                <ul class="mt-4 flex flex-wrap gap-2">{m.tags.map((tg) => <li class="tag">{tg}</li>)}</ul>
               </div>
-            </li>
-          );
-        })}
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
-  <section class="valeurs" aria-labelledby="valeurs">
+
+  <section class="valeurs" data-valeurs aria-labelledby="valeurs-titre">
     <div class="conteneur">
-      <h2 id="valeurs" class="titre-2">{a.valuesTitle}</h2>
-      <dl class="mt-10 grid gap-10 md:grid-cols-3">
+      <h2 id="valeurs-titre" class="titre-2">{a.valuesTitle}</h2>
+      <dl class="valeurs-liste">
         {a.values.map((v) => (
-          <div data-reveal>
-            <dt class="valeur-titre">{v.title}</dt>
-            <dd class="mt-3 text-[#a3a7b0]">{v.text}</dd>
+          <div class="valeur" data-valeur>
+            <dt class="valeur-mot">{v.title}</dt>
+            <dd class="valeur-texte">{v.text}</dd>
           </div>
         ))}
       </dl>
     </div>
   </section>
+
   <Method lang={lang} />
   <FinalCta lang={lang} />
 </Base>
+
 <style>
-  .avatar { display: block; padding-block-start: 4px; color: var(--color-encre); }
-  .membre {
-    display: grid;
-    gap: 16px 32px;
-    align-items: start;
-    padding-block: 32px;
-    border-block-start: 1px solid var(--color-trait);
+  .tete { padding-block: clamp(32px, 6vw, 72px) clamp(40px, 6vw, 72px); }
+  .tete-grille { display: grid; gap: 24px; align-items: center; }
+  @media (min-width: 1024px) { .tete-grille { grid-template-columns: 7fr 5fr; gap: 48px; } }
+  .tete-media { aspect-ratio: 1; inline-size: min(78%, 340px); justify-self: center; }
+  @media (min-width: 1024px) { .tete-media { inline-size: min(100%, 520px); } }
+  .tete-media video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
+
+  .bandeau { display: grid; gap: 12px; padding-block: 8px clamp(24px, 4vw, 40px); overflow: hidden; }
+  .rangee { overflow: hidden; }
+  .piste { display: flex; inline-size: max-content; animation: defile 60s linear infinite; }
+  .rangee-inverse .piste { animation-direction: reverse; animation-duration: 72s; }
+  .rangee:hover .piste { animation-play-state: paused; }
+  :global(html[dir="rtl"]) .piste { animation-direction: reverse; }
+  :global(html[dir="rtl"]) .rangee-inverse .piste { animation-direction: normal; }
+  .piste-liste { display: flex; flex: none; gap: 10px; padding-inline-end: 10px; }
+  .etiq {
+    display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+    padding: 12px 20px; border-radius: 999px;
+    background: var(--color-surface); border: 1px solid var(--color-trait);
+    font-weight: 500; font-size: clamp(15px, 1.6vw, 18px);
+    transition: background-color 0.25s, color 0.25s, border-color 0.25s;
   }
-  .membre:last-child { border-block-end: 1px solid var(--color-trait); }
-  @media (min-width: 900px) { .membre { grid-template-columns: 64px 5fr 6fr; } }
-  .valeurs { background: var(--color-encre); color: var(--color-papier); padding-block: 96px; }
-  .valeur-titre { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 5vw, 56px); line-height: 1; color: var(--color-corail); }
+  .etiq::before { content: ""; inline-size: 9px; block-size: 9px; border-radius: 999px; background: var(--pole); flex: none; }
+  .etiq:hover { background: var(--color-encre); border-color: var(--color-encre); color: var(--color-papier); }
+  @keyframes defile { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .piste { animation: none; inline-size: auto; padding-inline: 24px; }
+    .rangee-inverse, .piste-liste[aria-hidden] { display: none; }
+    .piste-liste { flex-wrap: wrap; }
+  }
+
+  .equipe { padding-block: clamp(64px, 9vw, 112px); }
+  .membres { display: grid; gap: 16px; margin-block-start: 32px; }
+  .membre {
+    display: flex; flex-direction: column; overflow: hidden;
+    border-radius: var(--radius-m); background: var(--color-surface); border: 1px solid var(--color-trait);
+    cursor: pointer; outline-offset: 3px;
+  }
+  .membre :global(.membre-media) { border-radius: 0; }
+  .membre-corps { padding: 24px; }
+  .membre-num { font-family: var(--font-mono); font-size: 13px; color: var(--color-encre-douce); }
+  .membre-role { margin-block-start: 6px; font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.15; }
+  .membre-detail { margin-block-start: 12px; }
+  .tag { padding: 4px 10px; border-radius: 999px; background: var(--color-papier); font-family: var(--font-mono); font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+  .tag::before { content: ""; inline-size: 7px; block-size: 7px; border-radius: 999px; background: var(--pole); flex: none; }
+
+  /* Grand écran : panneaux en accordéon horizontal, le membre actif s'ouvre. */
+  @media (min-width: 1024px) {
+    .membres { display: flex; block-size: 560px; }
+    .membre { flex: 1 1 0; min-inline-size: 0; transition: flex-grow 0.6s var(--ease-sortie), border-color 0.2s; position: relative; }
+    .membre[data-actif] { flex-grow: 2.4; border-color: var(--color-encre); }
+    .membre :global(.membre-media) { flex: 1; aspect-ratio: auto !important; min-block-size: 0; }
+    .membre-corps { flex: none; }
+    .membre-detail { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.5s var(--ease-sortie), opacity 0.3s; }
+    .membre-detail > * { overflow: hidden; }
+    .membre[data-actif] .membre-detail { grid-template-rows: 1fr; opacity: 1; transition-delay: 0.15s; }
+    .membre-role { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .membre[data-actif] .membre-role { white-space: normal; }
+  }
+
+  .valeurs { background: var(--color-encre); color: var(--color-papier); padding-block: clamp(72px, 10vw, 128px); }
+  .valeurs-liste { margin-block-start: 40px; }
+  .valeur {
+    display: grid; gap: 8px 48px; align-items: baseline;
+    padding-block: 28px; border-block-start: 1px solid #2c3038;
+  }
+  .valeur:last-child { border-block-end: 1px solid #2c3038; }
+  @media (min-width: 900px) { .valeur { grid-template-columns: 1fr 1fr; } }
+  .valeur-mot {
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(56px, 9vw, 128px); line-height: 0.95; letter-spacing: -0.035em;
+    color: #6e727a; transition: transform 0.4s var(--ease-sortie);
+  }
+  :global(html[dir="rtl"]) .valeur-mot { letter-spacing: 0; line-height: 1.25; }
+  .valeur:hover .valeur-mot { transform: translateX(10px); }
+  :global(html[dir="rtl"]) .valeur:hover .valeur-mot { transform: translateX(-10px); }
+  .valeur-texte { font-size: 20px; line-height: 30px; color: #a3a7b0; max-inline-size: 40ch; }
 </style>
+
+<script>
+  import { gsap, reduceMotion } from '../scripts/motion';
+  document.addEventListener('astro:page-load', () => {
+    // Équipe : le membre survolé, touché ou focalisé s'ouvre.
+    const membres = [...document.querySelectorAll<HTMLElement>('[data-membre]')];
+    const activer = (m: HTMLElement) => membres.forEach((x) => x.toggleAttribute('data-actif', x === m));
+    membres.forEach((m) => {
+      m.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') activer(m); });
+      m.addEventListener('click', () => activer(m));
+      m.addEventListener('focus', () => activer(m));
+    });
+
+    // Valeurs : chaque mot se colore en corail au fil du défilement.
+    const valeurs = document.querySelector('[data-valeurs]');
+    if (!valeurs) return;
+    const mots = valeurs.querySelectorAll<HTMLElement>('.valeur-mot');
+    if (reduceMotion()) { mots.forEach((m) => (m.style.color = 'var(--color-corail)')); return; }
+    mots.forEach((m) => {
+      gsap.to(m, { color: '#ff5a36', ease: 'none', scrollTrigger: { trigger: m, start: 'top 85%', end: 'top 45%', scrub: true } });
+    });
+  });
+</script>

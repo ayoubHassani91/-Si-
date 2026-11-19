@@ -17,11 +17,9 @@ const verb = t(lang).poles[pole].verb;
   .pm video { inline-size: 100%; block-size: 100%; object-fit: cover; mix-blend-mode: darken; }
   .pm-verbe {
     position: absolute; inset-block-start: 16px; inset-inline-start: 16px;
-    padding: 4px 10px; border-radius: var(--radius-s); background: var(--color-papier);
-    font-family: var(--font-mono); font-size: 12px; line-height: 16px;
-    box-shadow: inset 3px 0 0 var(--pole);
-  }
-  :global(html[dir="rtl"]) .pm-verbe { box-shadow: inset -3px 0 0 var(--pole); }
+    padding: 4px 10px; border-radius: 999px; background: var(--color-papier);
+    font-family: var(--font-mono); font-size: 12px; line-height: 16px; display: inline-flex; align-items: center; gap: 6px; }
+  .pm-verbe::before { content: ""; inline-size: 7px; block-size: 7px; border-radius: 999px; background: var(--pole); flex: none; }
 </style>
 <script>
   import { reduceMotion } from '../scripts/motion';

@@ -13,7 +13,7 @@ const s = d.services;
 <Base lang={lang} title={s.metaTitle} description={s.metaDescription} current="services">
   <section class="tete">
     <div class="conteneur">
-      <h1 class="titre-1" data-reveal>{s.title}</h1>
+      <h1 class="titre-1" data-titre>{s.title}</h1>
       <p class="chapo mt-5 max-w-[56ch]" data-reveal>{s.lead}</p>
       <!-- Sommaire : un bouton par pôle, qui descend jusqu'à sa bande. -->
       <nav class="sommaire" aria-label={s.jump} data-reveal>
@@ -118,7 +118,7 @@ const s = d.services;
     gap: 12px;
     min-block-size: 52px;
     padding-inline: 20px;
-    border-radius: var(--radius-s);
+    border-radius: 999px;
     background: var(--color-encre);
     color: var(--color-papier);
     font-weight: 500;

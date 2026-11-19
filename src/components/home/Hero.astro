@@ -21,7 +21,7 @@ const h = d.home.hero;
 
   <div class="conteneur hero-contenu">
     <div class="hero-texte">
-      <h1 class="display" data-hero-titre>{h.title}</h1>
+      <h1 class="display" data-titre>{h.title}</h1>
       <p class="chapo mt-6 max-w-[42ch]" data-hero-in>{h.lead}</p>
       <div class="mt-8 flex flex-wrap gap-3" data-hero-in>
         <a href={href(lang, 'contact')} class="btn btn-principal" data-magnet>
@@ -92,7 +92,6 @@ const h = d.home.hero;
     if (reduceMotion()) return; // image fixe du & assemblé
 
     const delay = document.querySelector('[data-intro]') ? 1.6 : 0.1;
-    gsap.from(section.querySelector('[data-hero-titre]'), { y: 28, duration: 0.8, ease: 'power3.out', delay, clearProps: 'transform' });
     gsap.from(section.querySelectorAll('[data-hero-in]'), { y: 16, opacity: 0, duration: 0.6, ease: 'power3.out', stagger: 0.07, delay: delay + 0.15, clearProps: 'all' });
 
     // Un clic sur le fond (hors liens et boutons) reconstruit le &.

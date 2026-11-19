@@ -61,6 +61,38 @@ export function initMagnets(root: ParentNode = document) {
   });
 }
 
+/**
+ * Effet d'arrivée commun : le titre principal [data-titre] se révèle mot par mot depuis un masque,
+ * juste après l'écran de chargement. Le texte reste lisible par les lecteurs d'écran (aria-label).
+ */
+export function initTitres(root: ParentNode = document) {
+  const els = root.querySelectorAll<HTMLElement>('[data-titre]');
+  if (!els.length) return;
+  const delay = document.querySelector('[data-intro]') ? 1.55 : 0.1;
+  els.forEach((el) => {
+    if (el.dataset.titreFait) return;
+    el.dataset.titreFait = '1';
+    if (reduceMotion()) return;
+    const texte = (el.textContent ?? '').trim().replace(/\s+/g, ' ');
+    el.setAttribute('aria-label', texte);
+    el.textContent = '';
+    texte.split(' ').forEach((mot, i, tous) => {
+      const masque = document.createElement('span');
+      masque.className = 'mot-masque';
+      masque.setAttribute('aria-hidden', 'true');
+      const int = document.createElement('span');
+      int.className = 'mot-int';
+      int.textContent = mot;
+      masque.append(int);
+      el.append(masque);
+      if (i < tous.length - 1) el.append(' ');
+    });
+    gsap.from(el.querySelectorAll('.mot-int'), {
+      yPercent: 115, rotate: 3, duration: 0.95, ease: 'power4.out', stagger: 0.055, delay, clearProps: 'transform',
+    });
+  });
+}
+
 export function killTriggers() {
   ScrollTrigger.getAll().forEach((st) => st.kill());
 }

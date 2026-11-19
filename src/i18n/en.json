@@ -333,7 +333,9 @@
         "text": "The same team from the first call to the follow-up. You always know who to talk to."
       }
     ],
-    "methodTitle": "Our method"
+    "methodTitle": "Our method",
+    "teamHint": "Hover or tap a team member.",
+    "stripLabel": "What we do"
   },
   "contact": {
     "metaTitle": "Contact and quote · Et si (&si)",
@@ -362,7 +364,29 @@
         "email": "Enter a valid email address, for example name@company.com.",
         "message": "Describe your project in a few words (20 characters minimum)."
       }
-    }
+    },
+    "channelsTitle": "Three ways to reach us",
+    "channels": {
+      "wa": {
+        "title": "WhatsApp",
+        "text": "The fastest: a reply the same day.",
+        "cta": "Open WhatsApp"
+      },
+      "phone": {
+        "title": "Phone",
+        "text": "Call us or copy the number.",
+        "cta": "Call",
+        "copy": "Copy the number",
+        "copied": "Number copied"
+      },
+      "form": {
+        "title": "Form",
+        "text": "Describe your project, we reply within one business day.",
+        "cta": "Fill in the form"
+      }
+    },
+    "counter": "{n} / 20 characters minimum",
+    "counterOk": "Long enough"
   },
   "legal": {
     "metaTitle": "Legal notice · Et si (&si)",

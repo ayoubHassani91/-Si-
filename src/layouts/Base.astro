@@ -75,11 +75,12 @@ const jsonLd = {
     <WhatsAppFloat lang={lang} />
     {current !== 'contact' && <MobileBar lang={lang} />}
     <script>
-      import { initLenis, initReveals, initMagnets, scrollToTop } from '../scripts/motion';
+      import { initLenis, initReveals, initMagnets, initTitres, scrollToTop } from '../scripts/motion';
       document.addEventListener('astro:page-load', () => {
         initLenis();
         initReveals();
         initMagnets();
+        initTitres();
       });
       document.addEventListener('astro:after-swap', scrollToTop);
     </script>

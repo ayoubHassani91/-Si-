@@ -44,9 +44,9 @@
   --text-etiquette: 12px;
   --text-etiquette--line-height: 16px;
 
-  --radius-s: 4px;
-  --radius-m: 12px;
-  --radius-l: 24px;
+  --radius-s: 10px;
+  --radius-m: 22px;
+  --radius-l: 32px;
 
   --ease-sortie: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -185,6 +185,9 @@
   [data-pole="communication"] { --pole: var(--color-corail); }
   [data-pole="conseil"] { --pole: var(--color-vert); }
 
+  /* Révélation des titres (initTitres) */
+  .mot-masque { display: inline-block; overflow: clip; vertical-align: bottom; padding-block: 0.06em 0.12em; margin-block: -0.06em -0.12em; }
+  .mot-int { display: inline-block; transform-origin: 0 100%; }
   .sr-only-focusable:not(:focus) {
     position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
   }

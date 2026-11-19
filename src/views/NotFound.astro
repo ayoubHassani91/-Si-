@@ -9,7 +9,7 @@ const n = t(lang).notFound;
 <Base lang={lang} title={n.metaTitle} noindex>
   <section class="conteneur grid min-h-[70svh] content-center gap-8 py-24">
     <p class="etiquette text-encre-douce" dir="ltr">&gt; 404</p>
-    <h1 class="titre-1 max-w-[18ch]">{n.title}</h1>
+    <h1 class="titre-1 max-w-[18ch]" data-titre>{n.title}</h1>
     <p class="chapo max-w-[44ch]">{n.text}</p>
     <a href={href(lang)} class="btn btn-principal self-start justify-self-start">{n.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
   </section>

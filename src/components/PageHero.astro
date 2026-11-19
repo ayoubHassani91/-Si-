@@ -5,7 +5,7 @@ const { title, lead, label, pole } = Astro.props;
 <section class="page-hero" data-pole={pole}>
   <div class="conteneur">
     {label && <p class="pastille" data-pole={pole}>{label}</p>}
-    <h1 class="titre-1 mt-6 max-w-[22ch]" data-reveal>{title}</h1>
+    <h1 class="titre-1 mt-6 max-w-[22ch]" data-titre>{title}</h1>
     {lead && <p class="chapo mt-6 max-w-[56ch]" data-reveal data-reveal-delay="0.08">{lead}</p>}
     <slot />
   </div>
