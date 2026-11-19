@@ -135,20 +135,9 @@
       "lead": "Sites, logiciels, publicité, vidéo, conseil : une équipe de trois qui conçoit, code et fait connaître ce dont votre entreprise a besoin pour avancer.",
       "cta": "Démarrer un projet",
       "terminal": "> imaginer · structurer · construire",
-      "composer": {
-        "title": "De quoi avez-vous besoin ?",
-        "hint": "Cochez un ou plusieurs services : on vous prépare un seul devis.",
-        "empty": "Aucun service choisi pour l'instant.",
-        "one": "1 service",
-        "many": "{n} services",
-        "polesOne": "1 pôle",
-        "polesMany": "{n} pôles",
-        "single": "un seul devis",
-        "cta": "Demander mon devis",
-        "ctaEmpty": "Parler de mon projet",
-        "reset": "Tout effacer",
-        "prefill": "Services souhaités : {list}."
-      }
+      "replay": "Reconstruire le logo &si",
+      "hintMouse": "Cliquez sur le & pour le reconstruire",
+      "hintTouch": "Touchez le & pour le reconstruire"
     },
     "manifesto": {
       "label": "Notre méthode en trois verbes",

@@ -1,6 +1,6 @@
 # Site &si
 
-Site vitrine de l'agence &si (« et si ») : Astro, Tailwind v4, GSAP + ScrollTrigger, Lenis.
+Site vitrine de l'agence &si (« et si ») : Astro, Tailwind v4, GSAP + ScrollTrigger, Lenis, three.js.
 Trois langues : français (`/`), anglais (`/en/`), arabe (`/ar/`, de droite à gauche).
 
 ## Démarrer
@@ -27,11 +27,11 @@ npx astro check           # vérification TypeScript / Astro
 - `src/i18n/index.ts` : routes (mêmes slugs dans les 3 langues), liens WhatsApp, sens d'écriture.
 - `src/views/` : une vue par page, partagée par les 3 langues ; `src/pages/` ne contient que des fichiers d'appel.
 - `src/components/home/` : les sections de l'accueil.
-- `src/components/Intro.astro` : écran d'entrée (logo animé en CSS, une fois par session, désactivé si les animations sont réduites).
-- `src/components/home/Hero.astro` : accroche + configurateur de projet ; la sélection est transmise à Contact (`?services=…&poles=…`).
+- `src/components/Intro.astro` : écran de chargement à chaque page, animation du logo rendue dans Blender (`public/intro/`, scène `intro` de `3d/etsi-3d.blend`) ; désactivé si les animations sont réduites.
+- `src/components/home/Hero.astro` + `src/scripts/hero3d.ts` : & en 3D au centre (construction depuis des fragments de code, inclinaison vers le pointeur, reconstruction au clic) ; vidéo rejouable au toucher sur mobile.
 - `src/components/MobileBar.astro` : barre d'actions fixe en bas d'écran sur mobile.
 - `src/styles/global.css` : jetons de la charte dans `@theme`.
-- `public/3d/` : icônes des pôles (rendus Blender). `public/brand/` : logos SVG.
+- `public/3d/` : & 3D (.glb Draco), vidéos de repli, icônes des pôles. `public/draco/` : décodeur Draco. `public/brand/` : logos SVG.
 
 ## Mise en ligne (GitHub Pages)
 

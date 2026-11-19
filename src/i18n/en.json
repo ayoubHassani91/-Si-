@@ -130,20 +130,9 @@
       "lead": "Websites, software, advertising, video, consulting: a team of three that designs, builds and promotes what your business needs to move forward.",
       "cta": "Start a project",
       "terminal": "> imagine · structure · build",
-      "composer": {
-        "title": "What do you need?",
-        "hint": "Tick one or more services: we'll prepare a single quote.",
-        "empty": "No service selected yet.",
-        "one": "1 service",
-        "many": "{n} services",
-        "polesOne": "1 area",
-        "polesMany": "{n} areas",
-        "single": "one quote",
-        "cta": "Request my quote",
-        "ctaEmpty": "Talk about my project",
-        "reset": "Clear all",
-        "prefill": "Services needed: {list}."
-      }
+      "replay": "Rebuild the &si logo",
+      "hintMouse": "Click the & to rebuild it",
+      "hintTouch": "Tap the & to rebuild it"
     },
     "manifesto": {
       "label": "Our method in three verbs",

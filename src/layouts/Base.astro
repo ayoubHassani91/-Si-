@@ -65,7 +65,7 @@ const jsonLd = {
     <ClientRouter />
   </head>
   <body>
-    {current === 'home' && <Intro lang={lang} />}
+    <Intro lang={lang} />
     <a href="#contenu" class="sr-only-focusable btn btn-principal fixed start-4 top-4 z-[70]">{d.a11y.skip}</a>
     <Header lang={lang} current={current} />
     <main id="contenu">
