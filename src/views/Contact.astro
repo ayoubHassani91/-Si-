@@ -70,18 +70,18 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 
         <div class="champ">
           <label for="c-nom">{f.name}</label>
-          <input id="c-nom" name="name" type="text" autocomplete="name" required aria-describedby="c-nom-err" />
+          <input id="c-nom" name="name" type="text" autocomplete="name" maxlength="120" required aria-describedby="c-nom-err" />
           <p class="erreur" id="c-nom-err" hidden></p>
         </div>
         <div class="grid gap-6 md:grid-cols-2">
           <div class="champ">
             <label for="c-email">{f.email}</label>
-            <input id="c-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="c-email-err" dir="ltr" />
+            <input id="c-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="200" required aria-describedby="c-email-err" dir="ltr" />
             <p class="erreur" id="c-email-err" hidden></p>
           </div>
           <div class="champ">
             <label for="c-tel">{f.phone} <span class="text-encre-douce">({f.optional})</span></label>
-            <input id="c-tel" name="phone" type="tel" autocomplete="tel" inputmode="tel" dir="ltr" />
+            <input id="c-tel" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30" dir="ltr" />
           </div>
         </div>
         <fieldset class="champ">
@@ -96,7 +96,7 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
         </fieldset>
         <div class="champ">
           <label for="c-msg">{f.message}</label>
-          <textarea id="c-msg" name="message" rows="6" required minlength="20" placeholder={f.messagePlaceholder} aria-describedby="c-msg-err"></textarea>
+          <textarea id="c-msg" name="message" rows="6" required minlength="20" maxlength="5000" placeholder={f.messagePlaceholder} aria-describedby="c-msg-err"></textarea>
           <div class="compteur" aria-hidden="true"><span class="compteur-barre" data-compteur-barre></span></div>
           <p class="compteur-texte" data-compteur data-tpl={c.counter} data-ok={c.counterOk}></p>
           <p class="erreur" id="c-msg-err" hidden></p>

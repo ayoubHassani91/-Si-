@@ -371,8 +371,6 @@
     "about": "&si est une agence parisienne : un ingénieur informatique et deux experts marketing, pour des entreprises de tous secteurs, en France et à l'international.",
     "contact": "Contact",
     "nav": "Navigation",
-    "legal": "Mentions légales",
-    "privacy": "Confidentialité",
     "rights": "Tous droits réservés."
   },
   "services": {
@@ -532,55 +530,6 @@
     },
     "counter": "{n} / 20 caractères minimum",
     "counterOk": "Longueur suffisante"
-  },
-  "legal": {
-    "metaTitle": "Mentions légales · Et si (&si)",
-    "title": "Mentions légales",
-    "todo": "[À COMPLÉTER]",
-    "sections": [
-      {
-        "title": "Éditeur du site",
-        "text": "Raison sociale, forme juridique, capital, SIREN, adresse du siège, directeur de la publication : [À COMPLÉTER]."
-      },
-      {
-        "title": "Hébergement",
-        "text": "Nom, adresse et téléphone de l'hébergeur : [À COMPLÉTER]."
-      },
-      {
-        "title": "Propriété intellectuelle",
-        "text": "L'ensemble des contenus de ce site (textes, logos, éléments 3D) appartient à &si, sauf mention contraire. Toute reproduction sans autorisation est interdite."
-      },
-      {
-        "title": "Contact",
-        "text": "Pour toute question : via le formulaire de la page Contact ou WhatsApp."
-      }
-    ]
-  },
-  "privacy": {
-    "metaTitle": "Politique de confidentialité · Et si (&si)",
-    "title": "Confidentialité",
-    "sections": [
-      {
-        "title": "Données collectées",
-        "text": "Le formulaire de contact recueille votre nom, votre e-mail, votre téléphone (facultatif) et votre message, uniquement pour répondre à votre demande."
-      },
-      {
-        "title": "Transmission",
-        "text": "Les messages transitent par le service Web3Forms, qui les achemine vers notre boîte e-mail. Ils ne sont ni revendus ni utilisés à des fins publicitaires."
-      },
-      {
-        "title": "Durée de conservation",
-        "text": "[À COMPLÉTER]"
-      },
-      {
-        "title": "Vos droits",
-        "text": "Vous pouvez demander l'accès, la rectification ou la suppression de vos données à tout moment : [À COMPLÉTER : adresse de contact dédiée]."
-      },
-      {
-        "title": "Mesure d'audience",
-        "text": "Aucun cookie publicitaire n'est déposé. [À COMPLÉTER si un outil de mesure est ajouté]."
-      }
-    ]
   },
   "notFound": {
     "metaTitle": "Page introuvable · Et si (&si)",

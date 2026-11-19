@@ -38,7 +38,7 @@ npx astro check           # vérification TypeScript / Astro
 Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque push sur `claude/eager-gates-7m1151`
 (ou à la main depuis l'onglet Actions). Adresse : https://ayoubhassani91.github.io/-Si-/
 
-- Clé Web3Forms : secret de dépôt `PUBLIC_WEB3FORMS_KEY` (Settings → Secrets and variables → Actions).
+- Clé Web3Forms : secret de dépôt `PUBLIC_WEB3FORMS_KEY` (Settings → Secrets and variables → Actions). Cette clé finit forcément dans le HTML (c'est prévu par Web3Forms : elle ne permet que d'envoyer vers votre boîte) ; restreignez-la à votre domaine dans le tableau de bord Web3Forms.
 - Domaine propre : variables de dépôt `SITE_URL` (ex. `https://www.exemple.fr`) et `BASE_PATH` = `/`, puis domaine à déclarer dans Settings → Pages.
 
 
@@ -49,6 +49,6 @@ Accueil FR 96 / AR 99 en performance ; 100 en accessibilité, bonnes pratiques e
 ## À compléter
 
 - Clé Web3Forms et domaine définitif (`.env`).
-- Mentions légales et confidentialité : emplacements `[À COMPLÉTER]`.
+- Mentions légales et politique de confidentialité / cookies : pages retirées pour l'instant, à ajouter avant l'ouverture au public.
 - Études de cas de l'accueil (marquées `[À compléter]`).
 - Newsletter : interface seulement, à brancher sur un outil d'e-mailing.

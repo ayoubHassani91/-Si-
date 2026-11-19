@@ -366,8 +366,6 @@
     "about": "&si is a Paris agency: one software engineer and two marketing experts, for businesses in every sector, in France and abroad.",
     "contact": "Contact",
     "nav": "Navigation",
-    "legal": "Legal notice",
-    "privacy": "Privacy",
     "rights": "All rights reserved."
   },
   "services": {
@@ -527,55 +525,6 @@
     },
     "counter": "{n} / 20 characters minimum",
     "counterOk": "Long enough"
-  },
-  "legal": {
-    "metaTitle": "Legal notice · Et si (&si)",
-    "title": "Legal notice",
-    "todo": "[TO COMPLETE]",
-    "sections": [
-      {
-        "title": "Publisher",
-        "text": "Company name, legal form, share capital, SIREN, registered address, publication director: [TO COMPLETE]."
-      },
-      {
-        "title": "Hosting",
-        "text": "Host name, address and phone number: [TO COMPLETE]."
-      },
-      {
-        "title": "Intellectual property",
-        "text": "All content on this site (texts, logos, 3D elements) belongs to &si unless stated otherwise. Any reproduction without permission is prohibited."
-      },
-      {
-        "title": "Contact",
-        "text": "For any question: use the form on the Contact page or WhatsApp."
-      }
-    ]
-  },
-  "privacy": {
-    "metaTitle": "Privacy policy · Et si (&si)",
-    "title": "Privacy",
-    "sections": [
-      {
-        "title": "Data collected",
-        "text": "The contact form collects your name, email, phone number (optional) and message, only to reply to your request."
-      },
-      {
-        "title": "Transfer",
-        "text": "Messages pass through the Web3Forms service, which forwards them to our inbox. They are never sold or used for advertising."
-      },
-      {
-        "title": "Retention period",
-        "text": "[TO COMPLETE]"
-      },
-      {
-        "title": "Your rights",
-        "text": "You can ask to access, correct or delete your data at any time: [TO COMPLETE: dedicated contact address]."
-      },
-      {
-        "title": "Analytics",
-        "text": "No advertising cookies are set. [TO COMPLETE if an analytics tool is added]."
-      }
-    ]
   },
   "notFound": {
     "metaTitle": "Page not found · Et si (&si)",

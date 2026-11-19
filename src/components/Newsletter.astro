@@ -12,7 +12,7 @@ const d = t(lang).newsletter;
   <form class="nl" data-newsletter novalidate>
     <label for="nl-email" class="etiquette text-encre-douce">{d.label}</label>
     <div class="mt-2 flex gap-2">
-      <input id="nl-email" name="email" type="email" autocomplete="email" placeholder={d.placeholder} required class="nl-champ" />
+      <input id="nl-email" name="email" type="email" autocomplete="email" maxlength="200" placeholder={d.placeholder} required class="nl-champ" />
       <button type="submit" class="btn btn-secondaire shrink-0">{d.cta}</button>
     </div>
     <p class="mt-2 text-legende text-encre-douce" role="status" data-nl-status hidden>{d.soon}</p>

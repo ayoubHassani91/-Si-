@@ -39,8 +39,6 @@ export const ROUTES = {
   conseil: 'services/accompagnement-conseil/',
   about: 'a-propos/',
   contact: 'contact/',
-  legal: 'mentions-legales/',
-  privacy: 'confidentialite/',
 } as const;
 export type RouteKey = keyof typeof ROUTES;
 
