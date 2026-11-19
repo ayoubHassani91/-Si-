@@ -1,6 +1,6 @@
 ---
-import { Code, Megaphone } from '@lucide/astro';
-import { t, type Lang } from '../../i18n';
+import { Code, Megaphone, ArrowRight } from '@lucide/astro';
+import { t, href, type Lang, type PoleKey } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const p = t(lang).home.proof;
@@ -25,19 +25,40 @@ const icons = [Code, Megaphone];
       </div>
     </div>
 
-    <div class="mt-20">
-      <div class="flex flex-wrap items-baseline justify-between gap-4">
-        <h3 class="titre-2">{p.casesTitle}</h3>
-      </div>
-      <ul class="mt-8 grid gap-4 md:grid-cols-3">
-        {p.cases.map((c) => (
-          <li class="cas" data-reveal>
-            <span class="pastille" data-pole={c.pole}>{t(lang).poles[c.pole as 'logiciels'].short}</span>
-            <p class="titre-3 mt-5">{c.title}</p>
-            <p class="mt-3 text-encre-douce">{c.text}</p>
-          </li>
+    <!-- Situations types : le visiteur choisit la sienne et voit notre réponse. -->
+    <div class="situations" data-situations>
+      <h3 class="titre-2" data-reveal>{p.casesTitle}</h3>
+      <p class="chapo mt-3 max-w-[52ch]" data-reveal>{p.casesLead}</p>
+      <div class="sit-grille">
+        <div class="sit-onglets" role="tablist" aria-label={p.casesTitle}>
+          {p.cases.map((c, i) => (
+            <button type="button" role="tab" class="sit-onglet" id={`sit-${i}`} aria-controls={`sit-panneau-${i}`}
+              aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-sit={i}>
+              <span class="sit-points" aria-hidden="true">{c.poles.map((pl) => <span class="sit-point" data-pole={pl}></span>)}</span>
+              <span class="sit-profil">{c.profile}</span>
+              <ArrowRight size={18} stroke-width={1.75} class="sit-fleche" aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+        {p.cases.map((c, i) => (
+          <div class="sit-panneau" role="tabpanel" id={`sit-panneau-${i}`} aria-labelledby={`sit-${i}`} data-sit-panneau={i} hidden={i !== 0}>
+            <p class="sit-label">{p.casesLabels.situation}</p>
+            <p class="sit-situation">{c.situation}</p>
+            <p class="sit-label mt-6">{p.casesLabels.action}</p>
+            <ol class="sit-actions">
+              {c.action.map((x, j) => <li style={`--i: ${j}`}><span class="sit-num" aria-hidden="true">{j + 1}</span>{x}</li>)}
+            </ol>
+            <div class="sit-resultat">
+              <p class="sit-label">{p.casesLabels.result}</p>
+              <p class="mt-1">{c.result}</p>
+            </div>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <a href={href(lang, 'contact', `?poles=${c.poles.join(',')}`)} class="btn btn-principal">{p.casesLabels.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+              <span class="flex flex-wrap gap-2">{c.poles.map((pl) => <span class="sit-pole" data-pole={pl}>{t(lang).poles[pl as PoleKey].short}</span>)}</span>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -61,9 +82,65 @@ const icons = [Code, Megaphone];
     letter-spacing: -0.02em;
   }
   .stat-phrase::first-letter { text-transform: uppercase; }
-  .cas {
-    padding: 28px;
-    border-radius: var(--radius-m);
-    border: 1.5px dashed color-mix(in srgb, var(--color-encre) 30%, transparent);
+  .situations { margin-block-start: clamp(64px, 8vw, 96px); }
+  .sit-grille { display: grid; gap: 16px; margin-block-start: 28px; }
+  @media (min-width: 1024px) { .sit-grille { grid-template-columns: 4fr 7fr; gap: 24px; align-items: start; } }
+  .sit-onglets { display: flex; flex-direction: column; gap: 8px; }
+  @media (max-width: 1023px) { .sit-onglets { flex-direction: row; overflow-x: auto; scrollbar-width: none; padding-block-end: 2px; } }
+  .sit-onglet {
+    display: flex; align-items: center; gap: 12px; min-block-size: 56px; padding-inline: 18px; flex: none;
+    border-radius: 999px; background: var(--color-surface); border: 1px solid var(--color-trait);
+    font-weight: 500; text-align: start; cursor: pointer; white-space: nowrap;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, scale 0.15s;
   }
+  .sit-onglet:hover { border-color: var(--color-encre); }
+  .sit-onglet:active { scale: 0.98; }
+  .sit-onglet[aria-selected="true"] { background: var(--color-encre); border-color: var(--color-encre); color: var(--color-papier); }
+  .sit-points { display: flex; gap: 3px; }
+  .sit-point { inline-size: 8px; block-size: 8px; border-radius: 999px; background: var(--pole); }
+  .sit-profil { flex: 1; }
+  .sit-fleche { opacity: 0; transform: translateX(-6px); transition: opacity 0.2s, transform 0.25s var(--ease-sortie); }
+  .sit-onglet[aria-selected="true"] .sit-fleche { opacity: 1; transform: none; }
+  @media (max-width: 1023px) { .sit-fleche { display: none; } }
+  :global(html[dir="rtl"]) .sit-fleche { scale: -1 1; }
+  .sit-panneau {
+    padding: clamp(24px, 3.5vw, 40px); border-radius: var(--radius-m);
+    background: var(--color-surface); border: 1px solid var(--color-trait);
+    animation: sit-entree 0.45s var(--ease-sortie);
+  }
+  @keyframes sit-entree { from { opacity: 0; transform: translateY(10px); } }
+  .sit-label { font-family: var(--font-mono); font-size: 12px; color: var(--color-encre-douce); }
+  .sit-situation { margin-block-start: 6px; font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; }
+  .sit-actions { display: grid; gap: 8px; margin-block-start: 10px; }
+  .sit-actions li {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-s); background: var(--color-papier);
+    animation: sit-entree 0.4s var(--ease-sortie) both; animation-delay: calc(0.12s + var(--i) * 0.08s);
+  }
+  .sit-num { display: grid; place-items: center; flex: none; inline-size: 26px; block-size: 26px; border-radius: 999px; background: var(--color-encre); color: var(--color-papier); font-family: var(--font-mono); font-size: 12px; }
+  .sit-resultat { margin-block-start: 20px; padding: 16px 18px; border-radius: var(--radius-s); background: #e3f0ec; color: var(--color-encre); }
+  .sit-resultat .sit-label { color: var(--color-vert); }
+  .sit-pole { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--color-papier); font-family: var(--font-mono); font-size: 12px; }
+  .sit-pole::before { content: ""; inline-size: 7px; block-size: 7px; border-radius: 999px; background: var(--pole); }
+  @media (prefers-reduced-motion: reduce) { .sit-panneau, .sit-actions li { animation: none; } }
 </style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const s = document.querySelector<HTMLElement>('[data-situations]');
+    if (!s) return;
+    const tabs = [...s.querySelectorAll<HTMLButtonElement>('[data-sit]')];
+    const panels = [...s.querySelectorAll<HTMLElement>('[data-sit-panneau]')];
+    const choisir = (i: number, focus = false) => {
+      tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(j === i)); t.tabIndex = j === i ? 0 : -1; });
+      panels.forEach((p, j) => { p.hidden = j !== i; });
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => choisir(i));
+      t.addEventListener('keydown', (e) => {
+        const n = ['ArrowDown', 'ArrowRight'].includes(e.key) ? 1 : ['ArrowUp', 'ArrowLeft'].includes(e.key) ? -1 : 0;
+        if (n) { e.preventDefault(); choisir((i + n + tabs.length) % tabs.length, true); }
+      });
+    });
+  });
+</script>

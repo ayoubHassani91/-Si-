@@ -196,24 +196,71 @@
       ],
       "stat": "des dizaines",
       "statLabel": "d'entreprises accompagnées",
-      "casesTitle": "Études de cas",
+      "casesTitle": "Vous vous reconnaissez ?",
       "cases": [
         {
-          "pole": "logiciels",
-          "title": "[Étude de cas à compléter] Automatisation des devis",
-          "text": "Secteur, problème de départ, solution livrée, résultat mesuré."
+          "profile": "Commerce de proximité",
+          "poles": [
+            "logiciels",
+            "communication"
+          ],
+          "situation": "Vous avez un commerce ou un restaurant, mais vos clients ne vous trouvent pas en ligne.",
+          "action": [
+            "Un site rapide, clair sur mobile",
+            "Une fiche Google complète et à jour",
+            "Une campagne locale sur Google et Meta"
+          ],
+          "result": "Vous apparaissez quand on vous cherche près de chez vous, et les appels et réservations arrivent directement."
         },
         {
-          "pole": "communication",
-          "title": "[Étude de cas à compléter] Campagne d'acquisition",
-          "text": "Secteur, problème de départ, solution livrée, résultat mesuré."
+          "profile": "Artisan ou PME",
+          "poles": [
+            "logiciels"
+          ],
+          "situation": "Vos devis, factures et relances vous prennent des soirées entières.",
+          "action": [
+            "Des modèles de devis remplis automatiquement",
+            "Des relances qui partent toutes seules",
+            "Un tableau de bord relié à vos outils"
+          ],
+          "result": "Vous récupérez du temps chaque semaine, et plus aucune relance n'est oubliée."
         },
         {
-          "pole": "conseil",
-          "title": "[Étude de cas à compléter] Ouverture d'une boutique",
-          "text": "Secteur, problème de départ, solution livrée, résultat mesuré."
+          "profile": "Création d'entreprise",
+          "poles": [
+            "conseil",
+            "logiciels",
+            "communication"
+          ],
+          "situation": "Vous voulez lancer votre entreprise ou votre boutique, sans savoir par où commencer.",
+          "action": [
+            "Un plan de lancement : statut, offre, prix",
+            "Un site prêt le jour de l'ouverture",
+            "Une première campagne pour faire venir vos premiers clients"
+          ],
+          "result": "Vous lancez avec un plan daté, une présence en ligne et un interlocuteur unique pour tout le reste."
+        },
+        {
+          "profile": "Boutique en ligne",
+          "poles": [
+            "communication"
+          ],
+          "situation": "Vous dépensez en publicité sans savoir ce qu'elle vous rapporte vraiment.",
+          "action": [
+            "Un audit de vos campagnes actuelles",
+            "Le suivi des ventes générées par chaque annonce",
+            "Des vidéos courtes adaptées à chaque réseau"
+          ],
+          "result": "Vous savez ce que rapporte chaque euro investi, et vous arrêtez ce qui ne fonctionne pas."
         }
-      ]
+      ],
+      "casesLead": "Quatre situations courantes, et la façon dont nous y répondons.",
+      "casesLabels": {
+        "situation": "Votre situation",
+        "action": "Ce que nous mettons en place",
+        "result": "Ce que ça change pour vous",
+        "cta": "Parler de ma situation"
+      }
     },
     "method": {
       "title": "Comment on travaille",
