@@ -18,11 +18,18 @@ export interface HeroScene {
   dispose: () => void;
 }
 
-export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: number } = {}): Promise<HeroScene> {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.NoToneMapping;
+export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: number; fxCanvas?: HTMLCanvasElement } = {}): Promise<HeroScene> {
+  // Deux calques : le & (calque 0) et, si fourni, les fragments et circuits (calque 1) sur un second canvas,
+  // ce qui permet de masquer la zone du texte pour les fragments sans jamais toucher au &.
+  const make = (c: HTMLCanvasElement) => {
+    const r = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: true });
+    r.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    r.outputColorSpace = THREE.SRGBColorSpace;
+    r.toneMapping = THREE.NoToneMapping;
+    return r;
+  };
+  const renderer = make(canvas);
+  const fxRenderer = opts.fxCanvas ? make(opts.fxCanvas) : null;
 
   const scene = new THREE.Scene();
   scene.add(new THREE.HemisphereLight(0xffffff, 0xf7f5f0, 2.8));
@@ -37,6 +44,10 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   loader.setDRACOLoader(draco);
   const gltf = await loader.loadAsync(`${base}3d/hero.glb`);
   scene.add(gltf.scene);
+  if (fxRenderer) {
+    scene.traverse((o) => { if ((o as THREE.Light).isLight) o.layers.enableAll(); });
+    ['fx_code', 'fx_circuit', 'fx_poles'].forEach((n) => gltf.scene.getObjectByName(n)?.traverse((o) => o.layers.set(1)));
+  }
 
   const camera = (gltf.cameras[0] as THREE.PerspectiveCamera) ?? new THREE.PerspectiveCamera(30, 1, 0.1, 100);
   // Champ resserré : le & remplit presque toute la hauteur.
@@ -92,6 +103,10 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     applied.tx = tilt.x; applied.ty = tilt.y; applied.e = e;
     // Parallaxe : fragments et circuit glissent à l'opposé du pointeur (positions absolues).
     fx.forEach((g, i) => { g.position.x = -tilt.x * (0.25 + i * 0.15); g.position.y = tilt.y * (0.25 + i * 0.15); });
+    if (fxRenderer) {
+      camera.layers.set(1); fxRenderer.render(scene, camera);
+      camera.layers.set(0);
+    }
     renderer.render(scene, camera);
   };
 
@@ -100,6 +115,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     const h = canvas.clientHeight;
     if (!w || !h) return;
     renderer.setSize(w, h, false);
+    fxRenderer?.setSize(w, h, false);
     camera.aspect = w / h;
     const tan = camera.aspect < 1 ? baseTan / Math.max(camera.aspect, 0.6) : baseTan;
     camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tan));
@@ -152,6 +168,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
       timer.dispose();
       draco.dispose();
       renderer.dispose();
+      fxRenderer?.dispose();
     },
   };
 }

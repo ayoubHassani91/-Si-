@@ -8,6 +8,7 @@ const h = d.home.hero;
 ---
 <section class="hero" data-hero>
   <!-- Arrière-plan : le & 3D, en grand, qui réagit au pointeur. -->
+  <div class="fond-fx" aria-hidden="true"><canvas class="fond-media" data-canvas-fx hidden></canvas></div>
   <div class="fond" aria-hidden="true">
     <img class="fond-media" data-poster src={asset('/3d/hero-poster.webp')} alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
     <video class="fond-media" data-video muted playsinline preload="none" poster={asset('/3d/hero-poster.webp')} hidden>
@@ -49,6 +50,7 @@ const h = d.home.hero;
   .fond-media { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
   img.fond-media, video.fond-media { mix-blend-mode: darken; }
   .fond-media[hidden] { display: none; }
+  .fond-fx { display: none; }
   /* Mobile : le & dans un bloc au-dessus du texte. */
   .hero { flex-direction: column; align-items: stretch; justify-content: center; }
   .fond { position: relative; block-size: 38svh; flex: none; }
@@ -59,16 +61,18 @@ const h = d.home.hero;
   .hero-texte h1 { max-inline-size: 12ch; }
   @media (min-width: 1024px) {
     .hero { flex-direction: row; align-items: center; }
-    /* La scène 3D n'occupe que la partie de fin : fragments et circuits ne passent jamais sous le texte.
-       Un léger fondu au bord évite une coupure nette des lignes. */
-    .fond {
-      position: absolute; inset: 0; inset-inline-start: 46%; block-size: auto;
-      -webkit-mask-image: linear-gradient(to right, transparent, #000 14%);
-      mask-image: linear-gradient(to right, transparent, #000 14%);
+    /* Fragments et circuits (calque à part) couvrent toute la largeur et partent du bord de la page ;
+       un masque calé sur la zone du texte (variables posées en JS) les estompe avant qu'ils ne la touchent.
+       Le & reste sur son propre calque, jamais masqué. */
+    .fond { position: absolute; inset: 0; block-size: auto; }
+    .fond-fx {
+      position: absolute; inset: 0;
+      --cx: 27%; --cy: 52%; --rx: 32%; --ry: 44%;
+      -webkit-mask-image: radial-gradient(ellipse var(--rx) var(--ry) at var(--cx) var(--cy), transparent 62%, #000 100%);
+      mask-image: radial-gradient(ellipse var(--rx) var(--ry) at var(--cx) var(--cy), transparent 62%, #000 100%);
     }
-    :global(html[dir="rtl"]) .fond { -webkit-mask-image: linear-gradient(to left, transparent, #000 14%); mask-image: linear-gradient(to left, transparent, #000 14%); }
-    img.fond-media, video.fond-media { object-fit: contain; transform: scale(1.15); }
-    .hero-texte { max-inline-size: 46%; }
+    img.fond-media, video.fond-media { inset-inline-start: 34%; inline-size: 66%; object-fit: contain; transform: scale(1.35); }
+    .hero-texte { max-inline-size: 600px; }
     .hero-contenu { padding-block: 48px 64px; }
   }
   @media (max-width: 1023px) { .hero-wa { background: var(--color-papier); } }
@@ -88,6 +92,21 @@ const h = d.home.hero;
     const video = section.querySelector<HTMLVideoElement>('[data-video]')!;
     const poster = section.querySelector<HTMLImageElement>('[data-poster]')!;
     const replayBtn = section.querySelector<HTMLButtonElement>('[data-replay]')!;
+    const fond = section.querySelector<HTMLElement>('.fond-fx')!;
+    const fxCanvas = section.querySelector<HTMLCanvasElement>('[data-canvas-fx]')!;
+    const texte = section.querySelector<HTMLElement>('.hero-texte')!;
+    // Zone épargnée par l'animation : une ellipse autour du bloc de texte, recalculée à chaque redimensionnement.
+    const caler = () => {
+      if (!matchMedia('(min-width: 1024px)').matches) return;
+      const s0 = section.getBoundingClientRect();
+      const t0 = texte.getBoundingClientRect();
+      fond.style.setProperty('--cx', `${((t0.left + t0.width / 2 - s0.left) / s0.width) * 100}%`);
+      fond.style.setProperty('--cy', `${((t0.top + t0.height / 2 - s0.top) / s0.height) * 100}%`);
+      fond.style.setProperty('--rx', `${((t0.width / 2 + 40) / s0.width / 0.62) * 100}%`);
+      fond.style.setProperty('--ry', `${((t0.height / 2 + 32) / s0.height / 0.62) * 100}%`);
+    };
+    caler();
+    new ResizeObserver(caler).observe(section);
 
     if (reduceMotion()) return; // image fixe du & assemblé
 
@@ -107,13 +126,16 @@ const h = d.home.hero;
       if (webglAvailable()) {
         try {
           canvas.hidden = false;
-          hero = await mountHero(canvas, { shift: 0 });
+          const rtl = document.documentElement.dir === 'rtl';
+          const large = matchMedia('(min-width: 1024px)').matches;
+          fxCanvas.hidden = !large;
+          if (large) fond.style.display = 'block';
+          hero = await mountHero(canvas, { shift: large ? (rtl ? -0.24 : 0.24) : 0, fxCanvas: large ? fxCanvas : undefined });
           poster.hidden = true;
           section.addEventListener('pointermove', (e) => {
             const r = section.getBoundingClientRect();
-            const c = canvas.getBoundingClientRect();
-            const cx = c.left + c.width / 2;
-            const cy = c.top + c.height / 2;
+            const cx = r.left + r.width * (large ? (rtl ? 0.26 : 0.74) : 0.5);
+            const cy = r.top + r.height / 2;
             const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width / 2)));
             const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2)));
             hero?.point(nx, ny);
