@@ -6,7 +6,7 @@ const { lang } = Astro.props;
 const d = t(lang);
 ---
 <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="wa-flottant" aria-label={d.a11y.whatsappFloat}>
-  <MessageCircle size={24} stroke-width={1.75} aria-hidden="true" />
+  <MessageCircle size={24} stroke-width={1.75} aria-hidden="true" class="flex-none" /><span class="wa-texte">{d.whatsapp.label}</span>
 </a>
 <style>
   .wa-flottant {
@@ -14,14 +14,21 @@ const d = t(lang);
     inset-inline-end: 20px;
     inset-block-end: 20px;
     z-index: 40;
-    display: grid;
-    place-items: center;
-    inline-size: 56px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     block-size: 56px;
+    padding-inline: 16px;
     border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
     background: var(--color-encre);
     color: var(--color-papier);
     transition: transform 0.25s var(--ease-sortie);
   }
   .wa-flottant:hover { transform: translateY(-3px); }
+  /* L'étiquette se déplie au survol ou au focus : on sait ce que fait le bouton avant de cliquer. */
+  .wa-texte { max-inline-size: 0; overflow: hidden; white-space: nowrap; transition: max-inline-size 0.35s var(--ease-sortie); }
+  .wa-flottant:hover .wa-texte, .wa-flottant:focus-visible .wa-texte { max-inline-size: 240px; }
+  @media (max-width: 767px) { .wa-flottant { display: none; } }
 </style>

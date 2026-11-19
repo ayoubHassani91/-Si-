@@ -1,0 +1,49 @@
+---
+import { ArrowRight, MessageCircle } from '@lucide/astro';
+import { t, href, whatsappHref, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const b = t(lang).ui.bar;
+---
+<!-- Mobile : les deux actions principales restent sous le pouce une fois le haut de page passé. -->
+<div class="barre" data-barre>
+  <a href={href(lang, 'contact')} class="btn btn-principal barre-cta">{b.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+  <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire barre-wa" aria-label={t(lang).a11y.whatsappFloat}>
+    <MessageCircle size={20} stroke-width={1.75} aria-hidden="true" /><span>{b.wa}</span>
+  </a>
+</div>
+<style>
+  .barre {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 45;
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-papier) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-block-start: 1px solid var(--color-trait);
+    transform: translateY(110%);
+    transition: transform 0.35s var(--ease-sortie);
+  }
+  .barre[data-visible] { transform: none; }
+  .barre .btn { white-space: nowrap; padding-inline: 16px; }
+  .barre-cta { flex: 1; justify-content: center; }
+  .barre-wa { background: var(--color-surface); }
+  /* Très petits écrans : WhatsApp en icône seule pour garder le bouton principal sur une ligne. */
+  @media (max-width: 379px) { .barre-wa span { display: none; } .barre-wa { padding-inline: 14px; } }
+  @media (min-width: 768px) { .barre { display: none; } }
+</style>
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const bar = document.querySelector<HTMLElement>('[data-barre]');
+    if (!bar) return;
+    const footer = document.querySelector('footer');
+    let footerVisible = false;
+    const sync = () => bar.toggleAttribute('data-visible', window.scrollY > innerHeight * 0.6 && !footerVisible);
+    if (footer) new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; sync(); }).observe(footer);
+    window.addEventListener('scroll', sync, { passive: true });
+    sync();
+  });
+</script>

@@ -13,50 +13,113 @@
     "langLabel": "Language",
     "whatsappFloat": "Message us on WhatsApp"
   },
-  "nav": { "home": "Home", "services": "Services", "about": "About", "contact": "Contact", "cta": "Start a project" },
-  "whatsapp": { "label": "Message us on WhatsApp", "message": "Hello &si, I'd like to talk about a project." },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Start a project"
+  },
+  "whatsapp": {
+    "label": "Message us on WhatsApp",
+    "message": "Hello &si, I'd like to talk about a project."
+  },
   "poles": {
     "logiciels": {
       "name": "Software & products",
       "short": "Software",
       "verb": "Build",
       "pitch": "Tools that work for you.",
-      "services": ["Websites", "Automation", "Custom software"],
+      "services": [
+        "Websites",
+        "Automation",
+        "Custom software"
+      ],
       "intro": "Your website should sell, your repetitive tasks should disappear, and the tool your business needs should finally exist. Our software engineer designs and codes these tools, then maintains them.",
       "details": [
-        { "title": "Websites", "text": "Fast showcase sites and online shops, easy to read on mobile, built to turn a visit into an enquiry. You stay in control of your content." },
-        { "title": "Automation", "text": "Follow-ups, quotes, invoices, syncing between your software: we find what eats your time every week and automate it." },
-        { "title": "Custom software", "text": "When no tool on the market fits the way you work, we code yours: web app, dashboard, internal tool." }
+        {
+          "title": "Websites",
+          "text": "Fast showcase sites and online shops, easy to read on mobile, built to turn a visit into an enquiry. You stay in control of your content."
+        },
+        {
+          "title": "Automation",
+          "text": "Follow-ups, quotes, invoices, syncing between your software: we find what eats your time every week and automate it."
+        },
+        {
+          "title": "Custom software",
+          "text": "When no tool on the market fits the way you work, we code yours: web app, dashboard, internal tool."
+        }
       ],
-      "deliverables": ["Short, approved specification", "Mock-up before development", "Documented code, hosting set up", "Training and follow-up after launch"]
+      "deliverables": [
+        "Short, approved specification",
+        "Mock-up before development",
+        "Documented code, hosting set up",
+        "Training and follow-up after launch"
+      ]
     },
     "communication": {
       "name": "Marketing & creative",
       "short": "Marketing",
       "verb": "Imagine",
       "pitch": "Get seen by the right people.",
-      "services": ["Ad management", "Video production", "Marketing"],
+      "services": [
+        "Ad management",
+        "Video production",
+        "Marketing"
+      ],
       "intro": "A good offer nobody sees doesn't sell. Our two marketing specialists build campaigns, videos and messages that bring in customers, and measure what every euro returns.",
       "details": [
-        { "title": "Ad management", "text": "Campaigns on Google, Meta and LinkedIn: targeting, ads, budget, conversion tracking. A clear report every month." },
-        { "title": "Video production", "text": "Short social videos, product presentations, motion design: from script to final edit, in the right format for each channel." },
-        { "title": "Marketing", "text": "Positioning, messaging, action plan and content: we clarify what you sell and to whom, then make it known." }
+        {
+          "title": "Ad management",
+          "text": "Campaigns on Google, Meta and LinkedIn: targeting, ads, budget, conversion tracking. A clear report every month."
+        },
+        {
+          "title": "Video production",
+          "text": "Short social videos, product presentations, motion design: from script to final edit, in the right format for each channel."
+        },
+        {
+          "title": "Marketing",
+          "text": "Positioning, messaging, action plan and content: we clarify what you sell and to whom, then make it known."
+        }
       ],
-      "deliverables": ["Initial audit and measurable goals", "Publishing calendar", "Ready-to-post creative", "Monthly results report"]
+      "deliverables": [
+        "Initial audit and measurable goals",
+        "Publishing calendar",
+        "Ready-to-post creative",
+        "Monthly results report"
+      ]
     },
     "conseil": {
       "name": "Coaching & consulting",
       "short": "Consulting",
       "verb": "Structure",
       "pitch": "Move forward with a plan, not by chance.",
-      "services": ["Professional coaching", "Starting a business or shop", "Business development"],
+      "services": [
+        "Professional coaching",
+        "Starting a business or shop",
+        "Business development"
+      ],
       "intro": "Starting a company, opening a shop, reaching the next stage: we help you decide, organise and launch, with clear steps and one contact who knows your file.",
       "details": [
-        { "title": "Professional coaching", "text": "Regular sessions to set priorities, unblock decisions and stay on course. You no longer face the big choices alone." },
-        { "title": "Starting a business or shop", "text": "Legal status, offer, pricing, online presence, first customers: we prepare the launch step by step." },
-        { "title": "Business development", "text": "New markets, new offers, team organisation: we build the plan and follow it with you." }
+        {
+          "title": "Professional coaching",
+          "text": "Regular sessions to set priorities, unblock decisions and stay on course. You no longer face the big choices alone."
+        },
+        {
+          "title": "Starting a business or shop",
+          "text": "Legal status, offer, pricing, online presence, first customers: we prepare the launch step by step."
+        },
+        {
+          "title": "Business development",
+          "text": "New markets, new offers, team organisation: we build the plan and follow it with you."
+        }
       ],
-      "deliverables": ["Initial assessment", "Dated roadmap", "Scheduled check-ins", "Ready-to-use tools and templates"]
+      "deliverables": [
+        "Initial assessment",
+        "Dated roadmap",
+        "Scheduled check-ins",
+        "Ready-to-use tools and templates"
+      ]
     }
   },
   "home": {
@@ -66,11 +129,29 @@
       "title": "What if we moved on to what's next?",
       "lead": "Websites, software, advertising, video, consulting: a team of three that designs, builds and promotes what your business needs to move forward.",
       "cta": "Start a project",
-      "terminal": "> imagine · structure · build"
+      "terminal": "> imagine · structure · build",
+      "composer": {
+        "title": "What do you need?",
+        "hint": "Tick one or more services: we'll prepare a single quote.",
+        "empty": "No service selected yet.",
+        "one": "1 service",
+        "many": "{n} services",
+        "polesOne": "1 area",
+        "polesMany": "{n} areas",
+        "single": "one quote",
+        "cta": "Request my quote",
+        "ctaEmpty": "Talk about my project",
+        "reset": "Clear all",
+        "prefill": "Services needed: {list}."
+      }
     },
     "manifesto": {
       "label": "Our method in three verbs",
-      "lines": ["Imagine.", "Structure.", "Build."],
+      "lines": [
+        "Imagine.",
+        "Structure.",
+        "Build."
+      ],
       "text": "We start by understanding what's holding you back. We organise the answer. Then we build it, with the same team from the first call to launch."
     },
     "poles": {
@@ -81,34 +162,78 @@
     "whatif": {
       "title": "What if…",
       "items": [
-        { "q": "your website brought you customers?", "a": "A fast site, clear on mobile, with one goal per page: getting you contacted. We build it, measure it and improve it." },
-        { "q": "your business could run without you for a weekend?", "a": "Follow-ups, quotes, appointments, reporting: what repeats can run on its own. We automate your tasks to give you time back." },
-        { "q": "the tool you dream of already existed, because we coded it?", "a": "Your way of working doesn't fit any software on the market? Our engineer designs and codes a tool made for you." }
-      ]
+        {
+          "q": "your website brought you customers?",
+          "a": "A fast site, clear on mobile, with one goal per page: getting you contacted. We build it, measure it and improve it."
+        },
+        {
+          "q": "your business could run without you for a weekend?",
+          "a": "Follow-ups, quotes, appointments, reporting: what repeats can run on its own. We automate your tasks to give you time back."
+        },
+        {
+          "q": "the tool you dream of already existed, because we coded it?",
+          "a": "Your way of working doesn't fit any software on the market? Our engineer designs and codes a tool made for you."
+        }
+      ],
+      "hint": "Tap a question to read our answer."
     },
     "proof": {
       "title": "A small team with complete skills.",
       "team": [
-        { "role": "Software engineer", "text": "Designs and codes your websites, automations and software. He knows what is feasible, how long it takes, and delivers it." },
-        { "role": "Two marketing and communication experts", "text": "Have supported dozens of companies whose revenue grew. They know how to bring in customers and prove it." }
+        {
+          "role": "Software engineer",
+          "text": "Designs and codes your websites, automations and software. He knows what is feasible, how long it takes, and delivers it."
+        },
+        {
+          "role": "Two marketing and communication experts",
+          "text": "Have supported dozens of companies whose revenue grew. They know how to bring in customers and prove it."
+        }
       ],
       "stat": "dozens",
       "statLabel": "of companies supported",
       "casesTitle": "Case studies",
       "casesNote": "Examples coming soon, shown anonymously.",
       "cases": [
-        { "pole": "logiciels", "title": "[Case study to complete] Quote automation", "text": "Sector, starting problem, delivered solution, measured result." },
-        { "pole": "communication", "title": "[Case study to complete] Acquisition campaign", "text": "Sector, starting problem, delivered solution, measured result." },
-        { "pole": "conseil", "title": "[Case study to complete] Opening a shop", "text": "Sector, starting problem, delivered solution, measured result." }
+        {
+          "pole": "logiciels",
+          "title": "[Case study to complete] Quote automation",
+          "text": "Sector, starting problem, delivered solution, measured result."
+        },
+        {
+          "pole": "communication",
+          "title": "[Case study to complete] Acquisition campaign",
+          "text": "Sector, starting problem, delivered solution, measured result."
+        },
+        {
+          "pole": "conseil",
+          "title": "[Case study to complete] Opening a shop",
+          "text": "Sector, starting problem, delivered solution, measured result."
+        }
       ]
     },
     "method": {
       "title": "How we work",
       "steps": [
-        { "title": "Listen", "text": "A first free conversation to understand your business and what's holding it back.", "tag": "1 call · 30 min" },
-        { "title": "Quote", "text": "A clear proposal: what we deliver, how long it takes, what it costs.", "tag": "within 72 h" },
-        { "title": "Build", "text": "We design, code and create. You approve every important step.", "tag": "weekly check-ins" },
-        { "title": "Follow-up", "text": "After delivery, we measure the results and adjust.", "tag": "monthly report" }
+        {
+          "title": "Listen",
+          "text": "A first free conversation to understand your business and what's holding it back.",
+          "tag": "1 call · 30 min"
+        },
+        {
+          "title": "Quote",
+          "text": "A clear proposal: what we deliver, how long it takes, what it costs.",
+          "tag": "within 72 h"
+        },
+        {
+          "title": "Build",
+          "text": "We design, code and create. You approve every important step.",
+          "tag": "weekly check-ins"
+        },
+        {
+          "title": "Follow-up",
+          "text": "After delivery, we measure the results and adjust.",
+          "tag": "monthly report"
+        }
       ]
     },
     "combo": {
@@ -157,15 +282,48 @@
     "lead": "&si started from a simple observation: businesses need tools that work and customers who show up. Rarely one without the other.",
     "teamTitle": "The team",
     "team": [
-      { "role": "Software engineer", "text": "Architecture, web development, automation, custom software. He makes sure what is promised is feasible, and delivers it.", "tags": ["Web", "Automation", "Software"] },
-      { "role": "Marketing specialist", "text": "Strategy, ad campaigns, results tracking. Has supported dozens of companies in their growth.", "tags": ["Ads", "Strategy", "Data"] },
-      { "role": "Communication specialist", "text": "Messaging, content, video production. Gives your offer a clear voice on every channel.", "tags": ["Video", "Content", "Brand"] }
+      {
+        "role": "Software engineer",
+        "text": "Architecture, web development, automation, custom software. He makes sure what is promised is feasible, and delivers it.",
+        "tags": [
+          "Web",
+          "Automation",
+          "Software"
+        ]
+      },
+      {
+        "role": "Marketing specialist",
+        "text": "Strategy, ad campaigns, results tracking. Has supported dozens of companies in their growth.",
+        "tags": [
+          "Ads",
+          "Strategy",
+          "Data"
+        ]
+      },
+      {
+        "role": "Communication specialist",
+        "text": "Messaging, content, video production. Gives your offer a clear voice on every channel.",
+        "tags": [
+          "Video",
+          "Content",
+          "Brand"
+        ]
+      }
     ],
     "valuesTitle": "What guides our work",
     "values": [
-      { "title": "Direct", "text": "We say what will work and what won't. Before you sign, not after." },
-      { "title": "Concrete", "text": "Deliverables, deadlines, numbers. No jargon to fill slides." },
-      { "title": "Committed", "text": "The same team from the first call to the follow-up. You always know who to talk to." }
+      {
+        "title": "Direct",
+        "text": "We say what will work and what won't. Before you sign, not after."
+      },
+      {
+        "title": "Concrete",
+        "text": "Deliverables, deadlines, numbers. No jargon to fill slides."
+      },
+      {
+        "title": "Committed",
+        "text": "The same team from the first call to the follow-up. You always know who to talk to."
+      }
     ],
     "methodTitle": "Our method"
   },
@@ -203,21 +361,48 @@
     "title": "Legal notice",
     "todo": "[TO COMPLETE]",
     "sections": [
-      { "title": "Publisher", "text": "Company name, legal form, share capital, SIREN, registered address, publication director: [TO COMPLETE]." },
-      { "title": "Hosting", "text": "Host name, address and phone number: [TO COMPLETE]." },
-      { "title": "Intellectual property", "text": "All content on this site (texts, logos, 3D elements) belongs to &si unless stated otherwise. Any reproduction without permission is prohibited." },
-      { "title": "Contact", "text": "For any question: use the form on the Contact page or WhatsApp." }
+      {
+        "title": "Publisher",
+        "text": "Company name, legal form, share capital, SIREN, registered address, publication director: [TO COMPLETE]."
+      },
+      {
+        "title": "Hosting",
+        "text": "Host name, address and phone number: [TO COMPLETE]."
+      },
+      {
+        "title": "Intellectual property",
+        "text": "All content on this site (texts, logos, 3D elements) belongs to &si unless stated otherwise. Any reproduction without permission is prohibited."
+      },
+      {
+        "title": "Contact",
+        "text": "For any question: use the form on the Contact page or WhatsApp."
+      }
     ]
   },
   "privacy": {
     "metaTitle": "Privacy policy · Et si (&si)",
     "title": "Privacy",
     "sections": [
-      { "title": "Data collected", "text": "The contact form collects your name, email, phone number (optional) and message, only to reply to your request." },
-      { "title": "Transfer", "text": "Messages pass through the Web3Forms service, which forwards them to our inbox. They are never sold or used for advertising." },
-      { "title": "Retention period", "text": "[TO COMPLETE]" },
-      { "title": "Your rights", "text": "You can ask to access, correct or delete your data at any time: [TO COMPLETE: dedicated contact address]." },
-      { "title": "Analytics", "text": "No advertising cookies are set. [TO COMPLETE if an analytics tool is added]." }
+      {
+        "title": "Data collected",
+        "text": "The contact form collects your name, email, phone number (optional) and message, only to reply to your request."
+      },
+      {
+        "title": "Transfer",
+        "text": "Messages pass through the Web3Forms service, which forwards them to our inbox. They are never sold or used for advertising."
+      },
+      {
+        "title": "Retention period",
+        "text": "[TO COMPLETE]"
+      },
+      {
+        "title": "Your rights",
+        "text": "You can ask to access, correct or delete your data at any time: [TO COMPLETE: dedicated contact address]."
+      },
+      {
+        "title": "Analytics",
+        "text": "No advertising cookies are set. [TO COMPLETE if an analytics tool is added]."
+      }
     ]
   },
   "notFound": {
@@ -225,5 +410,12 @@
     "title": "What if this page didn't exist?",
     "text": "It doesn't. The link may be old or mistyped.",
     "cta": "Back to home"
+  },
+  "ui": {
+    "intro": "Loading",
+    "bar": {
+      "cta": "Start a project",
+      "wa": "WhatsApp"
+    }
   }
 }

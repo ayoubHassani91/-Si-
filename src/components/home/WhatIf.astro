@@ -1,4 +1,5 @@
 ---
+import { Plus } from '@lucide/astro';
 import { t, type Lang } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -7,24 +8,33 @@ const w = t(lang).home.whatif;
 <section class="etsi" data-etsi aria-labelledby="etsi-titre">
   <div class="conteneur grid gap-10 lg:grid-cols-12">
     <div class="lg:col-span-4">
-      <h2 id="etsi-titre" class="etsi-titre">{w.title}</h2>
+      <div class="etsi-colle">
+        <h2 id="etsi-titre" class="etsi-titre">{w.title}</h2>
+        <p class="mt-6 max-w-[28ch] text-[#a3a7b0]">{w.hint}</p>
+      </div>
     </div>
-    <ol class="lg:col-span-8">
-      {w.items.map((it) => (
-        <li class="question" data-question>
-          <p class="titre-1 q">{it.q}</p>
-          <p class="chapo mt-5 max-w-[52ch] r">{it.a}</p>
+    <ul class="lg:col-span-8">
+      {w.items.map((it, i) => (
+        <li class="question">
+          <h3>
+            <button type="button" class="q" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`etsi-r-${i}`} id={`etsi-q-${i}`} data-q>
+              <span class="titre-2">{it.q}</span>
+              <span class="signe" aria-hidden="true"><Plus size={22} stroke-width={1.75} /></span>
+            </button>
+          </h3>
+          <div class="r-boite" id={`etsi-r-${i}`} role="region" aria-labelledby={`etsi-q-${i}`} data-r>
+            <div class="r-interne"><p class="chapo r">{it.a}</p></div>
+          </div>
         </li>
       ))}
-    </ol>
+    </ul>
   </div>
 </section>
 
 <style>
-  .etsi { background: var(--color-encre); color: var(--color-papier); padding-block: 128px; }
+  .etsi { background: var(--color-encre); color: var(--color-papier); padding-block: clamp(80px, 12vw, 128px); }
+  .etsi-colle { position: sticky; inset-block-start: 120px; }
   .etsi-titre {
-    position: sticky;
-    inset-block-start: 120px;
     font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(56px, 9vw, 120px);
@@ -33,20 +43,51 @@ const w = t(lang).home.whatif;
     color: var(--color-corail);
   }
   :global(html[dir="rtl"]) .etsi-titre { letter-spacing: 0; line-height: 1.2; }
-  .question { padding-block: 48px; border-block-start: 1px solid #2c3038; }
-  .question:first-child { border: 0; padding-block-start: 0; }
-  .q { font-family: var(--font-display); }
-  .r { color: #a3a7b0; }
+  .question { border-block-start: 1px solid #2c3038; }
+  .question:last-child { border-block-end: 1px solid #2c3038; }
+  .q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    inline-size: 100%;
+    padding-block: 28px;
+    text-align: start;
+    font-family: var(--font-display);
+    color: #a3a7b0;
+    cursor: pointer;
+    transition: color 0.25s;
+  }
+  .q:hover, .q[aria-expanded="true"] { color: var(--color-papier); }
+  .q:focus-visible { outline-color: #8c9bff; }
+  .signe {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 48px;
+    block-size: 48px;
+    border-radius: var(--radius-s);
+    box-shadow: inset 0 0 0 1px #2c3038;
+    transition: background-color 0.25s, color 0.25s;
+  }
+  .signe :global(svg) { transition: transform 0.35s var(--ease-sortie); }
+  .q:hover .signe { box-shadow: inset 0 0 0 1px #a3a7b0; }
+  .q[aria-expanded="true"] .signe { background: var(--color-corail); color: var(--color-encre); box-shadow: none; }
+  .q[aria-expanded="true"] .signe :global(svg) { transform: rotate(45deg); }
+  /* Ouverture fluide par grille 0fr → 1fr, sans mesurer la hauteur en JavaScript. */
+  .r-boite { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s var(--ease-sortie); }
+  .question:has(.q[aria-expanded="true"]) .r-boite { grid-template-rows: 1fr; }
+  .r-interne { overflow: hidden; visibility: hidden; transition: visibility 0s 0.4s; }
+  .question:has(.q[aria-expanded="true"]) .r-interne { visibility: visible; transition-delay: 0s; }
+  .r { color: #a3a7b0; max-inline-size: 52ch; padding-block-end: 32px; }
 </style>
 
 <script>
-  import { gsap, reduceMotion } from '../../scripts/motion';
   document.addEventListener('astro:page-load', () => {
-    const s = document.querySelector<HTMLElement>('[data-etsi]');
-    if (!s || reduceMotion()) return;
-    s.querySelectorAll<HTMLElement>('[data-question]').forEach((q) => {
-      gsap.fromTo(q.querySelector('.q'), { color: '#6e727a' }, { color: '#f7f5f0', ease: 'none', scrollTrigger: { trigger: q, start: 'top 85%', end: 'top 45%', scrub: true } });
-      gsap.from(q.querySelector('.r'), { opacity: 0, y: 16, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: q, start: 'top 55%', once: true } });
+    document.querySelectorAll<HTMLButtonElement>('[data-etsi] [data-q]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+      });
     });
   });
 </script>

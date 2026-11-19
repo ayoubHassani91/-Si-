@@ -6,7 +6,7 @@ const { lang } = Astro.props;
 const p = t(lang).home.proof;
 const icons = [Code, Megaphone];
 ---
-<section class="py-32" aria-labelledby="preuve-titre">
+<section class="py-20 md:py-32" aria-labelledby="preuve-titre">
   <div class="conteneur">
     <h2 id="preuve-titre" class="titre-1 max-w-[20ch]" data-reveal>{p.title}</h2>
     <div class="mt-14 grid gap-4 md:grid-cols-12">

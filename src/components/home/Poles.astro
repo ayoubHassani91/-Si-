@@ -36,7 +36,7 @@ const d = t(lang);
 </section>
 
 <style>
-  .poles { padding-block: 112px; }
+  .poles { padding-block: clamp(64px, 10vw, 112px); }
   .poles-tete {
     display: flex;
     flex-wrap: wrap;
@@ -45,7 +45,18 @@ const d = t(lang);
     gap: 24px;
     margin-block-end: 48px;
   }
-  .panneau { display: flex; flex-direction: column; padding: 32px; }
-  .panneau-icone { inline-size: 160px; block-size: auto; margin-block: 12px 4px; margin-inline-start: -16px; }
+  .panneau { position: relative; display: flex; flex-direction: column; padding: 32px; transition: border-color 0.2s, transform 0.3s var(--ease-sortie); }
+  /* Toute la carte est cliquable : le lien s'étend sur la carte. */
+  .panneau .lien::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+  .panneau:hover { transform: translateY(-4px); }
+  .panneau:active { transform: translateY(-1px); }
+  .panneau:has(.lien:focus-visible) { outline: 2px solid var(--color-cobalt); outline-offset: 3px; }
+  .panneau .lien:focus-visible { outline: none; }
+  .panneau:hover .lien { background-size: 100% 1.5px; }
+  .panneau:hover .fleche { transform: translateX(4px); }
+  :global(html[dir="rtl"]) .panneau:hover .fleche { transform: translateX(-4px) scaleX(-1); }
+  .panneau .fleche { transition: transform 0.25s var(--ease-sortie); }
+  .panneau-icone { inline-size: 160px; block-size: auto; margin-block: 12px 4px; margin-inline-start: -16px; transition: transform 0.4s var(--ease-sortie); }
+  .panneau:hover .panneau-icone { transform: translateY(-4px) rotate(-3deg); }
   .coche { color: var(--pole); flex: none; }
 </style>

@@ -5,7 +5,7 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const c = t(lang).home.combo;
 ---
-<section class="py-32" aria-labelledby="combo-titre">
+<section class="py-16 md:py-32" aria-labelledby="combo-titre">
   <div class="conteneur">
     <div class="combo">
       <h2 id="combo-titre" class="titre-1 max-w-[14ch]" data-reveal>{c.title}</h2>

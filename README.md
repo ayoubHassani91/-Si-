@@ -1,6 +1,6 @@
 # Site &si
 
-Site vitrine de l'agence &si (« et si ») : Astro, Tailwind v4, GSAP + ScrollTrigger, Lenis, three.js.
+Site vitrine de l'agence &si (« et si ») : Astro, Tailwind v4, GSAP + ScrollTrigger, Lenis.
 Trois langues : français (`/`), anglais (`/en/`), arabe (`/ar/`, de droite à gauche).
 
 ## Démarrer
@@ -27,9 +27,11 @@ npx astro check           # vérification TypeScript / Astro
 - `src/i18n/index.ts` : routes (mêmes slugs dans les 3 langues), liens WhatsApp, sens d'écriture.
 - `src/views/` : une vue par page, partagée par les 3 langues ; `src/pages/` ne contient que des fichiers d'appel.
 - `src/components/home/` : les sections de l'accueil.
-- `src/scripts/hero3d.ts` : scène three.js du hero (une seule animation dont le temps est piloté : construction 0–4 s, attente en boucle 4–8 s, pôles 8–11 s au scroll).
+- `src/components/Intro.astro` : écran d'entrée (logo animé en CSS, une fois par session, désactivé si les animations sont réduites).
+- `src/components/home/Hero.astro` : accroche + configurateur de projet ; la sélection est transmise à Contact (`?services=…&poles=…`).
+- `src/components/MobileBar.astro` : barre d'actions fixe en bas d'écran sur mobile.
 - `src/styles/global.css` : jetons de la charte dans `@theme`.
-- `public/3d/` : modèles .glb (Draco), vidéos de repli, image fixe. `public/brand/` : logos SVG. `public/draco/` : décodeur Draco local.
+- `public/3d/` : icônes des pôles (rendus Blender). `public/brand/` : logos SVG.
 
 ## Mise en ligne (GitHub Pages)
 
@@ -39,13 +41,6 @@ Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque
 - Clé Web3Forms : secret de dépôt `PUBLIC_WEB3FORMS_KEY` (Settings → Secrets and variables → Actions).
 - Domaine propre : variables de dépôt `SITE_URL` (ex. `https://www.exemple.fr`) et `BASE_PATH` = `/`, puis domaine à déclarer dans Settings → Pages.
 
-## Comportement du hero
-
-| Situation | Rendu |
-|---|---|
-| Écran ≥ 768 px, WebGL disponible | Scène 3D, chargée une fois la page au repos |
-| Écran < 768 px, appareil peu puissant ou pas de WebGL | Vidéo WebM/MP4 (4:5 sur mobile) |
-| `prefers-reduced-motion: reduce` | Image fixe, aucune animation |
 
 ## Mesures (Lighthouse 13, profil mobile, build local)
 

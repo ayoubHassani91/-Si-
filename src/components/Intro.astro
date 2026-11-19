@@ -1,0 +1,75 @@
+---
+import paths from '../data/logo-paths.json';
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<!-- Écran d'entrée : logo animé, joué une seule fois par session. CSS seul, aucun JavaScript requis. -->
+<div class="intro" data-intro role="presentation">
+  <svg class="intro-logo" viewBox={paths.viewBox} aria-hidden="true">
+    <path class="intro-amp" fill="var(--color-corail)" d={paths.amp} />
+    <path class="intro-si" fill="var(--color-encre)" d={paths.si} />
+  </svg>
+  <span class="intro-trait" aria-hidden="true"></span>
+  <span class="sr-only">{t(lang).ui.intro}</span>
+</div>
+<script is:inline>
+  (function () {
+    var el = document.currentScript && document.currentScript.previousElementSibling;
+    if (!el) return;
+    var vu = false;
+    try { vu = sessionStorage.getItem('etsi-intro') === '1'; sessionStorage.setItem('etsi-intro', '1'); } catch (e) {}
+    if (vu || matchMedia('(prefers-reduced-motion: reduce)').matches) { el.remove(); return; }
+    setTimeout(function () { el.remove(); }, 1700);
+  })();
+</script>
+
+<style>
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 20px;
+    background: var(--color-papier);
+    animation: intro-sortie 0.55s cubic-bezier(0.7, 0, 0.2, 1) 1.05s forwards;
+    pointer-events: none;
+  }
+  .intro-logo { inline-size: clamp(120px, 22vw, 200px); block-size: auto; overflow: visible; }
+  .intro-amp {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    clip-path: inset(100% 0 0 0);
+    animation: intro-amp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+  }
+  .intro-si {
+    opacity: 0;
+    transform: translateX(-12%);
+    transform-box: fill-box;
+    animation: intro-si 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+  }
+  .intro-trait {
+    inline-size: clamp(120px, 22vw, 200px);
+    block-size: 2px;
+    background: var(--color-trait);
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-trait::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-encre);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: intro-trait 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards;
+  }
+  :global(html[dir="rtl"]) .intro-trait::after { transform-origin: right; }
+  @keyframes intro-amp { to { clip-path: inset(0 0 0 0); } }
+  @keyframes intro-si { to { opacity: 1; transform: translateX(0); } }
+  @keyframes intro-trait { to { transform: scaleX(1); } }
+  @keyframes intro-sortie { to { transform: translateY(-100%); visibility: hidden; } }
+  @media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+</style>

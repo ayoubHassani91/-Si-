@@ -135,7 +135,11 @@
   .btn:hover svg { transform: translateX(4px); }
   html[dir="rtl"] .btn:hover svg { transform: translateX(-4px) scaleX(-1); }
   html[dir="rtl"] .btn svg.fleche { transform: scaleX(-1); }
+  .btn { transition-property: transform, background-color, color, box-shadow, scale; }
+  .btn:active { scale: 0.97; }
+  .btn[data-magnet] { transition-property: background-color, color, box-shadow, scale; }
   .btn-principal { background: var(--color-corail); color: var(--color-encre); }
+  .btn-principal:hover { background: #ff7152; }
   .btn-principal:hover { transform: translateY(-2px); }
   .btn-secondaire { box-shadow: inset 0 0 0 1.5px currentColor; color: inherit; }
   .btn-secondaire:hover { background: var(--color-encre); color: var(--color-papier); box-shadow: inset 0 0 0 1.5px var(--color-encre); }

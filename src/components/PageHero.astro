@@ -11,6 +11,6 @@ const { title, lead, label, pole } = Astro.props;
   </div>
 </section>
 <style>
-  .page-hero { padding-block: 96px 72px; }
+  .page-hero { padding-block: clamp(48px, 9vw, 96px) clamp(40px, 7vw, 72px); }
   .page-hero h1 { position: relative; }
 </style>

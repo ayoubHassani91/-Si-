@@ -44,6 +44,23 @@ export function initReveals(root: ParentNode = document) {
   });
 }
 
+/** Boutons « aimantés » : ils suivent légèrement le pointeur (souris uniquement). */
+export function initMagnets(root: ParentNode = document) {
+  if (reduceMotion() || !window.matchMedia('(pointer: fine)').matches) return;
+  root.querySelectorAll<HTMLElement>('[data-magnet]').forEach((el) => {
+    if (el.dataset.magnetOn) return;
+    el.dataset.magnetOn = '1';
+    const xTo = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3.out' });
+    const yTo = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3.out' });
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      xTo((e.clientX - r.left - r.width / 2) * 0.18);
+      yTo((e.clientY - r.top - r.height / 2) * 0.28);
+    });
+    el.addEventListener('pointerleave', () => { xTo(0); yTo(0); });
+  });
+}
+
 export function killTriggers() {
   ScrollTrigger.getAll().forEach((st) => st.kill());
 }

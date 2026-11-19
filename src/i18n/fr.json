@@ -134,7 +134,21 @@
       "title": "Et si on passait à la suite ?",
       "lead": "Sites, logiciels, publicité, vidéo, conseil : une équipe de trois qui conçoit, code et fait connaître ce dont votre entreprise a besoin pour avancer.",
       "cta": "Démarrer un projet",
-      "terminal": "> imaginer · structurer · construire"
+      "terminal": "> imaginer · structurer · construire",
+      "composer": {
+        "title": "De quoi avez-vous besoin ?",
+        "hint": "Cochez un ou plusieurs services : on vous prépare un seul devis.",
+        "empty": "Aucun service choisi pour l'instant.",
+        "one": "1 service",
+        "many": "{n} services",
+        "polesOne": "1 pôle",
+        "polesMany": "{n} pôles",
+        "single": "un seul devis",
+        "cta": "Demander mon devis",
+        "ctaEmpty": "Parler de mon projet",
+        "reset": "Tout effacer",
+        "prefill": "Services souhaités : {list}."
+      }
     },
     "manifesto": {
       "label": "Notre méthode en trois verbes",
@@ -165,7 +179,8 @@
           "q": "l'outil dont vous rêvez existait déjà, parce qu'on l'a codé ?",
           "a": "Votre façon de travailler ne rentre dans aucun logiciel du marché ? Notre ingénieur conçoit et code un outil fait pour vous."
         }
-      ]
+      ],
+      "hint": "Touchez une question pour lire notre réponse."
     },
     "proof": {
       "title": "Une petite équipe, des compétences complètes.",
@@ -400,5 +415,12 @@
     "title": "Et si cette page n'existait pas ?",
     "text": "C'est le cas. Le lien est peut-être ancien ou mal saisi.",
     "cta": "Retour à l'accueil"
+  },
+  "ui": {
+    "intro": "Chargement",
+    "bar": {
+      "cta": "Démarrer un projet",
+      "wa": "WhatsApp"
+    }
   }
 }

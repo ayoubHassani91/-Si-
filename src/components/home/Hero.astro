@@ -1,36 +1,66 @@
 ---
-import { ArrowRight, MessageCircle } from '@lucide/astro';
-import { t, href, asset, whatsappHref, type Lang } from '../../i18n';
+import { ArrowRight, MessageCircle, Check, RotateCcw } from '@lucide/astro';
+import { t, href, whatsappHref, POLES, type Lang } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang);
 const h = d.home.hero;
+const c = h.composer;
+const contact = href(lang, 'contact');
 ---
 <section class="hero" data-hero>
   <div class="conteneur hero-grille">
-    <div class="hero-texte" data-hero-texte>
-      <h1 class="display">{h.title}</h1>
-      <p class="chapo mt-6 max-w-[46ch]">{h.lead}</p>
-      <div class="mt-9 flex flex-wrap gap-3">
-        <a href={href(lang, 'contact')} class="btn btn-principal">
+    <div class="hero-texte">
+      <h1 class="display" data-hero-titre>{h.title}</h1>
+      <p class="chapo mt-6 max-w-[46ch]" data-hero-in>{h.lead}</p>
+      <div class="mt-9 flex flex-wrap gap-3" data-hero-in>
+        <a href={contact} class="btn btn-principal" data-magnet>
           {h.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
         </a>
-        <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire">
+        <a href={whatsappHref(lang)} target="_blank" rel="noopener" class="btn btn-secondaire" data-magnet>
           <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
         </a>
       </div>
     </div>
 
-    <div class="hero-scene" aria-hidden="true">
-      <img class="hero-poster" data-hero-poster src={asset('/3d/hero-poster.webp')} alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
-      <video class="hero-video" data-hero-video muted playsinline preload="none" poster={asset('/3d/hero-poster.webp')} hidden>
-        <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.webm')} type="video/webm" />
-        <source media="(max-width: 767px)" src={asset('/3d/hero-1080x1350.mp4')} type="video/mp4" />
-        <source src={asset('/3d/hero-1920x1080.webm')} type="video/webm" />
-        <source src={asset('/3d/hero-1920x1080.mp4')} type="video/mp4" />
-      </video>
-      <canvas class="hero-canvas" data-hero-canvas data-base={asset('/')}></canvas>
-    </div>
+    <!-- Configurateur : le visiteur compose son projet et part vers le devis avec sa sélection. -->
+    <form class="compo" action={contact} method="get" data-compo
+      data-empty={c.empty} data-one={c.one} data-many={c.many} data-poles-one={c.polesOne} data-poles-many={c.polesMany}
+      data-single={c.single} data-cta={c.cta} data-cta-empty={c.ctaEmpty}>
+      <h2 class="titre-3" data-hero-in>{c.title}</h2>
+      <p class="mt-2 text-encre-douce" data-hero-in>{c.hint}</p>
+
+      <div class="mt-6 space-y-5">
+        {POLES.map((p) => (
+          <fieldset class="groupe" data-pole={p} data-hero-in>
+            <legend class="groupe-titre"><span class="point" aria-hidden="true"></span>{d.poles[p].name}</legend>
+            <div class="puces">
+              {d.poles[p].services.map((s) => (
+                <label class="puce">
+                  <input type="checkbox" name="services" value={s} data-pole-key={p} />
+                  <span><Check size={16} stroke-width={1.75} aria-hidden="true" class="coche" />{s}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+      </div>
+
+      <div class="resume" data-hero-in>
+        <div class="jauge" aria-hidden="true">
+          {POLES.map((p) => <span class="segment" data-pole={p} data-seg={p}></span>)}
+        </div>
+        <p class="resume-texte" role="status" aria-live="polite" data-resume>{c.empty}</p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <button type="submit" class="btn btn-secondaire" data-compo-cta data-magnet>
+            <span data-compo-label>{c.ctaEmpty}</span><ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
+          </button>
+          <button type="reset" class="lien-reset" data-compo-reset hidden>
+            <RotateCcw size={15} stroke-width={1.75} aria-hidden="true" />{c.reset}
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -38,79 +68,141 @@ const h = d.home.hero;
   .hero { background: var(--color-papier); }
   .hero-grille {
     display: grid;
-    gap: 8px;
+    gap: 40px;
     align-items: center;
-    min-block-size: calc(100svh - 72px);
-    padding-block: 24px 64px;
+    padding-block: 40px 72px;
   }
-  .hero-scene { position: relative; order: -1; block-size: 36svh; }
   @media (min-width: 1024px) {
-    .hero-grille { grid-template-columns: 7fr 5fr; gap: 32px; padding-block: 48px 96px; }
-    .hero-scene { order: 0; block-size: min(64svh, 600px); }
+    .hero-grille { grid-template-columns: 6fr 5fr; gap: 64px; min-block-size: calc(100svh - 72px); padding-block: 48px 80px; }
   }
-  .hero-canvas, .hero-video, .hero-poster {
+
+  .compo {
+    background: var(--color-surface);
+    border: 1px solid var(--color-trait);
+    border-radius: var(--radius-m);
+    padding: clamp(20px, 3vw, 32px);
+  }
+  .groupe { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .groupe-titre {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-block-end: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-encre-douce);
+  }
+  .point { inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--pole); }
+  .puces { display: flex; flex-wrap: wrap; gap: 8px; }
+  .puce { position: relative; cursor: pointer; }
+  .puce input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+  .puce span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-block-size: 44px;
+    padding-inline: 14px;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--color-trait);
+    background: var(--color-papier);
+    font-size: 15px;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.15s var(--ease-sortie);
+  }
+  .puce .coche { inline-size: 0; opacity: 0; transition: inline-size 0.2s var(--ease-sortie), opacity 0.2s; }
+  .puce:hover span { border-color: var(--color-encre); }
+  .puce input:active + span { transform: scale(0.97); }
+  .puce input:checked + span { background: var(--color-encre); border-color: var(--color-encre); color: var(--color-papier); }
+  .puce input:checked + span .coche { inline-size: 16px; opacity: 1; color: var(--pole); }
+  .groupe[data-pole="logiciels"] .puce input:checked + span .coche { color: #8c9bff; }
+  .groupe[data-pole="conseil"] .puce input:checked + span .coche { color: #4fbfa6; }
+  .puce input:focus-visible + span { outline: 2px solid var(--color-cobalt); outline-offset: 2px; }
+
+  .resume { margin-block-start: 24px; padding-block-start: 20px; border-block-start: 1px solid var(--color-trait); }
+  .jauge { display: flex; gap: 4px; block-size: 6px; }
+  .segment {
+    flex: 1;
+    border-radius: 2px;
+    background: var(--color-trait);
+    position: relative;
+    overflow: hidden;
+  }
+  .segment::after {
+    content: "";
     position: absolute;
     inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
+    background: var(--pole);
+    transform: scaleX(var(--fill, 0));
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-sortie);
   }
-  /* Le fond papier des images se fond exactement dans celui de la page. */
-  .hero-video, .hero-poster { mix-blend-mode: darken; }
-  .hero-poster[hidden], .hero-canvas[hidden] { display: none; }
-  /* Sur grand écran, la 3D construit le & : l'image fixe ne sert qu'en repli. */
-  @media (min-width: 768px) { .hero-poster:not([data-show]) { display: none; } }
+  :global(html[dir="rtl"]) .segment::after { transform-origin: right; }
+  .resume-texte { margin-block-start: 12px; font-weight: 500; min-block-size: 26px; }
+  .compo[data-actif] [data-compo-cta] { background: var(--color-corail); color: var(--color-encre); box-shadow: none; }
+  .lien-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-block-size: 44px;
+    padding-inline: 8px;
+    color: var(--color-encre-douce);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .lien-reset:hover { color: var(--color-encre); }
+  .lien-reset[hidden] { display: none; }
 </style>
 
 <script>
   import { gsap, reduceMotion } from '../../scripts/motion';
-  import type { HeroScene } from '../../scripts/hero3d';
 
-  let hero: HeroScene | null = null;
-  const BUILD_END = 4; // secondes : le & est assemblé
-
-  async function init() {
+  function init() {
     const section = document.querySelector<HTMLElement>('[data-hero]');
     if (!section) return;
-    const canvas = section.querySelector<HTMLCanvasElement>('[data-hero-canvas]')!;
-    const video = section.querySelector<HTMLVideoElement>('[data-hero-video]')!;
-    const poster = section.querySelector<HTMLImageElement>('[data-hero-poster]')!;
-    const texte = section.querySelector<HTMLElement>('[data-hero-texte]')!;
+    const form = section.querySelector<HTMLFormElement>('[data-compo]')!;
+    const ds = form.dataset;
+    const resume = form.querySelector<HTMLElement>('[data-resume]')!;
+    const label = form.querySelector<HTMLElement>('[data-compo-label]')!;
+    const reset = form.querySelector<HTMLButtonElement>('[data-compo-reset]')!;
+    const boxes = [...form.querySelectorAll<HTMLInputElement>('input[name="services"]')];
 
-    // Animations réduites : image fixe du & assemblé, rien d'autre.
-    if (reduceMotion()) { canvas.hidden = true; poster.setAttribute('data-show', ''); return; }
+    const update = () => {
+      const chosen = boxes.filter((b) => b.checked);
+      const poles = new Set(chosen.map((b) => b.dataset.poleKey));
+      form.toggleAttribute('data-actif', chosen.length > 0);
+      reset.hidden = chosen.length === 0;
+      label.textContent = chosen.length ? ds.cta! : ds.ctaEmpty!;
+      form.querySelectorAll<HTMLElement>('[data-seg]').forEach((seg) => {
+        const all = boxes.filter((b) => b.dataset.poleKey === seg.dataset.seg);
+        seg.style.setProperty('--fill', String(all.filter((b) => b.checked).length / all.length));
+      });
+      if (!chosen.length) { resume.textContent = ds.empty!; return; }
+      const n = chosen.length === 1 ? ds.one! : ds.many!.replace('{n}', String(chosen.length));
+      const p = poles.size === 1 ? ds.polesOne! : ds.polesMany!.replace('{n}', String(poles.size));
+      resume.textContent = `${n} · ${p} · ${ds.single}`;
+    };
+    form.addEventListener('change', update);
+    form.addEventListener('reset', () => requestAnimationFrame(update));
 
-    gsap.timeline({ defaults: { ease: 'power3.out' } })
-      .from(texte.querySelector('h1'), { y: 24, duration: 0.8 }, 0) // pas de fondu : le titre est l'élément LCP
-      .from(texte.querySelectorAll('.chapo, .btn'), { y: 16, opacity: 0, duration: 0.6, stagger: 0.06 }, 0.3);
-
-    const mobile = matchMedia('(max-width: 767px)').matches
-      || ((navigator.hardwareConcurrency ?? 8) <= 4 && matchMedia('(pointer: coarse)').matches);
-
-    if (!mobile) {
-      // three.js n'est chargé qu'une fois la page affichée et le navigateur au repos.
-      await new Promise<void>((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
-      await new Promise<void>((r) => ('requestIdleCallback' in window ? requestIdleCallback(() => r(), { timeout: 1500 }) : setTimeout(r, 300)));
-      const { webglAvailable, mountHero } = await import('../../scripts/hero3d');
-      if (webglAvailable()) {
-        try {
-          hero = await mountHero(canvas);
-          poster.hidden = true;
-          return;
-        } catch {
-          hero = null;
-        }
+    // Envoi : on part vers la page Contact avec la sélection dans l'adresse (?services=…).
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const chosen = boxes.filter((b) => b.checked);
+      const url = new URL(form.action, location.href);
+      if (chosen.length) {
+        url.searchParams.set('services', chosen.map((b) => b.value).join('|'));
+        url.searchParams.set('poles', [...new Set(chosen.map((b) => b.dataset.poleKey))].join(','));
       }
-    }
+      location.href = url.toString();
+    });
+    update();
 
-    // Mobile ou sans WebGL : la vidéo joue la construction une fois, puis s'arrête sur le & assemblé.
-    canvas.hidden = true;
-    video.hidden = false;
-    video.addEventListener('playing', () => { poster.hidden = true; }, { once: true });
-    video.addEventListener('timeupdate', () => { if (video.currentTime >= BUILD_END) video.pause(); });
-    video.play().catch(() => { video.hidden = true; poster.hidden = false; poster.setAttribute('data-show', ''); });
+    if (reduceMotion()) return;
+    const delay = document.querySelector('[data-intro]') ? 0.9 : 0.1;
+    gsap.from(section.querySelector('[data-hero-titre]'), { y: 24, duration: 0.8, ease: 'power3.out', delay, clearProps: 'transform' });
+    gsap.from(section.querySelectorAll('[data-hero-in]'), {
+      y: 18, opacity: 0, duration: 0.6, ease: 'power3.out', stagger: 0.05, delay, clearProps: 'all',
+    });
   }
 
   document.addEventListener('astro:page-load', init);
-  document.addEventListener('astro:before-swap', () => { hero?.dispose(); hero = null; });
 </script>
