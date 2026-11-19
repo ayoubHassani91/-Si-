@@ -130,9 +130,7 @@
       "lead": "Websites, software, advertising, video, consulting: a team of three that designs, builds and promotes what your business needs to move forward.",
       "cta": "Start a project",
       "terminal": "> imagine · structure · build",
-      "replay": "Rebuild the &si logo",
-      "hintMouse": "Move your mouse: the & reacts. Click to rebuild it.",
-      "hintTouch": "Tap the & to rebuild it"
+      "replay": "Rebuild the &si logo"
     },
     "manifesto": {
       "label": "Our method in three verbs",
@@ -155,8 +153,7 @@
           "pole": "logiciels",
           "text": "We build your tools: website, automations, custom software."
         }
-      ],
-      "hint": "Hover or tap a verb."
+      ]
     },
     "poles": {
       "title": "Three areas, one goal: your results.",
@@ -178,8 +175,7 @@
           "q": "the tool you dream of already existed, because we coded it?",
           "a": "Your way of working doesn't fit any software on the market? Our engineer designs and codes a tool made for you."
         }
-      ],
-      "hint": "Tap a question to read our answer."
+      ]
     },
     "proof": {
       "title": "A small team with complete skills.",
@@ -196,7 +192,6 @@
       "stat": "dozens",
       "statLabel": "of companies supported",
       "casesTitle": "Case studies",
-      "casesNote": "Examples coming soon, shown anonymously.",
       "cases": [
         {
           "pole": "logiciels",
@@ -280,7 +275,6 @@
     "cta": "Discuss my project",
     "jump": "Go to area",
     "discover": "Explore this area",
-    "pickService": "Pick a service to see the details.",
     "step": "Step"
   },
   "about": {
@@ -337,7 +331,6 @@
       }
     ],
     "methodTitle": "Our method",
-    "teamHint": "Hover or tap a team member.",
     "cred": {
       "title": "Experience you can measure.",
       "lead": "No vague promises: a track record, clients, results.",

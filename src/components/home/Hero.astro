@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, MessageCircle, MousePointer2 } from '@lucide/astro';
+import { ArrowRight, MessageCircle } from '@lucide/astro';
 import { t, href, asset, whatsappHref, type Lang } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -31,10 +31,6 @@ const h = d.home.hero;
           <MessageCircle size={18} stroke-width={1.75} aria-hidden="true" />{d.whatsapp.label}
         </a>
       </div>
-      <p class="indice etiquette" aria-hidden="true" data-hero-in>
-        <MousePointer2 size={14} stroke-width={1.75} />
-        <span class="indice-souris">{h.hintMouse}</span><span class="indice-tactile">{h.hintTouch}</span>
-      </p>
     </div>
   </div>
   <button type="button" class="sr-only" data-replay>{h.replay}</button>
@@ -61,9 +57,6 @@ const h = d.home.hero;
   .hero-contenu :is(a, button) { pointer-events: auto; }
   .hero-texte { max-inline-size: 640px; }
   .hero-texte h1 { max-inline-size: 12ch; }
-  .indice { display: inline-flex; align-items: center; gap: 6px; margin-block-start: 28px; color: var(--color-encre-douce); }
-  .indice-tactile { display: none; }
-  @media (pointer: coarse) { .indice-souris { display: none; } .indice-tactile { display: inline; } }
   @media (min-width: 1024px) {
     .hero { flex-direction: row; align-items: center; }
     .fond { position: absolute; inset: 0; block-size: auto; }

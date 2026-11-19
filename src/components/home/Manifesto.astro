@@ -22,7 +22,6 @@ const steps = m.steps as { pole: PoleKey; text: string }[];
         ))}
       </div>
       <p class="mt-8 max-w-[52ch] text-encre-douce">{m.text}</p>
-      <p class="etiquette mt-4 text-encre-douce indice-verbes" aria-hidden="true">{m.hint}</p>
     </div>
 
     <div class="lg:col-span-5">
@@ -92,8 +91,6 @@ const steps = m.steps as { pole: PoleKey; text: string }[];
   .point { inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--pole); }
   .panneau:not([hidden]) { animation: apparait 0.45s var(--ease-sortie); }
   @keyframes apparait { from { opacity: 0; transform: translateY(10px); } }
-  .indice-verbes { display: none; }
-  @media (min-width: 640px) { .indice-verbes { display: block; } }
 </style>
 
 <script>

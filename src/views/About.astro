@@ -60,10 +60,7 @@ const etatTexte = { oui: cmp.yes, non: cmp.no, partiel: cmp.part };
 
   <section class="equipe" aria-labelledby="equipe-titre">
     <div class="conteneur">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <h2 id="equipe-titre" class="titre-1" data-reveal>{a.teamTitle}</h2>
-        <p class="etiquette text-encre-douce">{a.teamHint}</p>
-      </div>
+      <h2 id="equipe-titre" class="titre-1" data-reveal>{a.teamTitle}</h2>
       <ul class="membres" data-membres>
         {a.team.map((m, i) => (
           <li class="membre" data-pole={polesEquipe[i]} tabindex="0" data-membre data-actif={i === 0 ? '' : undefined}>

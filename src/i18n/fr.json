@@ -135,9 +135,7 @@
       "lead": "Sites, logiciels, publicité, vidéo, conseil : une équipe de trois qui conçoit, code et fait connaître ce dont votre entreprise a besoin pour avancer.",
       "cta": "Démarrer un projet",
       "terminal": "> imaginer · structurer · construire",
-      "replay": "Reconstruire le logo &si",
-      "hintMouse": "Bougez la souris : le & réagit. Cliquez pour le reconstruire.",
-      "hintTouch": "Touchez le & pour le reconstruire"
+      "replay": "Reconstruire le logo &si"
     },
     "manifesto": {
       "label": "Notre méthode en trois verbes",
@@ -160,8 +158,7 @@
           "pole": "logiciels",
           "text": "On construit vos outils : site, automatisations, logiciel sur mesure."
         }
-      ],
-      "hint": "Survolez ou touchez un verbe."
+      ]
     },
     "poles": {
       "title": "Trois pôles, un seul objectif : vos résultats.",
@@ -183,8 +180,7 @@
           "q": "l'outil dont vous rêvez existait déjà, parce qu'on l'a codé ?",
           "a": "Votre façon de travailler ne rentre dans aucun logiciel du marché ? Notre ingénieur conçoit et code un outil fait pour vous."
         }
-      ],
-      "hint": "Touchez une question pour lire notre réponse."
+      ]
     },
     "proof": {
       "title": "Une petite équipe, des compétences complètes.",
@@ -201,7 +197,6 @@
       "stat": "des dizaines",
       "statLabel": "d'entreprises accompagnées",
       "casesTitle": "Études de cas",
-      "casesNote": "Exemples à venir, présentés de façon anonyme.",
       "cases": [
         {
           "pole": "logiciels",
@@ -285,7 +280,6 @@
     "cta": "Parler de mon projet",
     "jump": "Aller au pôle",
     "discover": "Découvrir le pôle",
-    "pickService": "Choisissez un service pour voir le détail.",
     "step": "Étape"
   },
   "about": {
@@ -342,7 +336,6 @@
       }
     ],
     "methodTitle": "Notre méthode",
-    "teamHint": "Survolez ou touchez un membre de l'équipe.",
     "cred": {
       "title": "Une expérience qui se mesure.",
       "lead": "Pas de promesses vagues : un parcours, des clients, des résultats.",

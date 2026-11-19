@@ -34,10 +34,7 @@ const others = POLES.filter((x) => x !== pole);
   <!-- Services du pôle : onglets verticaux, le détail s'affiche à côté. -->
   <section class="services" data-pole={pole} data-onglets aria-labelledby="inclus">
     <div class="conteneur">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <h2 id="inclus" class="titre-2" data-reveal>{s.includes}</h2>
-        <p class="etiquette text-encre-douce">{s.pickService}</p>
-      </div>
+      <h2 id="inclus" class="titre-2" data-reveal>{s.includes}</h2>
       <div class="onglets-grille">
         <div class="onglets" role="tablist" aria-label={s.includes}>
           {p.details.map((x, i) => (
