@@ -183,47 +183,77 @@
       ]
     },
     "proof": {
-      "title": "Une petite équipe, des compétences complètes.",
-      "team": [
-        {
-          "role": "Ingénieur informatique",
-          "text": "Conçoit et code vos sites, vos automatisations et vos logiciels. Il sait ce qui est faisable, en combien de temps, et le fait."
-        },
-        {
-          "role": "Deux experts marketing et communication",
-          "text": "Ont accompagné des dizaines d'entreprises dont le chiffre d'affaires a augmenté. Ils savent faire venir des clients et le prouver."
-        }
-      ],
-      "stat": "des dizaines",
-      "statLabel": "d'entreprises accompagnées",
+      "title": "L'équipe",
       "casesTitle": "Vous vous reconnaissez ?",
       "cases": [
         {
           "profile": "Commerce de proximité",
           "poles": [
-            "logiciels",
-            "communication"
+            "communication",
+            "logiciels"
           ],
-          "situation": "Vous avez un commerce ou un restaurant, mais vos clients ne vous trouvent pas en ligne.",
+          "situation": "Vous avez un commerce ou un restaurant, mais les clients passent devant sans entrer ni vous suivre en ligne.",
           "action": [
-            "Un site rapide, clair sur mobile",
-            "Une fiche Google complète et à jour",
-            "Une campagne locale sur Google et Meta"
+            [
+              "video",
+              "Des vidéos courtes pour Instagram, TikTok et Facebook, tournées et montées pour vous"
+            ],
+            [
+              "logiciel",
+              "Un programme de fidélité sur mesure : carte, points et offres envoyées par SMS"
+            ],
+            [
+              "auto",
+              "Des messages automatiques : rappel de réservation, demande d'avis, offre d'anniversaire"
+            ]
           ],
-          "result": "Vous apparaissez quand on vous cherche près de chez vous, et les appels et réservations arrivent directement."
+          "result": "Vos clients vous voient chaque semaine sur leurs réseaux, reviennent plus souvent et laissent des avis."
         },
         {
           "profile": "Artisan ou PME",
           "poles": [
-            "logiciels"
+            "logiciels",
+            "communication"
           ],
-          "situation": "Vos devis, factures et relances vous prennent des soirées entières.",
+          "situation": "Vous êtes bon dans votre métier, mais trouver de nouveaux clients et faire vos devis vous prend des soirées.",
           "action": [
-            "Des modèles de devis remplis automatiquement",
-            "Des relances qui partent toutes seules",
-            "Un tableau de bord relié à vos outils"
+            [
+              "logiciel",
+              "Un outil sur mesure qui repère les clients potentiels de votre zone et les contacte pour vous"
+            ],
+            [
+              "auto",
+              "Des devis générés en quelques clics, envoyés puis relancés automatiquement"
+            ],
+            [
+              "ads",
+              "Des annonces Google ciblées sur votre zone d'intervention"
+            ]
           ],
-          "result": "Vous récupérez du temps chaque semaine, et plus aucune relance n'est oubliée."
+          "result": "Les demandes arrivent sans que vous ayez à les chercher, et vos soirées vous appartiennent."
+        },
+        {
+          "profile": "Entreprise de services",
+          "poles": [
+            "logiciels",
+            "conseil"
+          ],
+          "situation": "Votre équipe passe ses journées sur des tâches répétitives : saisie, copier-coller, tableaux à mettre à jour.",
+          "action": [
+            [
+              "auto",
+              "L'automatisation de vos tâches répétitives : saisie, synchronisation entre logiciels, rapports"
+            ],
+            [
+              "logiciel",
+              "Un logiciel métier sur mesure, pensé pour votre façon de travailler"
+            ],
+            [
+              "logiciel",
+              "Un tableau de bord qui réunit vos chiffres en temps réel"
+            ]
+          ],
+          "result": "Votre équipe se concentre sur vos clients, plus sur l'administratif."
         },
         {
           "profile": "Création d'entreprise",
@@ -234,32 +264,61 @@
           ],
           "situation": "Vous voulez lancer votre entreprise ou votre boutique, sans savoir par où commencer.",
           "action": [
-            "Un plan de lancement : statut, offre, prix",
-            "Un site prêt le jour de l'ouverture",
-            "Une première campagne pour faire venir vos premiers clients"
+            [
+              "conseil",
+              "Un plan de lancement : statut, offre, prix, étapes datées"
+            ],
+            [
+              "site",
+              "Un site prêt le jour de l'ouverture"
+            ],
+            [
+              "video",
+              "Des vidéos et une première campagne pour faire venir vos premiers clients"
+            ]
           ],
-          "result": "Vous lancez avec un plan daté, une présence en ligne et un interlocuteur unique pour tout le reste."
+          "result": "Vous lancez avec un plan clair, une présence en ligne et un seul interlocuteur pour tout le reste."
         },
         {
           "profile": "Boutique en ligne",
           "poles": [
-            "communication"
+            "communication",
+            "logiciels"
           ],
-          "situation": "Vous dépensez en publicité sans savoir ce qu'elle vous rapporte vraiment.",
+          "situation": "Vous vendez en ligne, mais la publicité coûte cher et les commandes vous prennent un temps fou.",
           "action": [
-            "Un audit de vos campagnes actuelles",
-            "Le suivi des ventes générées par chaque annonce",
-            "Des vidéos courtes adaptées à chaque réseau"
+            [
+              "ads",
+              "Des campagnes Meta et Google suivies vente par vente"
+            ],
+            [
+              "auto",
+              "Commandes, stocks, factures et e-mails clients gérés automatiquement"
+            ],
+            [
+              "video",
+              "Des vidéos produits courtes pour les réseaux et les annonces"
+            ]
           ],
-          "result": "Vous savez ce que rapporte chaque euro investi, et vous arrêtez ce qui ne fonctionne pas."
+          "result": "Vous savez ce que rapporte chaque euro de publicité, et vous passez votre temps à développer la boutique plutôt qu'à la gérer."
         }
       ],
-      "casesLead": "Quatre situations courantes, et la façon dont nous y répondons.",
+      "casesLead": "Cinq situations courantes, et la façon dont nous y répondons.",
       "casesLabels": {
         "situation": "Votre situation",
         "action": "Ce que nous mettons en place",
         "result": "Ce que ça change pour vous",
         "cta": "Parler de ma situation"
+      },
+      "lead": "Un ingénieur informatique expérimenté et deux experts du marketing et de la communication : de quoi concevoir, construire et faire connaître votre projet, sans multiplier les prestataires.",
+      "teamLink": "Découvrir l'équipe",
+      "casesTypes": {
+        "logiciel": "Logiciel sur mesure",
+        "auto": "Automatisation",
+        "video": "Vidéo réseaux",
+        "ads": "Publicité",
+        "site": "Site",
+        "conseil": "Conseil"
       }
     },
     "method": {

@@ -59,9 +59,16 @@ const h = d.home.hero;
   .hero-texte h1 { max-inline-size: 12ch; }
   @media (min-width: 1024px) {
     .hero { flex-direction: row; align-items: center; }
-    .fond { position: absolute; inset: 0; block-size: auto; }
-    /* La vidéo et l'image fixe placent le & dans la moitié de fin. */
-    img.fond-media, video.fond-media { inset-inline-start: 34%; inline-size: 66%; object-fit: contain; transform: scale(1.35); }
+    /* La scène 3D n'occupe que la partie de fin : fragments et circuits ne passent jamais sous le texte.
+       Un léger fondu au bord évite une coupure nette des lignes. */
+    .fond {
+      position: absolute; inset: 0; inset-inline-start: 46%; block-size: auto;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 14%);
+      mask-image: linear-gradient(to right, transparent, #000 14%);
+    }
+    :global(html[dir="rtl"]) .fond { -webkit-mask-image: linear-gradient(to left, transparent, #000 14%); mask-image: linear-gradient(to left, transparent, #000 14%); }
+    img.fond-media, video.fond-media { object-fit: contain; transform: scale(1.15); }
+    .hero-texte { max-inline-size: 46%; }
     .hero-contenu { padding-block: 48px 64px; }
   }
   @media (max-width: 1023px) { .hero-wa { background: var(--color-papier); } }
@@ -100,14 +107,13 @@ const h = d.home.hero;
       if (webglAvailable()) {
         try {
           canvas.hidden = false;
-          const large = matchMedia('(min-width: 1024px)').matches;
-          const rtl = document.documentElement.dir === 'rtl';
-          hero = await mountHero(canvas, { shift: large ? (rtl ? -0.24 : 0.24) : 0 });
+          hero = await mountHero(canvas, { shift: 0 });
           poster.hidden = true;
           section.addEventListener('pointermove', (e) => {
             const r = section.getBoundingClientRect();
-            const cx = r.left + r.width * (large ? (rtl ? 0.26 : 0.74) : 0.5);
-            const cy = r.top + r.height / 2;
+            const c = canvas.getBoundingClientRect();
+            const cx = c.left + c.width / 2;
+            const cy = c.top + c.height / 2;
             const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width / 2)));
             const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2)));
             hero?.point(nx, ny);

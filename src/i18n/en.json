@@ -178,47 +178,77 @@
       ]
     },
     "proof": {
-      "title": "A small team with complete skills.",
-      "team": [
-        {
-          "role": "Software engineer",
-          "text": "Designs and codes your websites, automations and software. He knows what is feasible, how long it takes, and delivers it."
-        },
-        {
-          "role": "Two marketing and communication experts",
-          "text": "Have supported dozens of companies whose revenue grew. They know how to bring in customers and prove it."
-        }
-      ],
-      "stat": "dozens",
-      "statLabel": "of companies supported",
+      "title": "The team",
       "casesTitle": "Sound familiar?",
       "cases": [
         {
           "profile": "Local business",
           "poles": [
-            "logiciels",
-            "communication"
+            "communication",
+            "logiciels"
           ],
-          "situation": "You run a shop or a restaurant, but customers can't find you online.",
+          "situation": "You run a shop or a restaurant, but people walk past without coming in or following you online.",
           "action": [
-            "A fast website, clear on mobile",
-            "A complete, up-to-date Google profile",
-            "A local campaign on Google and Meta"
+            [
+              "video",
+              "Short videos for Instagram, TikTok and Facebook, shot and edited for you"
+            ],
+            [
+              "logiciel",
+              "A custom loyalty programme: card, points and offers sent by text message"
+            ],
+            [
+              "auto",
+              "Automatic messages: booking reminders, review requests, birthday offers"
+            ]
           ],
-          "result": "You show up when people search nearby, and calls and bookings come straight to you."
+          "result": "Your customers see you every week on their feeds, come back more often and leave reviews."
         },
         {
           "profile": "Tradesperson or SME",
           "poles": [
-            "logiciels"
+            "logiciels",
+            "communication"
           ],
-          "situation": "Quotes, invoices and follow-ups eat up entire evenings.",
+          "situation": "You're good at your trade, but finding new customers and writing quotes takes up your evenings.",
           "action": [
-            "Quote templates filled in automatically",
-            "Follow-ups that go out on their own",
-            "A dashboard connected to your tools"
+            [
+              "logiciel",
+              "A custom tool that finds potential customers in your area and contacts them for you"
+            ],
+            [
+              "auto",
+              "Quotes generated in a few clicks, sent and followed up automatically"
+            ],
+            [
+              "ads",
+              "Google ads targeted at the area you cover"
+            ]
           ],
-          "result": "You get time back every week, and no follow-up is ever forgotten."
+          "result": "Enquiries come in without you chasing them, and your evenings are yours again."
+        },
+        {
+          "profile": "Service company",
+          "poles": [
+            "logiciels",
+            "conseil"
+          ],
+          "situation": "Your team spends its days on repetitive tasks: data entry, copy-pasting, spreadsheets to update.",
+          "action": [
+            [
+              "auto",
+              "Automation of your repetitive tasks: data entry, syncing between software, reports"
+            ],
+            [
+              "logiciel",
+              "Custom business software, built around the way you work"
+            ],
+            [
+              "logiciel",
+              "A dashboard that brings your figures together in real time"
+            ]
+          ],
+          "result": "Your team focuses on your customers, not on admin."
         },
         {
           "profile": "Starting a business",
@@ -229,32 +259,61 @@
           ],
           "situation": "You want to launch your business or shop, but don't know where to start.",
           "action": [
-            "A launch plan: legal status, offer, pricing",
-            "A website ready on opening day",
-            "A first campaign to bring in your first customers"
+            [
+              "conseil",
+              "A launch plan: legal status, offer, pricing, dated steps"
+            ],
+            [
+              "site",
+              "A website ready on opening day"
+            ],
+            [
+              "video",
+              "Videos and a first campaign to bring in your first customers"
+            ]
           ],
-          "result": "You launch with a dated plan, an online presence and one contact for everything else."
+          "result": "You launch with a clear plan, an online presence and one contact for everything else."
         },
         {
           "profile": "Online shop",
           "poles": [
-            "communication"
+            "communication",
+            "logiciels"
           ],
-          "situation": "You spend on advertising without knowing what it really brings in.",
+          "situation": "You sell online, but advertising is expensive and orders take up all your time.",
           "action": [
-            "An audit of your current campaigns",
-            "Tracking of the sales generated by each ad",
-            "Short videos adapted to each network"
+            [
+              "ads",
+              "Meta and Google campaigns tracked sale by sale"
+            ],
+            [
+              "auto",
+              "Orders, stock, invoices and customer emails handled automatically"
+            ],
+            [
+              "video",
+              "Short product videos for social media and ads"
+            ]
           ],
-          "result": "You know what every euro invested returns, and you stop what doesn't work."
+          "result": "You know what every euro of advertising brings in, and you spend your time growing the shop instead of running it."
         }
       ],
-      "casesLead": "Four common situations, and how we handle them.",
+      "casesLead": "Five common situations, and how we handle them.",
       "casesLabels": {
         "situation": "Your situation",
         "action": "What we put in place",
         "result": "What changes for you",
         "cta": "Talk about my situation"
+      },
+      "lead": "An experienced software engineer and two marketing and communication experts: everything needed to design, build and promote your project, without juggling providers.",
+      "teamLink": "Meet the team",
+      "casesTypes": {
+        "logiciel": "Custom software",
+        "auto": "Automation",
+        "video": "Social video",
+        "ads": "Advertising",
+        "site": "Website",
+        "conseil": "Consulting"
       }
     },
     "method": {

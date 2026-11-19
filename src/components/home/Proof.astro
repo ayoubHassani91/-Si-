@@ -1,126 +1,159 @@
 ---
-import { Code, Megaphone, ArrowRight } from '@lucide/astro';
+import { ArrowRight, Code, TrendingUp, Clapperboard } from '@lucide/astro';
 import { t, href, type Lang, type PoleKey } from '../../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const p = t(lang).home.proof;
-const icons = [Code, Megaphone];
+const d = t(lang);
+const p = d.home.proof;
+const team = d.about.team;
+const icons = [Code, TrendingUp, Clapperboard];
+const polesEquipe: PoleKey[] = ['logiciels', 'conseil', 'communication'];
+// Chaque type d'action prend la couleur du pôle qui le porte.
+const poleDuType: Record<string, PoleKey> = { logiciel: 'logiciels', auto: 'logiciels', site: 'logiciels', video: 'communication', ads: 'communication', conseil: 'conseil' };
+const types = p.casesTypes as Record<string, string>;
 ---
-<section class="py-20 md:py-32" aria-labelledby="preuve-titre">
-  <div class="conteneur">
-    <h2 id="preuve-titre" class="titre-1 max-w-[20ch]" data-reveal>{p.title}</h2>
-    <div class="mt-14 grid gap-4 md:grid-cols-12">
-      {p.team.map((m, i) => {
+<section class="equipe-accueil" aria-labelledby="preuve-titre">
+  <div class="conteneur equipe-grille">
+    <div class="equipe-tete">
+      <h2 id="preuve-titre" class="titre-1" data-reveal>{p.title}</h2>
+      <p class="chapo mt-5 max-w-[40ch]" data-reveal>{p.lead}</p>
+      <a href={href(lang, 'about')} class="lien mt-6 inline-flex items-center gap-2" data-reveal>{p.teamLink}<ArrowRight size={16} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+    </div>
+    <ul class="membres-accueil">
+      {team.map((m, i) => {
         const Icon = icons[i];
         return (
-          <article class="carte p-8 md:col-span-4" data-reveal data-reveal-delay={i * 0.08}>
-            <Icon size={28} stroke-width={1.75} aria-hidden="true" />
-            <h3 class="titre-3 mt-6">{m.role}</h3>
-            <p class="mt-3 text-encre-douce">{m.text}</p>
-          </article>
+          <li class="m-ligne" data-pole={polesEquipe[i]} data-reveal data-reveal-delay={i * 0.07}>
+            <span class="m-icone" aria-hidden="true"><Icon size={24} stroke-width={1.75} /></span>
+            <div>
+              <h3 class="m-role">{m.role}</h3>
+              <p class="m-preuve">{m.proof}</p>
+              <p class="m-texte">{m.text}</p>
+            </div>
+          </li>
         );
       })}
-      <div class="stat md:col-span-4" data-reveal data-reveal-delay="0.16">
-        <p class="stat-phrase">{p.stat} {p.statLabel}.</p>
-      </div>
-    </div>
+    </ul>
+  </div>
+</section>
 
-    <!-- Situations types : le visiteur choisit la sienne et voit notre réponse. -->
-    <div class="situations" data-situations>
-      <h3 class="titre-2" data-reveal>{p.casesTitle}</h3>
-      <p class="chapo mt-3 max-w-[52ch]" data-reveal>{p.casesLead}</p>
-      <div class="sit-grille">
-        <div class="sit-onglets" role="tablist" aria-label={p.casesTitle}>
-          {p.cases.map((c, i) => (
-            <button type="button" role="tab" class="sit-onglet" id={`sit-${i}`} aria-controls={`sit-panneau-${i}`}
-              aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-sit={i}>
-              <span class="sit-points" aria-hidden="true">{c.poles.map((pl) => <span class="sit-point" data-pole={pl}></span>)}</span>
-              <span class="sit-profil">{c.profile}</span>
-              <ArrowRight size={18} stroke-width={1.75} class="sit-fleche" aria-hidden="true" />
-            </button>
-          ))}
-        </div>
-        {p.cases.map((c, i) => (
-          <div class="sit-panneau" role="tabpanel" id={`sit-panneau-${i}`} aria-labelledby={`sit-${i}`} data-sit-panneau={i} hidden={i !== 0}>
-            <p class="sit-label">{p.casesLabels.situation}</p>
-            <p class="sit-situation">{c.situation}</p>
-            <p class="sit-label mt-6">{p.casesLabels.action}</p>
-            <ol class="sit-actions">
-              {c.action.map((x, j) => <li style={`--i: ${j}`}><span class="sit-num" aria-hidden="true">{j + 1}</span>{x}</li>)}
-            </ol>
-            <div class="sit-resultat">
-              <p class="sit-label">{p.casesLabels.result}</p>
-              <p class="mt-1">{c.result}</p>
-            </div>
-            <div class="mt-6 flex flex-wrap items-center gap-3">
-              <a href={href(lang, 'contact', `?poles=${c.poles.join(',')}`)} class="btn btn-principal">{p.casesLabels.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
-              <span class="flex flex-wrap gap-2">{c.poles.map((pl) => <span class="sit-pole" data-pole={pl}>{t(lang).poles[pl as PoleKey].short}</span>)}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+<!-- Situations types : le visiteur choisit la sienne et voit notre réponse. -->
+<section class="situations" data-situations aria-labelledby="sit-titre">
+  <div class="conteneur">
+    <h2 id="sit-titre" class="titre-1" data-reveal>{p.casesTitle}</h2>
+    <p class="chapo mt-4 max-w-[52ch]" data-reveal>{p.casesLead}</p>
+    <div class="sit-onglets" role="tablist" aria-label={p.casesTitle}>
+      {p.cases.map((c, i) => (
+        <button type="button" role="tab" class="sit-onglet" id={`sit-${i}`} aria-controls={`sit-panneau-${i}`}
+          aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-sit={i}>
+          <span class="sit-points" aria-hidden="true">{c.poles.map((pl) => <span class="sit-point" data-pole={pl}></span>)}</span>
+          {c.profile}
+        </button>
+      ))}
     </div>
+    {p.cases.map((c, i) => (
+      <div class="sit-panneau" role="tabpanel" id={`sit-panneau-${i}`} aria-labelledby={`sit-${i}`} data-sit-panneau={i} hidden={i !== 0}>
+        <div class="sit-col">
+          <p class="sit-label">{p.casesLabels.situation}</p>
+          <p class="sit-situation">{c.situation}</p>
+        </div>
+        <div class="sit-col">
+          <p class="sit-label">{p.casesLabels.action}</p>
+          <ol class="sit-actions">
+            {(c.action as string[][]).map(([type, txt], j) => (
+              <li style={`--i: ${j}`} data-pole={poleDuType[type]}>
+                <span class="sit-type">{types[type]}</span>
+                <span class="sit-action-texte">{txt}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div class="sit-col sit-fin">
+          <div class="sit-resultat">
+            <p class="sit-label">{p.casesLabels.result}</p>
+            <p class="mt-2">{c.result}</p>
+          </div>
+          <a href={href(lang, 'contact', `?poles=${c.poles.join(',')}`)} class="btn btn-principal sit-cta">{p.casesLabels.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" /></a>
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 
 <style>
-  .stat {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 32px;
-    border-radius: var(--radius-m);
-    background: var(--color-corail);
-    color: var(--color-encre);
-    min-block-size: 260px;
+  .equipe-accueil { padding-block: clamp(64px, 9vw, 120px); }
+  .equipe-grille { display: grid; gap: 40px; }
+  @media (min-width: 1024px) {
+    .equipe-grille { grid-template-columns: 5fr 7fr; gap: 72px; align-items: start; }
+    .equipe-tete { position: sticky; inset-block-start: 112px; }
   }
-  .stat-phrase {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(28px, 3.2vw, 40px);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+  .membres-accueil { border-block-start: 1px solid var(--color-trait); }
+  .m-ligne {
+    position: relative;
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 20px;
+    padding-block: 28px;
+    border-block-end: 1px solid var(--color-trait);
+    transition: padding 0.35s var(--ease-sortie);
   }
-  .stat-phrase::first-letter { text-transform: uppercase; }
-  .situations { margin-block-start: clamp(64px, 8vw, 96px); }
-  .sit-grille { display: grid; gap: 16px; margin-block-start: 28px; }
-  @media (min-width: 1024px) { .sit-grille { grid-template-columns: 4fr 7fr; gap: 24px; align-items: start; } }
-  .sit-onglets { display: flex; flex-direction: column; gap: 8px; }
-  @media (max-width: 1023px) { .sit-onglets { flex-direction: row; overflow-x: auto; scrollbar-width: none; padding-block-end: 2px; } }
+  .m-ligne::before {
+    content: ""; position: absolute; inset-block: 28px; inset-inline-start: -16px; inline-size: 4px; border-radius: 999px;
+    background: var(--pole); transform: scaleY(0); transition: transform 0.35s var(--ease-sortie);
+  }
+  .m-ligne:hover { padding-inline-start: 8px; }
+  .m-ligne:hover::before { transform: scaleY(1); }
+  .m-icone {
+    display: grid; place-items: center; inline-size: 52px; block-size: 52px; border-radius: 999px;
+    background: var(--color-sable); transition: background-color 0.25s, color 0.25s;
+  }
+  .m-ligne:hover .m-icone { background: var(--pole); color: var(--color-papier); }
+  .m-ligne[data-pole="communication"]:hover .m-icone { color: var(--color-encre); }
+  .m-role { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.2vw, 28px); line-height: 1.15; }
+  .m-preuve { margin-block-start: 6px; font-weight: 500; color: var(--color-corail-texte); }
+  .m-texte { margin-block-start: 10px; color: var(--color-encre-douce); max-inline-size: 60ch; }
+
+  .situations { padding-block: clamp(64px, 9vw, 120px); background: var(--color-sable); }
+  .sit-onglets { display: flex; flex-wrap: wrap; gap: 8px; margin-block-start: 28px; }
+  @media (max-width: 767px) { .sit-onglets { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--marge) * -1); padding-inline: var(--marge); } }
   .sit-onglet {
-    display: flex; align-items: center; gap: 12px; min-block-size: 56px; padding-inline: 18px; flex: none;
-    border-radius: 999px; background: var(--color-surface); border: 1px solid var(--color-trait);
-    font-weight: 500; text-align: start; cursor: pointer; white-space: nowrap;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s, scale 0.15s;
+    display: inline-flex; align-items: center; gap: 10px; flex: none; min-block-size: 48px; padding-inline: 18px;
+    border-radius: 999px; background: var(--color-papier); font-weight: 500; white-space: nowrap; cursor: pointer;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-encre) 14%, transparent);
+    transition: background-color 0.2s, color 0.2s, scale 0.15s;
   }
-  .sit-onglet:hover { border-color: var(--color-encre); }
-  .sit-onglet:active { scale: 0.98; }
-  .sit-onglet[aria-selected="true"] { background: var(--color-encre); border-color: var(--color-encre); color: var(--color-papier); }
+  .sit-onglet:hover { box-shadow: inset 0 0 0 1.5px var(--color-encre); }
+  .sit-onglet:active { scale: 0.97; }
+  .sit-onglet[aria-selected="true"] { background: var(--color-encre); color: var(--color-papier); box-shadow: none; }
   .sit-points { display: flex; gap: 3px; }
   .sit-point { inline-size: 8px; block-size: 8px; border-radius: 999px; background: var(--pole); }
-  .sit-profil { flex: 1; }
-  .sit-fleche { opacity: 0; transform: translateX(-6px); transition: opacity 0.2s, transform 0.25s var(--ease-sortie); }
-  .sit-onglet[aria-selected="true"] .sit-fleche { opacity: 1; transform: none; }
-  @media (max-width: 1023px) { .sit-fleche { display: none; } }
-  :global(html[dir="rtl"]) .sit-fleche { scale: -1 1; }
+
   .sit-panneau {
-    padding: clamp(24px, 3.5vw, 40px); border-radius: var(--radius-m);
-    background: var(--color-surface); border: 1px solid var(--color-trait);
+    display: grid; gap: 28px; margin-block-start: 20px; padding: clamp(24px, 3.5vw, 40px);
+    border-radius: var(--radius-m); background: var(--color-surface);
     animation: sit-entree 0.45s var(--ease-sortie);
   }
+  @media (min-width: 1024px) { .sit-panneau { grid-template-columns: 4fr 5fr 4fr; gap: 36px; } }
+  .sit-panneau[hidden] { display: none; }
   @keyframes sit-entree { from { opacity: 0; transform: translateY(10px); } }
   .sit-label { font-family: var(--font-mono); font-size: 12px; color: var(--color-encre-douce); }
-  .sit-situation { margin-block-start: 6px; font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; }
-  .sit-actions { display: grid; gap: 8px; margin-block-start: 10px; }
+  .sit-situation { margin-block-start: 8px; font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.2vw, 28px); line-height: 1.22; }
+  .sit-actions { display: grid; gap: 10px; margin-block-start: 10px; }
   .sit-actions li {
-    display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-s); background: var(--color-papier);
-    animation: sit-entree 0.4s var(--ease-sortie) both; animation-delay: calc(0.12s + var(--i) * 0.08s);
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 16px; border-radius: var(--radius-s);
+    background: var(--color-papier);
+    animation: sit-entree 0.4s var(--ease-sortie) both; animation-delay: calc(0.1s + var(--i) * 0.08s);
   }
-  .sit-num { display: grid; place-items: center; flex: none; inline-size: 26px; block-size: 26px; border-radius: 999px; background: var(--color-encre); color: var(--color-papier); font-family: var(--font-mono); font-size: 12px; }
-  .sit-resultat { margin-block-start: 20px; padding: 16px 18px; border-radius: var(--radius-s); background: #e3f0ec; color: var(--color-encre); }
+  .sit-type {
+    display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
+    background: var(--color-surface); font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  }
+  .sit-type::before { content: ""; inline-size: 7px; block-size: 7px; border-radius: 999px; background: var(--pole); }
+  .sit-action-texte { font-weight: 500; }
+  .sit-fin { display: flex; flex-direction: column; gap: 20px; }
+  .sit-resultat { padding: 18px 20px; border-radius: var(--radius-s); background: #e3f0ec; }
   .sit-resultat .sit-label { color: var(--color-vert); }
-  .sit-pole { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--color-papier); font-family: var(--font-mono); font-size: 12px; }
-  .sit-pole::before { content: ""; inline-size: 7px; block-size: 7px; border-radius: 999px; background: var(--pole); }
+  .sit-cta { align-self: flex-start; }
   @media (prefers-reduced-motion: reduce) { .sit-panneau, .sit-actions li { animation: none; } }
 </style>
 
@@ -134,6 +167,7 @@ const icons = [Code, Megaphone];
       tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(j === i)); t.tabIndex = j === i ? 0 : -1; });
       panels.forEach((p, j) => { p.hidden = j !== i; });
       if (focus) tabs[i].focus();
+      tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
     };
     tabs.forEach((t, i) => {
       t.addEventListener('click', () => choisir(i));
