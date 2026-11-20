@@ -107,13 +107,28 @@ const h = d.home.hero;
         try {
           canvas.hidden = false;
           const rtl = document.documentElement.dir === 'rtl';
-          const large = matchMedia('(min-width: 1024px)').matches;
-          hero = await mountHero(canvas, { shift: large ? (rtl ? -0.24 : 0.24) : 0 });
+          // Zone libre pour le logo : de la fin du texte jusqu'au bord de la mise en page (un peu au-delà).
+          const texte = section.querySelector<HTMLElement>('.hero-texte')!;
+          const cadre = section.querySelector<HTMLElement>('.hero-contenu')!;
+          const zone = () => {
+            if (!matchMedia('(min-width: 1024px)').matches) return null;
+            const c = canvas.getBoundingClientRect();
+            const k = cadre.getBoundingClientRect();
+            const bords = [...texte.children].map((el) => el.getBoundingClientRect());
+            if (rtl) {
+              const fin = Math.min(...bords.map((b) => b.left)) - 48;
+              return { l: Math.max(24, k.left - 120) - c.left, r: fin - c.left };
+            }
+            const fin = Math.max(...bords.map((b) => b.right)) + 48;
+            return { l: fin - c.left, r: Math.min(c.width - 24, k.right + 120 - c.left) };
+          };
+          hero = await mountHero(canvas, { zone });
           poster.hidden = true;
           // Le logo suit le curseur partout dans la fenêtre (position relative au centre du logo).
           const suivre = (e: PointerEvent) => {
             const r = canvas.getBoundingClientRect();
-            const cx = r.left + r.width * (large ? (rtl ? 0.26 : 0.74) : 0.5);
+            const z = zone();
+            const cx = r.left + (z ? (z.l + z.r) / 2 : r.width / 2);
             const cy = r.top + r.height / 2;
             const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (innerWidth * 0.4)));
             const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (innerHeight * 0.45)));

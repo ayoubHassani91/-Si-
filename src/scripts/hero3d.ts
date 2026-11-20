@@ -37,7 +37,7 @@ const surSphere = (rnd: () => number) => {
   return new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), u);
 };
 
-export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: number } = {}): Promise<HeroScene> {
+export async function mountHero(canvas: HTMLCanvasElement, opts: { zone?: () => { l: number; r: number } | null } = {}): Promise<HeroScene> {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -62,7 +62,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   const camera = new THREE.PerspectiveCamera(20, 1, 0.1, 60);
   const DIST = 4.6;
   const LARGEUR_LOGO = 1.07;
-  const shift = opts.shift ?? 0;
+  const RATIO_LOGO = 1.85; // largeur / hauteur du logo
 
   type Bloc = {
     o: THREE.Mesh; p: THREE.Vector3; q: THREE.Quaternion;
@@ -128,10 +128,17 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    const part = shift ? 0.42 : 0.72; // part de la largeur occupée par le logo au repos
+    // Zone libre à côté du texte (en px dans le canvas) : le logo la remplit, sans dépasser 60 % de la hauteur.
+    const z = opts.zone?.();
+    let part = 0.72; // part de la largeur occupée par le logo au repos
+    let decalage = 0;
+    if (z) {
+      part = Math.min((z.r - z.l) / w, (h * 0.6 * RATIO_LOGO) / w);
+      decalage = (z.l + z.r) / 2 / w - 0.5;
+    }
     const tanH = LARGEUR_LOGO / (part * 2 * DIST);
     camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tanH / camera.aspect));
-    if (shift) camera.setViewOffset(w, h, -shift * w, 0, w, h);
+    if (decalage) camera.setViewOffset(w, h, -decalage * w, 0, w, h);
     else camera.clearViewOffset();
     camera.updateProjectionMatrix();
     render();
