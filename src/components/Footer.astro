@@ -2,7 +2,8 @@
 import { MessageCircle } from '@lucide/astro';
 import Logo from './Logo.astro';
 import Newsletter from './Newsletter.astro';
-import { t, href, slugOf, whatsappHref, SOCIAL, LOCALES, POLES, type Lang } from '../i18n';
+import Reseaux from './Reseaux.astro';
+import { t, href, slugOf, whatsappHref, LOCALES, POLES, type Lang } from '../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -38,18 +39,7 @@ const year = new Date().getFullYear();
         </a>
         <p class="mt-4"><a class="lien-pied" href="tel:+33652277787" dir="ltr">06 52 27 77 87</a></p>
         <p class="etiquette mb-3 mt-8 text-encre-douce">{d.footer.follow}</p>
-        <ul class="flex gap-2">
-          <li>
-            <a class="reseau" href={SOCIAL.linkedin} target="_blank" rel="noopener" aria-label={d.footer.linkedin}>
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
-            </a>
-          </li>
-          <li>
-            <a class="reseau" href={SOCIAL.instagram} target="_blank" rel="noopener" aria-label={d.footer.instagram}>
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><path d="M17.5 6.5h.01" /></svg>
-            </a>
-          </li>
-        </ul>
+        <Reseaux lang={lang} />
         <div class="mt-8 flex gap-2" role="group" aria-label={d.a11y.langLabel}>
           {LOCALES.map((l) => (
             <a class="langue-pied" href={href(l, slug)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-astro-reload>{d.langs[l]}</a>
@@ -77,17 +67,5 @@ const year = new Date().getFullYear();
     text-decoration: none;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-encre) 20%, transparent);
   }
-  .reseau {
-    display: inline-grid;
-    place-items: center;
-    inline-size: 44px;
-    block-size: 44px;
-    border-radius: 999px;
-    color: var(--color-encre);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-encre) 20%, transparent);
-    transition: background-color 0.2s, color 0.2s;
-  }
-  .reseau:hover { background: var(--color-encre); color: var(--color-papier); }
-  .reseau:focus-visible { outline: 2px solid var(--color-corail-texte); outline-offset: 2px; }
   .langue-pied[aria-current="true"] { background: var(--color-encre); color: var(--color-papier); }
 </style>

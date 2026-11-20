@@ -1,6 +1,7 @@
 ---
 import { ArrowRight, Menu, X } from '@lucide/astro';
 import Logo from './Logo.astro';
+import Reseaux from './Reseaux.astro';
 import { t, href, slugOf, LOCALES, type Lang, type RouteKey } from '../i18n';
 
 interface Props { lang: Lang; current?: RouteKey }
@@ -28,6 +29,7 @@ const isActive = (k: RouteKey) =>
     </nav>
 
     <div class="flex items-center gap-3">
+      <div class="hidden md:block"><Reseaux lang={lang} variante="entete" /></div>
       <div class="langues hidden sm:flex" role="group" aria-label={d.a11y.langLabel}>
         {LOCALES.map((l) => (
           <a href={href(l, slug)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-astro-reload>
@@ -61,6 +63,7 @@ const isActive = (k: RouteKey) =>
       <a href={href(lang, 'contact')} class="btn btn-principal self-start">
         {d.nav.cta}<ArrowRight size={18} stroke-width={1.75} class="fleche" aria-hidden="true" />
       </a>
+      <Reseaux lang={lang} variante="sombre" />
       <div class="langues langues-sombre flex" role="group" aria-label={d.a11y.langLabel}>
         {LOCALES.map((l) => (
           <a href={href(l, slug)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-astro-reload>{d.langs[l]}</a>
@@ -123,8 +126,12 @@ const isActive = (k: RouteKey) =>
   }
   @media (min-width: 1024px) { .burger[data-menu-open] { display: none; } }
   .menu-mobile {
+    /* L'en-tête a un backdrop-filter : il devient le bloc conteneur du menu « fixed ».
+       On fixe donc la hauteur à celle de l'écran au lieu de « inset: 0 ». */
     position: fixed;
-    inset: 0;
+    inset: 0 0 auto;
+    block-size: 100dvh;
+    overflow-y: auto;
     z-index: 60;
     display: flex;
     flex-direction: column;
