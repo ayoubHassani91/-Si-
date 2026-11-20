@@ -11,11 +11,12 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
  *  2. la caméra fait un large mouvement tournant pendant que les blocs convergent en vague
  *     et se verrouillent avec un rebond ;
  *  3. un « clic » final fait vibrer tout le logo.
- * Ensuite : le logo reste compact et se tourne vers le curseur de la souris, où qu'il soit sur l'écran.
+ * Ensuite : le logo reste compact et se tourne franchement vers le curseur, où qu'il soit sur l'écran ;
+ * même souris immobile, il flotte et ondule doucement. Le rendu s'arrête quand le logo n'est plus visible.
  * Le rendu ne tourne que pendant un mouvement, jamais en continu au repos.
  */
-const TOURNE = THREE.MathUtils.degToRad(58); // gauche / droite
-const BASCULE = THREE.MathUtils.degToRad(40); // haut / bas
+const TOURNE = THREE.MathUtils.degToRad(80); // gauche / droite
+const BASCULE = THREE.MathUtils.degToRad(55); // haut / bas
 const FIN = 2.8;
 
 export interface HeroScene {
@@ -108,7 +109,14 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     // « Clic » final : une courte vibration quand le dernier bloc se verrouille.
     const choc = t > 2.25 && t < 2.75 ? Math.sin((t - 2.25) * 38) * Math.exp(-(t - 2.25) * 9) * 0.03 : 0;
     logo.scale.setScalar(1 + choc);
-    logo.rotation.set(tilt.y, tilt.x, 0);
+    // Mouvement libre permanent (souris immobile ou non) : rotations lentes et légère flottaison.
+    const a = vie;
+    logo.rotation.set(
+      tilt.y + a * (Math.sin(horloge * 0.83) * 0.16 + Math.sin(horloge * 0.37) * 0.08),
+      tilt.x + a * (Math.sin(horloge * 0.61) * 0.32 + Math.sin(horloge * 0.29 + 1) * 0.14),
+      a * Math.sin(horloge * 0.47) * 0.06,
+    );
+    logo.position.y = a * Math.sin(horloge * 1.1) * 0.025;
     renderer.render(scene, camera);
   };
 
@@ -129,17 +137,22 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     render();
   };
 
+  let horloge = 0;
+  let vie = 0; // amplitude du mouvement libre, monte en douceur après l'entrée
+  let visible = true;
   const timer = new THREE.Timer();
   timer.connect(document);
   const loop = () => {
     timer.update();
     const dt = Math.min(timer.getDelta(), 0.1);
     if (t < FIN) t += dt;
-    tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 4, dt);
-    tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 4, dt);
+    horloge += dt;
+    vie = t >= FIN ? THREE.MathUtils.damp(vie, 1, 1.2, dt) : 0;
+    tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 5, dt);
+    tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 5, dt);
     render();
-    const calme = t >= FIN && Math.abs(tilt.x - target.x) < 1e-3 && Math.abs(tilt.y - target.y) < 1e-3;
-    if (calme) { renderer.setAnimationLoop(null); running = false; }
+    // Le logo vit en continu, mais on coupe le rendu dès qu'il sort de l'écran.
+    if (!visible) { renderer.setAnimationLoop(null); running = false; }
   };
   const wake = () => {
     if (running) return;
@@ -151,11 +164,13 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   fit();
   const ro = new ResizeObserver(fit);
   ro.observe(canvas);
+  const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); });
+  io.observe(canvas);
   wake();
   canvas.dataset.ready = 'true';
 
   return {
-    replay() { t = 0; wake(); },
+    replay() { t = 0; vie = 0; wake(); },
     point(nx, ny) {
       // Le logo se tourne vers le curseur : à droite → il regarde à droite, en bas → il regarde en bas.
       target.set(nx * TOURNE, ny * BASCULE);
@@ -164,6 +179,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     dispose() {
       renderer.setAnimationLoop(null);
       ro.disconnect();
+      io.disconnect();
       timer.dispose();
       draco.dispose();
       renderer.dispose();
