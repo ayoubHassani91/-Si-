@@ -154,15 +154,15 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     if (t < FIN) t += dt;
     tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 5, dt);
     tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 5, dt);
-    explode = THREE.MathUtils.damp(explode, burst, 10, dt);
+    explode = THREE.MathUtils.damp(explode, burst, 4, dt);
     // Les blocs glissent en continu vers leur destination du moment et tournent tant que la souris bouge.
     blocs.forEach((b) => {
-      b.dir.x = THREE.MathUtils.damp(b.dir.x, b.cible.x, 7, dt);
-      b.dir.y = THREE.MathUtils.damp(b.dir.y, b.cible.y, 7, dt);
-      b.dir.z = THREE.MathUtils.damp(b.dir.z, b.cible.z, 7, dt);
-      b.spin += dt * 4 * burst;
+      b.dir.x = THREE.MathUtils.damp(b.dir.x, b.cible.x, 2.5, dt);
+      b.dir.y = THREE.MathUtils.damp(b.dir.y, b.cible.y, 2.5, dt);
+      b.dir.z = THREE.MathUtils.damp(b.dir.z, b.cible.z, 2.5, dt);
+      b.spin += dt * 1.6 * burst;
     });
-    burst = THREE.MathUtils.damp(burst, 0, 3.2, dt);
+    burst = THREE.MathUtils.damp(burst, 0, 1.4, dt);
     render();
     const calme = t >= FIN && explode < 1e-3 && burst < 1e-3
       && Math.abs(tilt.x - target.x) < 1e-3 && Math.abs(tilt.y - target.y) < 1e-3;
@@ -203,7 +203,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
       if (t >= FIN && px !== undefined && py !== undefined && speed > 0.002 && surLogo(px, py)) {
         // Nouvelle salve : de nouvelles directions à chaque mouvement qui démarre.
         nouvellesDestinations(nx - prevX, ny - prevY);
-        burst = Math.min(1, burst + 0.25 + speed * 2.5);
+        burst = Math.min(1, burst + 0.12 + speed * 1.5);
       }
       wake();
     },
