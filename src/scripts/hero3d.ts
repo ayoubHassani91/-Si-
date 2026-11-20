@@ -3,29 +3,38 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 /**
- * Hero 3D : le logo &si complet (modèle Blender : 15 blocs pour le &, 3 pièces pour « si »).
- * Entrée en trois temps :
- *  1. les blocs du & arrivent de tous les côtés en tournoyant et se verrouillent avec un léger rebond ;
- *  2. le « s » pivote depuis la droite, le fût du « i » monte, son point tombe en place ;
- *  3. la caméra se rapproche et le logo pivote pour se placer face au visiteur.
- * Ensuite : inclinaison vers le pointeur, dispersion si le pointeur bouge vite, nouvelle entrée au clic.
+ * Hero 3D : le logo &si, construit dans Blender à partir des tracés exacts du logo SVG,
+ * découpé en 29 blocs (& et « si »).
+ *
+ * Entrée (~2,8 s) :
+ *  1. les blocs sont éparpillés dans l'espace autour du logo et tournent sur eux-mêmes ;
+ *  2. la caméra fait un large mouvement tournant pendant que les blocs convergent en vague
+ *     et se verrouillent avec un rebond ;
+ *  3. un « clic » final fait vibrer tout le logo.
+ * Ensuite : chaque mouvement de souris sur le logo projette les blocs dans toutes les directions
+ * (nouvelles directions à chaque mouvement), puis ils se recalent ; le logo s'incline vers le pointeur.
  * Le rendu ne tourne que pendant un mouvement, jamais en continu au repos.
  */
-const TILT = THREE.MathUtils.degToRad(18);
-const FIN = 2.4; // durée totale de l'entrée (s)
+const TILT = THREE.MathUtils.degToRad(14);
+const FIN = 2.8;
 
 export interface HeroScene {
   replay: () => void;
-  point: (nx: number, ny: number) => void; // -1..1, relatif au centre du logo
+  /** nx, ny : position du pointeur (-1..1) ; px, py : coordonnées écran pour savoir s'il survole le logo. */
+  point: (nx: number, ny: number, px?: number, py?: number) => void;
   dispose: () => void;
 }
 
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 const expoOut = (x: number) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
-const backOut = (x: number, s = 1.6) => 1 + (s + 1) * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2);
-
-/** Générateur pseudo-aléatoire reproductible : la même chorégraphie à chaque visite. */
+const backOut = (x: number, s = 1.7) => 1 + (s + 1) * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2);
 const aleatoire = (graine: number) => () => ((graine = (graine * 16807) % 2147483647) / 2147483647);
+const surSphere = (rnd: () => number) => {
+  const u = rnd() * 2 - 1;
+  const a = rnd() * Math.PI * 2;
+  const r = Math.sqrt(1 - u * u);
+  return new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), u);
+};
 
 export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: number } = {}): Promise<HeroScene> {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -49,53 +58,33 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   logo.add(gltf.scene);
   scene.add(logo);
 
-  const camera = new THREE.PerspectiveCamera(20, 1, 0.1, 50);
+  const camera = new THREE.PerspectiveCamera(20, 1, 0.1, 60);
   const DIST = 4.6;
   const LARGEUR_LOGO = 1.07;
   const shift = opts.shift ?? 0;
-  let part = 0.42; // part de la largeur du canvas occupée par le logo
 
-  // Pièces et trajectoires d'entrée.
-  type Piece = { o: THREE.Object3D; p: THREE.Vector3; q: THREE.Quaternion; depart: THREE.Vector3; axe: THREE.Vector3; angle: number; t0: number; duree: number; ecart: THREE.Vector3 };
-  const pieces: Piece[] = [];
-  const rnd = aleatoire(7);
+  type Bloc = {
+    o: THREE.Mesh; p: THREE.Vector3; q: THREE.Quaternion;
+    depart: THREE.Vector3; axeDepart: THREE.Vector3; tours: number; t0: number;
+    dir: THREE.Vector3; axe: THREE.Vector3;
+  };
+  const rnd = aleatoire(11);
+  const blocs: Bloc[] = [];
   gltf.scene.traverse((o) => {
     if (!(o as THREE.Mesh).isMesh) return;
-    const p = o.position.clone();
-    const q = o.quaternion.clone();
-    const nom = (o.name || o.parent?.name || '').toLowerCase();
-    const estSi = nom.startsWith('si_');
-    let depart: THREE.Vector3;
-    let axe: THREE.Vector3;
-    let angle: number;
-    let t0: number;
-    let duree: number;
-    if (!estSi) {
-      // Blocs du & : depuis un point aléatoire autour, en profondeur variable.
-      const a = rnd() * Math.PI * 2;
-      depart = new THREE.Vector3(Math.cos(a) * (0.9 + rnd() * 0.6), Math.sin(a) * (0.6 + rnd() * 0.5), -1.6 + rnd() * 2.4);
-      axe = new THREE.Vector3(rnd() - 0.5, rnd() - 0.5, rnd() - 0.5).normalize();
-      angle = 1.6 + rnd() * 1.6;
-      t0 = rnd() * 0.5;
-      duree = 1.0 + rnd() * 0.2;
-    } else {
-      // « si » : chaque pièce a son geste.
-      const estPoint = isPoint(o as THREE.Mesh);
-      const estS = !estPoint && o.position.x < 0.35;
-      if (estS) { depart = new THREE.Vector3(1.0, 0, -0.4); axe = new THREE.Vector3(0, 1, 0); angle = -1.9; t0 = 0.75; duree = 1.0; }
-      else if (estPoint) { depart = new THREE.Vector3(0, 1.1, 0); axe = new THREE.Vector3(1, 0, 0); angle = 1.2; t0 = 1.15; duree = 0.8; }
-      else { depart = new THREE.Vector3(0, -1.0, 0); axe = new THREE.Vector3(0, 0, 1); angle = 0.35; t0 = 0.95; duree = 0.9; }
-    }
-    const d = new THREE.Vector3(p.x, p.y, 0);
-    if (d.lengthSq() < 1e-4) d.set(0, 1, 0);
-    const ecart = d.normalize().setZ(0.5 + rnd() * 0.4);
-    pieces.push({ o, p, q, depart, axe, angle, t0, duree, ecart });
+    const m = o as THREE.Mesh;
+    const p = m.position.clone();
+    // Ordre d'arrivée : vague de gauche à droite sur tout le logo, avec un peu de hasard.
+    const vague = (p.x + 0.55) / 1.1;
+    blocs.push({
+      o: m, p, q: m.quaternion.clone(),
+      depart: surSphere(rnd).multiplyScalar(1.6 + rnd() * 1.2),
+      axeDepart: surSphere(rnd), tours: 2 + rnd() * 3,
+      t0: 0.35 + vague * 0.9 + rnd() * 0.25,
+      dir: surSphere(rnd), axe: surSphere(rnd),
+    });
   });
-  function isPoint(m: THREE.Mesh) {
-    m.geometry.computeBoundingBox();
-    const b = m.geometry.boundingBox!;
-    return b.max.y - b.min.y < 0.15; // le point du i est la seule petite pièce du « si »
-  }
+  const nouvellesDirections = () => blocs.forEach((b) => { b.dir = surSphere(rnd); b.axe = surSphere(rnd); });
 
   const qTmp = new THREE.Quaternion();
   let t = 0;
@@ -107,42 +96,44 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   let running = false;
 
   const render = () => {
-    pieces.forEach((pc) => {
-      const x = clamp01((t - pc.t0) / pc.duree);
-      const k = backOut(x);
+    blocs.forEach((b) => {
+      const k = backOut(clamp01((t - b.t0) / 1.05));
       const r = 1 - k;
-      pc.o.position.copy(pc.p).addScaledVector(pc.depart, r).addScaledVector(pc.ecart, explode * 0.16);
-      pc.o.quaternion.copy(pc.q);
-      qTmp.setFromAxisAngle(pc.axe, pc.angle * r + explode * 0.4);
-      pc.o.quaternion.premultiply(qTmp);
-      pc.o.visible = t >= pc.t0;
+      b.o.position.copy(b.p).addScaledVector(b.depart, r).addScaledVector(b.dir, explode * 0.42);
+      b.o.quaternion.copy(b.q);
+      // Avant l'arrivée, le bloc tourne sur lui-même ; à l'arrivée, la rotation se déroule jusqu'à zéro.
+      qTmp.setFromAxisAngle(b.axeDepart, r * b.tours + (t < b.t0 ? t * 1.5 : 0));
+      b.o.quaternion.premultiply(qTmp);
+      if (explode > 1e-3) { qTmp.setFromAxisAngle(b.axe, explode * 1.4); b.o.quaternion.premultiply(qTmp); }
     });
-    // La caméra se rapproche, le logo pivote pour faire face.
-    const c = expoOut(clamp01(t / FIN));
-    camera.position.set(0, 0.35 + (1 - c) * 0.25, DIST + (1 - c) * 1.4);
+    // Mouvement de caméra : de côté et au-dessus, jusqu'à la vue de face.
+    const c = expoOut(clamp01(t / 2.4));
+    const az = (1 - c) * 1.05;
+    const el = 0.07 + (1 - c) * 0.35;
+    const d = DIST + (1 - c) * 2.2;
+    camera.position.set(Math.sin(az) * Math.cos(el) * d, Math.sin(el) * d, Math.cos(az) * Math.cos(el) * d);
     camera.lookAt(0, 0, 0);
-    logo.rotation.set(tilt.y, tilt.x - (1 - c) * 0.45, 0);
+    // « Clic » final : une courte vibration quand le dernier bloc se verrouille.
+    const choc = t > 2.25 && t < 2.75 ? Math.sin((t - 2.25) * 38) * Math.exp(-(t - 2.25) * 9) * 0.03 : 0;
+    logo.scale.setScalar(1 + choc);
+    logo.rotation.set(tilt.y, tilt.x, 0);
     renderer.render(scene, camera);
   };
 
   let w = 1;
   let h = 1;
-  const cadrer = () => {
-    // Largeur visible à la distance de repos → le logo occupe « part » de la largeur du canvas.
-    const tanH = LARGEUR_LOGO / (part * 2 * DIST);
-    camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tanH / camera.aspect));
-    if (shift) camera.setViewOffset(w, h, -shift * w, 0, w, h);
-    else camera.clearViewOffset();
-    camera.updateProjectionMatrix();
-  };
   const fit = () => {
     w = canvas.clientWidth;
     h = canvas.clientHeight;
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    part = shift ? 0.42 : 0.72;
-    cadrer();
+    const part = shift ? 0.42 : 0.72; // part de la largeur occupée par le logo au repos
+    const tanH = LARGEUR_LOGO / (part * 2 * DIST);
+    camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tanH / camera.aspect));
+    if (shift) camera.setViewOffset(w, h, -shift * w, 0, w, h);
+    else camera.clearViewOffset();
+    camera.updateProjectionMatrix();
     render();
   };
 
@@ -154,8 +145,8 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     if (t < FIN) t += dt;
     tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 5, dt);
     tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 5, dt);
-    explode = THREE.MathUtils.damp(explode, burst, 8, dt);
-    burst = THREE.MathUtils.damp(burst, 0, 2.6, dt);
+    explode = THREE.MathUtils.damp(explode, burst, 10, dt);
+    burst = THREE.MathUtils.damp(burst, 0, 3.2, dt);
     render();
     const calme = t >= FIN && explode < 1e-3 && burst < 1e-3
       && Math.abs(tilt.x - target.x) < 1e-3 && Math.abs(tilt.y - target.y) < 1e-3;
@@ -168,6 +159,17 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     renderer.setAnimationLoop(loop);
   };
 
+  // Le pointeur survole-t-il le logo ? Test sur les blocs eux-mêmes (29 maillages, peu coûteux).
+  const raycaster = new THREE.Raycaster();
+  const ndc = new THREE.Vector2();
+  const meshes = blocs.map((b) => b.o);
+  const surLogo = (px: number, py: number) => {
+    const r = canvas.getBoundingClientRect();
+    ndc.set(((px - r.left) / r.width) * 2 - 1, -((py - r.top) / r.height) * 2 + 1);
+    raycaster.setFromCamera(ndc, camera);
+    return raycaster.intersectObjects(meshes, false).length > 0;
+  };
+
   fit();
   const ro = new ResizeObserver(fit);
   ro.observe(canvas);
@@ -176,11 +178,15 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
 
   return {
     replay() { t = 0; burst = 0; explode = 0; wake(); },
-    point(nx, ny) {
+    point(nx, ny, px, py) {
       const speed = Math.hypot(nx - last.x, ny - last.y);
       last.set(nx, ny);
       target.set(nx * TILT, ny * TILT * 0.6);
-      if (t >= FIN) burst = Math.min(1, burst + speed * 1.1);
+      if (t >= FIN && px !== undefined && py !== undefined && speed > 0.002 && surLogo(px, py)) {
+        // Nouvelle salve : de nouvelles directions à chaque mouvement qui démarre.
+        if (explode < 0.08) nouvellesDirections();
+        burst = Math.min(1, burst + 0.25 + speed * 2.5);
+      }
       wake();
     },
     dispose() {

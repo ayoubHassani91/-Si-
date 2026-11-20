@@ -116,7 +116,7 @@ const h = d.home.hero;
             const cy = r.top + r.height / 2;
             const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width / 2)));
             const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2)));
-            hero?.point(nx, ny);
+            hero?.point(nx, ny, e.clientX, e.clientY);
           });
           section.addEventListener('pointerleave', () => hero?.point(0, 0));
           section.addEventListener('click', (e) => { if (surFond(e)) hero?.replay(); });
