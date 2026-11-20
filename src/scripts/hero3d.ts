@@ -66,7 +66,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   type Bloc = {
     o: THREE.Mesh; p: THREE.Vector3; q: THREE.Quaternion;
     depart: THREE.Vector3; axeDepart: THREE.Vector3; tours: number; t0: number;
-    dir: THREE.Vector3; axe: THREE.Vector3;
+    dir: THREE.Vector3; cible: THREE.Vector3; axe: THREE.Vector3; spin: number;
   };
   const rnd = aleatoire(11);
   const blocs: Bloc[] = [];
@@ -81,10 +81,19 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
       depart: surSphere(rnd).multiplyScalar(1.6 + rnd() * 1.2),
       axeDepart: surSphere(rnd), tours: 2 + rnd() * 3,
       t0: 0.35 + vague * 0.9 + rnd() * 0.25,
-      dir: surSphere(rnd), axe: surSphere(rnd),
+      dir: new THREE.Vector3(), cible: new THREE.Vector3(), axe: surSphere(rnd), spin: 0,
     });
   });
-  const nouvellesDirections = () => blocs.forEach((b) => { b.dir = surSphere(rnd); b.axe = surSphere(rnd); });
+  // À chaque mouvement : une nouvelle destination au hasard pour chaque bloc (distance variable),
+  // poussée dans le sens du geste ; l'axe de rotation change aussi.
+  const geste = new THREE.Vector3();
+  const nouvellesDestinations = (gx: number, gy: number) => {
+    geste.set(gx, -gy, 0).multiplyScalar(6);
+    blocs.forEach((b) => {
+      b.cible.copy(surSphere(rnd)).multiplyScalar(0.35 + rnd() * 0.9).add(geste);
+      if (rnd() < 0.5) b.axe.copy(surSphere(rnd));
+    });
+  };
 
   const qTmp = new THREE.Quaternion();
   let t = 0;
@@ -99,12 +108,12 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     blocs.forEach((b) => {
       const k = backOut(clamp01((t - b.t0) / 1.05));
       const r = 1 - k;
-      b.o.position.copy(b.p).addScaledVector(b.depart, r).addScaledVector(b.dir, explode * 0.42);
+      b.o.position.copy(b.p).addScaledVector(b.depart, r).addScaledVector(b.dir, explode);
       b.o.quaternion.copy(b.q);
       // Avant l'arrivée, le bloc tourne sur lui-même ; à l'arrivée, la rotation se déroule jusqu'à zéro.
       qTmp.setFromAxisAngle(b.axeDepart, r * b.tours + (t < b.t0 ? t * 1.5 : 0));
       b.o.quaternion.premultiply(qTmp);
-      if (explode > 1e-3) { qTmp.setFromAxisAngle(b.axe, explode * 1.4); b.o.quaternion.premultiply(qTmp); }
+      if (explode > 1e-3) { qTmp.setFromAxisAngle(b.axe, b.spin * explode); b.o.quaternion.premultiply(qTmp); }
     });
     // Mouvement de caméra : de côté et au-dessus, jusqu'à la vue de face.
     const c = expoOut(clamp01(t / 2.4));
@@ -146,6 +155,13 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 5, dt);
     tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 5, dt);
     explode = THREE.MathUtils.damp(explode, burst, 10, dt);
+    // Les blocs glissent en continu vers leur destination du moment et tournent tant que la souris bouge.
+    blocs.forEach((b) => {
+      b.dir.x = THREE.MathUtils.damp(b.dir.x, b.cible.x, 7, dt);
+      b.dir.y = THREE.MathUtils.damp(b.dir.y, b.cible.y, 7, dt);
+      b.dir.z = THREE.MathUtils.damp(b.dir.z, b.cible.z, 7, dt);
+      b.spin += dt * 4 * burst;
+    });
     burst = THREE.MathUtils.damp(burst, 0, 3.2, dt);
     render();
     const calme = t >= FIN && explode < 1e-3 && burst < 1e-3
@@ -179,12 +195,14 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   return {
     replay() { t = 0; burst = 0; explode = 0; wake(); },
     point(nx, ny, px, py) {
+      const prevX = last.x;
+      const prevY = last.y;
       const speed = Math.hypot(nx - last.x, ny - last.y);
       last.set(nx, ny);
       target.set(nx * TILT, ny * TILT * 0.6);
       if (t >= FIN && px !== undefined && py !== undefined && speed > 0.002 && surLogo(px, py)) {
         // Nouvelle salve : de nouvelles directions à chaque mouvement qui démarre.
-        if (explode < 0.08) nouvellesDirections();
+        nouvellesDestinations(nx - prevX, ny - prevY);
         burst = Math.min(1, burst + 0.25 + speed * 2.5);
       }
       wake();
