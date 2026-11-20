@@ -9,7 +9,7 @@ const h = d.home.hero;
 <section class="hero" data-hero>
   <!-- Le & : 3D interactive sur ordinateur, image fixe animée en CSS sur mobile (rendus Blender). -->
   <div class="fond" aria-hidden="true">
-    <img class="fond-media" data-poster src={asset('/3d/amp-poster.webp')} alt="" width="1200" height="1200" fetchpriority="high" decoding="async" />
+    <img class="fond-media" data-poster src={asset('/3d/logo-poster.webp')} alt="" width="912" height="514" fetchpriority="high" decoding="async" />
     <canvas class="fond-media" data-canvas data-base={asset('/')} hidden></canvas>
   </div>
 
@@ -58,7 +58,7 @@ const h = d.home.hero;
   @media (min-width: 1024px) {
     .hero { flex-direction: row; align-items: center; }
     .fond { position: absolute; inset: 0; block-size: auto; }
-    img.fond-media { inset-inline-start: 46%; inline-size: 54%; }
+    img.fond-media { inset-inline-start: 50%; inline-size: 46%; }
     .hero-texte { max-inline-size: 600px; }
     .hero-contenu { padding-block: 48px 64px; }
   }
