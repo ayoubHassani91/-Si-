@@ -110,15 +110,22 @@ const h = d.home.hero;
           const large = matchMedia('(min-width: 1024px)').matches;
           hero = await mountHero(canvas, { shift: large ? (rtl ? -0.24 : 0.24) : 0 });
           poster.hidden = true;
-          section.addEventListener('pointermove', (e) => {
-            const r = section.getBoundingClientRect();
+          // Le logo suit le curseur partout dans la fenêtre (position relative au centre du logo).
+          const suivre = (e: PointerEvent) => {
+            const r = canvas.getBoundingClientRect();
             const cx = r.left + r.width * (large ? (rtl ? 0.26 : 0.74) : 0.5);
             const cy = r.top + r.height / 2;
-            const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width / 2)));
-            const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height / 2)));
-            hero?.point(nx, ny, e.clientX, e.clientY);
-          });
-          section.addEventListener('pointerleave', () => hero?.point(0, 0));
+            const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (innerWidth / 2)));
+            const ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (innerHeight / 2)));
+            hero?.point(nx, ny);
+          };
+          const recentrer = () => hero?.point(0, 0);
+          addEventListener('pointermove', suivre, { passive: true });
+          document.documentElement.addEventListener('pointerleave', recentrer);
+          document.addEventListener('astro:before-swap', () => {
+            removeEventListener('pointermove', suivre);
+            document.documentElement.removeEventListener('pointerleave', recentrer);
+          }, { once: true });
           section.addEventListener('click', (e) => { if (surFond(e)) hero?.replay(); });
           replayBtn.addEventListener('click', () => hero?.replay());
           return;

@@ -11,17 +11,17 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
  *  2. la caméra fait un large mouvement tournant pendant que les blocs convergent en vague
  *     et se verrouillent avec un rebond ;
  *  3. un « clic » final fait vibrer tout le logo.
- * Ensuite : le logo reste compact ; chaque mouvement de souris dessus le fait pivoter dans le sens
- * du geste (il change d'orientation), puis il revient doucement de face.
+ * Ensuite : le logo reste compact et se tourne vers le curseur de la souris, où qu'il soit sur l'écran.
  * Le rendu ne tourne que pendant un mouvement, jamais en continu au repos.
  */
-const TILT = THREE.MathUtils.degToRad(14);
+const TOURNE = THREE.MathUtils.degToRad(38); // gauche / droite
+const BASCULE = THREE.MathUtils.degToRad(26); // haut / bas
 const FIN = 2.8;
 
 export interface HeroScene {
   replay: () => void;
-  /** nx, ny : position du pointeur (-1..1) ; px, py : coordonnées écran pour savoir s'il survole le logo. */
-  point: (nx: number, ny: number, px?: number, py?: number) => void;
+  /** nx, ny : position du curseur par rapport au logo (-1..1). */
+  point: (nx: number, ny: number) => void;
   dispose: () => void;
 }
 
@@ -86,10 +86,6 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   let t = 0;
   const target = new THREE.Vector2();
   const tilt = new THREE.Vector2();
-  const last = new THREE.Vector2();
-  // Rotation du logo entier donnée par les gestes de la souris (x : autour de l'axe horizontal, y : vertical).
-  const rot = new THREE.Vector2();
-  const vit = new THREE.Vector2();
   let running = false;
 
   const render = () => {
@@ -112,7 +108,7 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     // « Clic » final : une courte vibration quand le dernier bloc se verrouille.
     const choc = t > 2.25 && t < 2.75 ? Math.sin((t - 2.25) * 38) * Math.exp(-(t - 2.25) * 9) * 0.03 : 0;
     logo.scale.setScalar(1 + choc);
-    logo.rotation.set(tilt.y + rot.x, tilt.x + rot.y, 0);
+    logo.rotation.set(tilt.y, tilt.x, 0);
     renderer.render(scene, camera);
   };
 
@@ -139,17 +135,10 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     timer.update();
     const dt = Math.min(timer.getDelta(), 0.1);
     if (t < FIN) t += dt;
-    tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 5, dt);
-    tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 5, dt);
-    // Le logo pivote avec l'élan du geste, l'élan s'amortit, puis un ressort doux le ramène de face.
-    // Angle limité pour que le logo reste toujours lisible (jamais vu par la tranche).
-    rot.x = THREE.MathUtils.clamp(rot.x + vit.x * dt, -0.55, 0.55);
-    rot.y = THREE.MathUtils.clamp(rot.y + vit.y * dt, -0.85, 0.85);
-    vit.x = THREE.MathUtils.damp(vit.x, -rot.x * 2.5, 4, dt);
-    vit.y = THREE.MathUtils.damp(vit.y, -rot.y * 2.5, 4, dt);
+    tilt.x = THREE.MathUtils.damp(tilt.x, target.x, 4, dt);
+    tilt.y = THREE.MathUtils.damp(tilt.y, target.y, 4, dt);
     render();
-    const calme = t >= FIN && Math.abs(rot.x) + Math.abs(rot.y) + Math.abs(vit.x) + Math.abs(vit.y) < 1e-3
-      && Math.abs(tilt.x - target.x) < 1e-3 && Math.abs(tilt.y - target.y) < 1e-3;
+    const calme = t >= FIN && Math.abs(tilt.x - target.x) < 1e-3 && Math.abs(tilt.y - target.y) < 1e-3;
     if (calme) { renderer.setAnimationLoop(null); running = false; }
   };
   const wake = () => {
@@ -159,17 +148,6 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
     renderer.setAnimationLoop(loop);
   };
 
-  // Le pointeur survole-t-il le logo ? Test sur les blocs eux-mêmes (29 maillages, peu coûteux).
-  const raycaster = new THREE.Raycaster();
-  const ndc = new THREE.Vector2();
-  const meshes = blocs.map((b) => b.o);
-  const surLogo = (px: number, py: number) => {
-    const r = canvas.getBoundingClientRect();
-    ndc.set(((px - r.left) / r.width) * 2 - 1, -((py - r.top) / r.height) * 2 + 1);
-    raycaster.setFromCamera(ndc, camera);
-    return raycaster.intersectObjects(meshes, false).length > 0;
-  };
-
   fit();
   const ro = new ResizeObserver(fit);
   ro.observe(canvas);
@@ -177,19 +155,10 @@ export async function mountHero(canvas: HTMLCanvasElement, opts: { shift?: numbe
   canvas.dataset.ready = 'true';
 
   return {
-    replay() { t = 0; rot.set(0, 0); vit.set(0, 0); wake(); },
-    point(nx, ny, px, py) {
-      const prevX = last.x;
-      const prevY = last.y;
-      const speed = Math.hypot(nx - last.x, ny - last.y);
-      last.set(nx, ny);
-      target.set(nx * TILT, ny * TILT * 0.6);
-      if (t >= FIN && px !== undefined && py !== undefined && speed > 0.002 && surLogo(px, py)) {
-        // Le geste donne de l'élan au logo dans sa direction (horizontal → tourne de côté, vertical → bascule).
-        const MAX = 5;
-        vit.y = THREE.MathUtils.clamp(vit.y + (nx - prevX) * 18, -MAX, MAX);
-        vit.x = THREE.MathUtils.clamp(vit.x + (ny - prevY) * 18, -MAX, MAX);
-      }
+    replay() { t = 0; wake(); },
+    point(nx, ny) {
+      // Le logo se tourne vers le curseur : à droite → il regarde à droite, en bas → il regarde en bas.
+      target.set(nx * TOURNE, ny * BASCULE);
       wake();
     },
     dispose() {
