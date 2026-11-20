@@ -7,7 +7,8 @@ const { lang } = Astro.props;
 const d = t(lang);
 const c = d.contact;
 const f = c.form;
-const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+// Clé d'accès Web3Forms : publique par nature (elle ne permet que d'envoyer vers la boîte de l'agence).
+const key = import.meta.env.PUBLIC_WEB3FORMS_KEY || '52e58672-0a4e-4654-9cce-00d897743f18';
 ---
 <Base lang={lang} title={c.metaTitle} description={c.metaDescription} current="contact">
   <section class="tete">

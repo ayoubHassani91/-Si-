@@ -17,7 +17,7 @@ npx astro check           # vérification TypeScript / Astro
 
 | Variable | Rôle |
 |---|---|
-| `PUBLIC_WEB3FORMS_KEY` | Clé d'accès Web3Forms (web3forms.com), qui envoie le formulaire de contact par e-mail. Sans elle, le formulaire invite à écrire sur WhatsApp. |
+| `PUBLIC_WEB3FORMS_KEY` | Facultatif. Clé d'accès Web3Forms (web3forms.com) qui envoie le formulaire de contact par e-mail ; par défaut, celle écrite dans `src/views/Contact.astro`. |
 | `SITE_URL` | Domaine du site (liens canoniques, hreflang, sitemap, robots.txt). |
 | `BASE_PATH` | Sous-dossier de publication : `/-Si-` sur GitHub Pages, `/` sur un domaine propre. |
 
@@ -28,7 +28,7 @@ npx astro check           # vérification TypeScript / Astro
 - `src/views/` : une vue par page, partagée par les 3 langues ; `src/pages/` ne contient que des fichiers d'appel.
 - `src/components/home/` : les sections de l'accueil.
 - `src/components/Intro.astro` : écran de chargement à chaque page, animation du logo rendue dans Blender (`public/intro/`, scène `intro` de `3d/etsi-3d.blend`) ; désactivé si les animations sont réduites.
-- `src/components/home/Hero.astro` + `src/scripts/hero3d.ts` : & en 3D (15 blocs découpés dans Blender, `public/3d/amp.glb`) qui s'assemble depuis la profondeur, s'incline vers le pointeur et se rejoue au clic ; image fixe animée en CSS sur mobile (`public/3d/amp-poster.webp`).
+- `src/components/home/Hero.astro` + `src/scripts/hero3d.ts` : logo &si en 3D (29 blocs découpés dans Blender, `public/3d/logo.glb`) qui s'assemble à l'entrée, se tourne vers le curseur, flotte en continu et se rejoue au clic ; image fixe animée en CSS sur mobile (`public/3d/logo-poster.webp`).
 - `src/components/MobileBar.astro` : barre d'actions fixe en bas d'écran sur mobile.
 - `src/styles/global.css` : jetons de la charte dans `@theme`.
 - `public/3d/` : & 3D (.glb Draco) et son image fixe. `public/draco/` : décodeur Draco. `public/brand/` : logos SVG.
@@ -38,7 +38,7 @@ npx astro check           # vérification TypeScript / Astro
 Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque push sur `claude/eager-gates-7m1151`
 (ou à la main depuis l'onglet Actions). Adresse : https://ayoubhassani91.github.io/-Si-/
 
-- Clé Web3Forms : secret de dépôt `PUBLIC_WEB3FORMS_KEY` (Settings → Secrets and variables → Actions). Cette clé finit forcément dans le HTML (c'est prévu par Web3Forms : elle ne permet que d'envoyer vers votre boîte) ; restreignez-la à votre domaine dans le tableau de bord Web3Forms.
+- Formulaire de contact : envoyé par Web3Forms vers la boîte de l'agence. La clé d'accès est publique par nature (elle ne permet que d'envoyer vers cette boîte) ; restreignez-la au domaine du site dans le tableau de bord Web3Forms.
 - Domaine propre : variables de dépôt `SITE_URL` (ex. `https://www.exemple.fr`) et `BASE_PATH` = `/`, puis domaine à déclarer dans Settings → Pages.
 
 
