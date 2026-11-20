@@ -62,6 +62,12 @@ export function slugOf(pathname: string): string {
   return parts.join('/');
 }
 
+/** Réseaux sociaux de l'agence (pied de page et données structurées). */
+export const SOCIAL = {
+  linkedin: 'https://www.linkedin.com/company/agence-etsi/',
+  instagram: 'https://www.instagram.com/etsi_compagnie/',
+} as const;
+
 export function whatsappHref(lang: Lang): string {
   return `https://wa.me/33652277787?text=${encodeURIComponent(t(lang).whatsapp.message)}`;
 }
