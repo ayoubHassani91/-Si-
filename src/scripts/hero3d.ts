@@ -14,8 +14,8 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
  * Ensuite : le logo reste compact et se tourne vers le curseur de la souris, où qu'il soit sur l'écran.
  * Le rendu ne tourne que pendant un mouvement, jamais en continu au repos.
  */
-const TOURNE = THREE.MathUtils.degToRad(38); // gauche / droite
-const BASCULE = THREE.MathUtils.degToRad(26); // haut / bas
+const TOURNE = THREE.MathUtils.degToRad(58); // gauche / droite
+const BASCULE = THREE.MathUtils.degToRad(40); // haut / bas
 const FIN = 2.8;
 
 export interface HeroScene {
