@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import MobileBar from '../components/MobileBar.astro';
 import Intro from '../components/Intro.astro';
-import { t, dirOf, htmlLang, href, asset, slugOf, LOCALES, type Lang, type RouteKey } from '../i18n';
+import { t, dirOf, htmlLang, href, asset, slugOf, LOCALES, INSTAGRAM_URL, type Lang, type RouteKey } from '../i18n';
 
 interface Props {
   lang: Lang;
@@ -36,6 +36,7 @@ const jsonLd = {
   areaServed: ['FR', 'Worldwide'],
   knowsLanguage: ['fr', 'en', 'ar'],
   inLanguage: htmlLang[lang],
+  sameAs: [INSTAGRAM_URL],
 };
 ---
 <!doctype html>

@@ -62,6 +62,9 @@ export function slugOf(pathname: string): string {
   return parts.join('/');
 }
 
+export const INSTAGRAM_URL = 'https://www.instagram.com/etsi_compagnie/';
+export const INSTAGRAM_HANDLE = '@etsi_compagnie';
+
 export function whatsappHref(lang: Lang): string {
   return `https://wa.me/33652277787?text=${encodeURIComponent(t(lang).whatsapp.message)}`;
 }
