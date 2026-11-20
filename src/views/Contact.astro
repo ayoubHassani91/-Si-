@@ -40,8 +40,8 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
           <span class="canal-icone"><Phone size={26} stroke-width={1.75} aria-hidden="true" /></span>
           <h3 class="canal-titre">{c.channels.phone.title}</h3>
           <p class="text-encre-douce"><a href="tel:+33652277787" dir="ltr" class="numero">06 52 27 77 87</a></p>
-          <div class="canal-action flex gap-2">
-            <a href="tel:+33652277787" class="canal-bouton">{c.channels.phone.cta}</a>
+          <div class="canal-action canal-duo">
+            <a href="tel:+33652277787" class="canal-bouton canal-plein">{c.channels.phone.cta}</a>
             <button type="button" class="canal-bouton canal-copie" data-copie="+33652277787" data-copie-ok={c.channels.phone.copied}>
               <span class="copie-icones" aria-hidden="true"><Copy size={16} stroke-width={1.75} class="i-copie" /><Check size={16} stroke-width={1.75} class="i-ok" /></span>
               <span data-copie-label>{c.channels.phone.copy}</span>
@@ -135,7 +135,8 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
   .canal:hover .canal-icone { background: var(--color-corail); transform: rotate(-6deg); }
   .canal-titre { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
   .numero { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--color-encre); text-decoration: none; }
-  .canal-action { margin-block-start: auto; padding-block-start: 12px; }
+  .canal-action { margin-block-start: auto; }
+  .canal > p.text-encre-douce { margin-block-end: 12px; }
   .canal-lien {
     display: flex; align-items: center; justify-content: space-between; min-block-size: 48px; padding-inline: 16px;
     border-radius: 999px; background: var(--color-encre); color: var(--color-papier); font-weight: 500; text-decoration: none;
@@ -147,12 +148,16 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
   .canal:hover .canal-lien .fleche { transform: translateX(4px); }
   .canal:hover .canal-lien .fleche-bas { transform: rotate(90deg) translateX(4px); }
   :global(html[dir="rtl"]) .canal-lien .fleche { transform: scaleX(-1); }
+  /* Téléphone : deux boutons de même hauteur que ceux des autres cartes, sur toute la largeur. */
+  .canal-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .canal-bouton {
-    display: inline-flex; align-items: center; gap: 8px; min-block-size: 48px; padding-inline: 16px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-block-size: 48px; padding-inline: 12px; white-space: nowrap;
     border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--color-encre); font-weight: 500; text-decoration: none; cursor: pointer;
     transition: background-color 0.2s, color 0.2s, scale 0.15s;
   }
   .canal-bouton:hover { background: var(--color-encre); color: var(--color-papier); }
+  .canal-plein { background: var(--color-encre); color: var(--color-papier); box-shadow: none; }
+  .canal-plein:hover { background: var(--color-corail); color: var(--color-encre); }
   .canal-bouton:active { scale: 0.96; }
   .copie-icones { position: relative; inline-size: 16px; block-size: 16px; }
   .copie-icones :global(svg) { position: absolute; inset: 0; transition: opacity 0.2s, transform 0.3s var(--ease-sortie); }
