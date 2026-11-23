@@ -52,6 +52,7 @@ const year = new Date().getFullYear();
 
     <div class="flex flex-col gap-3 border-t border-encre/15 py-6 text-legende text-encre-douce sm:flex-row sm:justify-between">
       <p>© {year} &si. {d.footer.rights}</p>
+      <button type="button" class="lien-cookies" data-cookies-ouvrir>{d.cookies.manage}</button>
     </div>
   </div>
 </footer>
@@ -59,6 +60,8 @@ const year = new Date().getFullYear();
 <style>
   .pied { background: var(--color-sable); padding-block-start: 64px; margin-block-start: 0; }
   .lien-pied { text-decoration: none; }
+  .lien-cookies { text-align: start; text-decoration: underline; text-underline-offset: 3px; min-block-size: 24px; }
+  .lien-cookies:hover { color: var(--color-corail-texte); }
   .lien-pied:hover { color: var(--color-corail-texte); }
   .langue-pied {
     font-size: 14px;

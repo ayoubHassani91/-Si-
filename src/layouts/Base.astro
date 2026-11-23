@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import MobileBar from '../components/MobileBar.astro';
 import Intro from '../components/Intro.astro';
+import Cookies from '../components/Cookies.astro';
 import { t, dirOf, htmlLang, href, asset, slugOf, LOCALES, SOCIAL, type Lang, type RouteKey } from '../i18n';
 
 interface Props {
@@ -76,6 +77,7 @@ const jsonLd = {
     <Footer lang={lang} />
     <WhatsAppFloat lang={lang} />
     {current !== 'contact' && <MobileBar lang={lang} />}
+    <Cookies lang={lang} />
     <script>
       import { initLenis, initReveals, initMagnets, initTitres, scrollToTop } from '../scripts/motion';
       document.addEventListener('astro:page-load', () => {

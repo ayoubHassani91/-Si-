@@ -546,5 +546,19 @@
       "cta": "Démarrer un projet",
       "wa": "WhatsApp"
     }
+  },
+  "cookies": {
+    "title": "Vos cookies, votre choix",
+    "text": "Nous aimerions mesurer l'audience du site pour l'améliorer. Ces cookies ne sont déposés qu'avec votre accord, et vous pouvez changer d'avis à tout moment.",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "customize": "Personnaliser",
+    "save": "Enregistrer mes choix",
+    "necessary": "Nécessaires",
+    "necessaryText": "Retiennent votre choix sur les cookies.",
+    "audience": "Mesure d'audience",
+    "audienceText": "Statistiques de visite anonymes pour savoir quelles pages sont utiles.",
+    "always": "Toujours actifs",
+    "manage": "Gérer les cookies"
   }
 }

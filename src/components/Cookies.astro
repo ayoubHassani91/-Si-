@@ -1,0 +1,151 @@
+---
+import { t, type Lang } from '../i18n';
+
+/** Bandeau de consentement aux cookies. Refuser est aussi simple et aussi visible qu'accepter (règles CNIL). */
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = t(lang).cookies;
+---
+<section class="cookies" role="region" aria-labelledby="cookies-titre" hidden data-cookies>
+  <p id="cookies-titre" class="cookies-titre">{c.title}</p>
+  <p class="cookies-texte">{c.text}</p>
+
+  <div class="cookies-choix" hidden data-cookies-detail>
+    <div class="cookies-ligne">
+      <div>
+        <p class="cookies-nom">{c.necessary}</p>
+        <p class="cookies-aide">{c.necessaryText}</p>
+      </div>
+      <span class="cookies-toujours">{c.always}</span>
+    </div>
+    <label class="cookies-ligne">
+      <span>
+        <span class="cookies-nom">{c.audience}</span>
+        <span class="cookies-aide">{c.audienceText}</span>
+      </span>
+      <input type="checkbox" class="interrupteur" data-cookies-mesure />
+    </label>
+  </div>
+
+  <div class="cookies-actions">
+    <button type="button" class="btn btn-principal cookies-btn" data-cookies-refuser>{c.refuse}</button>
+    <button type="button" class="btn btn-secondaire cookies-btn" data-cookies-personnaliser>{c.customize}</button>
+    <button type="button" class="btn btn-secondaire cookies-btn" hidden data-cookies-enregistrer>{c.save}</button>
+    <button type="button" class="btn btn-principal cookies-btn" data-cookies-accepter>{c.accept}</button>
+  </div>
+</section>
+
+<style>
+  .cookies {
+    position: fixed;
+    z-index: 70;
+    inset-inline: 16px;
+    inset-block-end: calc(16px + env(safe-area-inset-bottom));
+    max-inline-size: 440px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--color-surface);
+    color: var(--color-encre);
+    box-shadow: 0 0 0 1px var(--color-trait), 0 18px 48px -12px color-mix(in srgb, var(--color-encre) 28%, transparent);
+    animation: cookies-entree 0.5s var(--ease-sortie) both;
+  }
+  @media (min-width: 768px) { .cookies { inset-inline-end: auto; inset-inline-start: 24px; inset-block-end: 24px; } }
+  .cookies[hidden] { display: none; }
+  @keyframes cookies-entree { from { opacity: 0; transform: translateY(16px); } }
+  @media (prefers-reduced-motion: reduce) { .cookies { animation: none; } }
+
+  .cookies-titre { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 1.2; }
+  .cookies-texte { margin-block-start: 8px; font-size: 14px; line-height: 1.5; color: var(--color-encre-douce); }
+
+  .cookies-choix { margin-block-start: 16px; border-block-start: 1px solid var(--color-trait); }
+  .cookies-choix[hidden] { display: none; }
+  .cookies-ligne {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+    border-block-end: 1px solid var(--color-trait);
+  }
+  label.cookies-ligne { cursor: pointer; }
+  .cookies-nom { display: block; font-weight: 500; font-size: 14px; }
+  .cookies-aide { display: block; margin-block-start: 2px; font-size: 13px; line-height: 1.4; color: var(--color-encre-douce); }
+  .cookies-toujours { flex: none; font-family: var(--font-mono); font-size: 11px; color: var(--color-encre-douce); }
+
+  .interrupteur {
+    flex: none;
+    appearance: none;
+    position: relative;
+    inline-size: 44px;
+    block-size: 26px;
+    border-radius: 999px;
+    background: var(--color-trait);
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .interrupteur::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 3px;
+    inset-inline-start: 3px;
+    inline-size: 20px;
+    block-size: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+    transition: transform 0.2s var(--ease-sortie);
+  }
+  .interrupteur:checked { background: var(--color-encre); }
+  .interrupteur:checked::after { transform: translateX(18px); }
+  :global(html[dir="rtl"]) .interrupteur:checked::after { transform: translateX(-18px); }
+  .interrupteur:focus-visible { outline: 2px solid var(--color-corail-texte); outline-offset: 2px; }
+
+  .cookies-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-block-start: 16px; }
+  .cookies-btn { flex: 1 1 auto; justify-content: center; min-block-size: 44px; padding-inline: 16px; font-size: 14px; }
+  .cookies-btn[hidden] { display: none; }
+</style>
+
+<script>
+  import { lireConsentement, enregistrerConsentement } from '../scripts/consentement';
+
+  // Le bandeau attend la fin de l'écran de chargement pour ne pas le masquer.
+  const apresIntro = () => new Promise<void>((r) => {
+    const t0 = performance.now();
+    const attendre = () => (!document.querySelector('[data-intro]') || performance.now() - t0 > 3500 ? r() : setTimeout(attendre, 100));
+    attendre();
+  });
+
+  function init() {
+    const bandeau = document.querySelector<HTMLElement>('[data-cookies]');
+    if (!bandeau) return;
+    const detail = bandeau.querySelector<HTMLElement>('[data-cookies-detail]')!;
+    const mesure = bandeau.querySelector<HTMLInputElement>('[data-cookies-mesure]')!;
+    const btnPerso = bandeau.querySelector<HTMLButtonElement>('[data-cookies-personnaliser]')!;
+    const btnSave = bandeau.querySelector<HTMLButtonElement>('[data-cookies-enregistrer]')!;
+
+    const fermer = (choix: boolean) => { enregistrerConsentement(choix); bandeau.hidden = true; };
+    const ouvrir = (avecDetail: boolean) => {
+      const c = lireConsentement();
+      mesure.checked = c?.mesure ?? false;
+      detail.hidden = !avecDetail;
+      btnPerso.hidden = avecDetail;
+      btnSave.hidden = !avecDetail;
+      bandeau.hidden = false;
+    };
+
+    bandeau.querySelector('[data-cookies-accepter]')!.addEventListener('click', () => fermer(true));
+    bandeau.querySelector('[data-cookies-refuser]')!.addEventListener('click', () => fermer(false));
+    btnSave.addEventListener('click', () => fermer(mesure.checked));
+    btnPerso.addEventListener('click', () => { ouvrir(true); mesure.focus(); });
+    // Lien « Gérer les cookies » du pied de page : rouvre le bandeau avec le détail.
+    document.querySelectorAll('[data-cookies-ouvrir]').forEach((b) => b.addEventListener('click', () => {
+      ouvrir(true);
+      bandeau.querySelector<HTMLElement>('#cookies-titre')?.scrollIntoView({ block: 'nearest' });
+      mesure.focus();
+    }));
+
+    if (!lireConsentement()) apresIntro().then(() => ouvrir(false));
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>

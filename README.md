@@ -29,6 +29,7 @@ npx astro check           # vérification TypeScript / Astro
 - `src/components/home/` : les sections de l'accueil.
 - `src/components/Intro.astro` : écran de chargement à chaque page, animation du logo rendue dans Blender (`public/intro/`, scène `intro` de `3d/etsi-3d.blend`) ; désactivé si les animations sont réduites.
 - `src/components/home/Hero.astro` + `src/scripts/hero3d.ts` : logo &si en 3D (29 blocs découpés dans Blender, `public/3d/logo.glb`) qui s'assemble à l'entrée, se tourne vers le curseur, flotte en continu et se rejoue au clic ; image fixe animée en CSS sur mobile (`public/3d/logo-poster.webp`).
+- `src/components/Cookies.astro` + `src/scripts/consentement.ts` : bandeau de consentement aux cookies (CNIL), choix gardé 6 mois, lien « Gérer les cookies » en pied de page. Pour ajouter une mesure d'audience, la charger dans `surConsentement((c) => { if (c.mesure) … })`.
 - `src/components/MobileBar.astro` : barre d'actions fixe en bas d'écran sur mobile.
 - `src/styles/global.css` : jetons de la charte dans `@theme`.
 - `public/3d/` : & 3D (.glb Draco) et son image fixe. `public/draco/` : décodeur Draco. `public/brand/` : logos SVG.
