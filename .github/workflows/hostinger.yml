@@ -1,0 +1,61 @@
+name: Construire le site pour Hostinger
+
+# Hostinger (hébergement web) copie les fichiers du dépôt sans lancer de build.
+# Ce workflow construit donc le site pour etsi-company.com et publie le résultat
+# sur la branche « hostinger », que Hostinger déploie telle quelle dans public_html.
+
+on:
+  push:
+    branches: [claude/eager-gates-7m1151]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hostinger
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Construire le site
+        run: npm run build
+        env:
+          SITE_URL: ${{ vars.HOSTINGER_SITE_URL || 'https://etsi-company.com' }}
+          BASE_PATH: /
+      - name: Réglages Apache (page 404, HTTPS, cache)
+        run: |
+          cat > dist/.htaccess <<'EOF'
+          ErrorDocument 404 /404.html
+          Options -Indexes
+
+          RewriteEngine On
+          RewriteCond %{HTTPS} off
+          RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+          <IfModule mod_headers.c>
+            <FilesMatch "\.(js|css|woff2|webp|png|jpg|svg|glb|wasm)$">
+              Header set Cache-Control "public, max-age=31536000, immutable"
+            </FilesMatch>
+            <FilesMatch "\.html$">
+              Header set Cache-Control "no-cache"
+            </FilesMatch>
+          </IfModule>
+          EOF
+      - name: Publier sur la branche hostinger
+        run: |
+          cd dist
+          git init -q -b hostinger
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Site construit depuis ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" hostinger
