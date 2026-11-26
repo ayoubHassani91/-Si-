@@ -1,0 +1,1 @@
+import{i as e,n as t,o as n,r,t as i}from"./motion.BjgdGr4x.js";document.addEventListener(`astro:page-load`,()=>{i(),r(),t(),e()}),document.addEventListener(`astro:after-swap`,n);

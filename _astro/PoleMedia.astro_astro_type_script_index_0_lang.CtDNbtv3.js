@@ -1,0 +1,1 @@
+import{a as e}from"./motion.BjgdGr4x.js";document.addEventListener(`astro:page-load`,()=>{if(e())return;let t=new IntersectionObserver(e=>e.forEach(e=>{let t=e.target;e.isIntersecting?t.play().catch(()=>{}):t.pause()}),{threshold:.25});document.querySelectorAll(`[data-motion-auto]`).forEach(e=>t.observe(e))});
